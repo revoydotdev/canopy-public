@@ -1,0 +1,529 @@
+{
+  "$schemaNote": "Escape hatch for scripts/reachability.mjs (Phase 6.2). Each entry names a symbol + its declaring file that the gate found unreachable and that the team has knowingly deferred. An entry requires a reason, a gap/ADR reference, and an expiry date (YYYY-MM-DD). An expired entry FAILS the gate — substrate is a dated, self-cancelling exception, not a silent norm. Entries tagged with an existing G-xx id match the Verified gap register in ROADMAP.md. Expiry is tiered, not blanket, per the 2026-08-04 remediation pass (this repo ships waves on a roughly one-day cadence, so a uniform 6-week grace was never proportionate to actual velocity): G-14 entries (capability.ts/capability-token.ts) are tied to ADR-028, the record that decides whether to wire or delete them; pre-existing registered-gap entries (G-01, G-02, G-04, G-06, G-11, G-12, G-29, G-32) expire in 21 days (established architectural gaps whose closure plausibly spans more than one wave). The 2026-08-04 first sweep (94 previously-uncatalogued dead exports found when the 6.2 gate first ran) was retriaged wave1/gate-honesty (2026-08-04, same day): folded into an existing gap row where one genuinely fit (G-29, G-32, above); tagged DEFERRED-WAVE1-LOOP-AS-JOB-2026-08-04 / DEFERRED-WAVE1-TUI-CONTRACTS-2026-08-04 (10-day expiry, 2026-08-14) where an active same-wave lane's stated scope plausibly reaches the symbol and re-triage after that lane lands is the right next step; tagged RECOMMEND-DELETION-2026-08-04 (14-day expiry, 2026-08-18) where no active lane's scope plausibly reaches the symbol and the honest recommendation is deletion or a deliberate ADR + gap-register row, not indefinite deferral. None of these three new tags are Verified-gap-register G-xx ids — they are dated, reasoned placeholders pending that decision, consistent with this file's existing NEW-6.2-2026-08-04 convention.",
+  "version": 1,
+  "entries": [
+    {
+      "symbol": "clippedResidualValue",
+      "file": "packages/arbor-eval/src/agent-uct.ts",
+      "reason": "Roadmap 21's clipped residual value is exposed for deterministic evaluation fixtures and is deliberately excluded from the production UCT scorer. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "buildRunManifest",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "Trajectory manifests are offline evaluation artifacts pending a real post-W1a corpus and must not be presented as live production telemetry. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "rightForRightReasons",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "R4R is an offline benchmark metric whose production meaning requires an independently labeled corpus that does not yet exist. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "falseAcceptanceByVerification",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "False-acceptance splits are offline analysis over labeled outcomes; wiring fixture-derived rates into runtime policy would fabricate evidence. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "compareEvalEstimates",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "Partial-evaluation comparison is retained for offline experiments until a governed corpus supplies actual comparison records. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "unresolvedComparisonRate",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "Unresolved rate is an offline measurement and remains unavailable for production until post-W1a observations are recorded. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "siblingOutcomeSignals",
+      "file": "packages/arbor-eval/src/trajectory-metrics.ts",
+      "reason": "Sibling process-supervision signals are evaluation-only; production UCT deliberately remains unchanged by Roadmap 21. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "evaluateRepositoryRetrieval",
+      "file": "packages/arbor-eval/src/repository-retrieval-eval.ts",
+      "reason": "Repository retrieval comparison is an offline calibration/held-out evaluation boundary. Production uses RepositoryGraphIndex.queryTask directly; feeding calibration results into runtime policy would bypass the verified-cohort activation guard. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "evaluateRepositoryRetrievalAblation",
+      "file": "packages/arbor-eval/src/repository-retrieval-eval.ts",
+      "reason": "Cumulative retrieval-signal ablation is an offline calibration/held-out evaluation boundary. It measures candidate policy arms but cannot authorize a runtime policy or manufacture held-out provenance. RE-JUSTIFIED 2026-08-18: confirmed zero references from any of the four reachability entry points (grepped arbor-mcp/src/cli.ts, arbor-eval/src/cli.ts, arbor-eval/src/staged-native-safety-cli.ts, arbor-opencode/src/plugin.ts). Wiring an offline, fixture-derived metric into runtime policy would fabricate non-inferiority or held-out evidence that does not exist. Retires when a governed, independently labeled post-W1a corpus exists and a named ADR authorizes using it for production policy, or when Roadmap 21's harness-economics lane is abandoned and this is deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131.",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09"
+    },
+    {
+      "symbol": "evaluateKnowledgeBaseRetrieval",
+      "file": "packages/arbor-kb/src/retrieval-eval.ts",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09",
+      "reason": "Knowledge-base retrieval evaluation is an offline calibration/held-out measurement boundary introduced by ADR-112. Production retrieval runs through KnowledgeBase.inject/selectTopK directly; wiring these comparison harnesses into runtime policy would feed fixture-derived recall and token-reduction figures into live decisions and fabricate held-out evidence that does not exist. This is the same boundary already accepted for evaluateRepositoryRetrieval in packages/arbor-eval/src/repository-retrieval-eval.ts under this gap. AUTHORED 2026-08-26 during ADR-112 implementation: confirmed zero references from any of the four reachability entry points. Retires when a governed, independently labeled retrieval cohort exists and a named ADR authorizes using it for production policy, or when the semantic-retrieval lane is abandoned and these are deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131. CORRECTED 2026-08-27 per ADR-138 (accepted the same day): the sentence above describing this as a boundary around retrieval 'introduced by ADR-112' overstates what runs. ADR-112's semantic retrieval stage has never executed in any configuration; loadVendoredEmbeddingPort has no vendored asset, so cosineSimilarity never runs and what this harness evaluates is trigramEmbed's LEXICAL character-trigram similarity, not semantic similarity. The offline boundary is unchanged and still correct; only its description was wrong."
+    },
+    {
+      "symbol": "evaluateKnowledgeBaseRetrievalAblation",
+      "file": "packages/arbor-kb/src/retrieval-eval.ts",
+      "gap": "HARNESS-ECONOMICS-EVAL-2026-08-12",
+      "expires": "2026-12-09",
+      "reason": "Knowledge-base retrieval evaluation is an offline calibration/held-out measurement boundary introduced by ADR-112. Production retrieval runs through KnowledgeBase.inject/selectTopK directly; wiring these comparison harnesses into runtime policy would feed fixture-derived recall and token-reduction figures into live decisions and fabricate held-out evidence that does not exist. This is the same boundary already accepted for evaluateRepositoryRetrieval in packages/arbor-eval/src/repository-retrieval-eval.ts under this gap. AUTHORED 2026-08-26 during ADR-112 implementation: confirmed zero references from any of the four reachability entry points. Retires when a governed, independently labeled retrieval cohort exists and a named ADR authorizes using it for production policy, or when the semantic-retrieval lane is abandoned and these are deleted instead. RENEWED 2026-08-27 to 2026-12-09 by operator interview (decisions/interviews.jsonl, held_at 2026-08-27): `bun run gate:reachability` on this date independently recomputed the graph and still reports this symbol as unreachable-and-suppressed, so the boundary holds. The expiry moved from a monthly to a quarterly cadence deliberately — the reason text was byte-identical across the two prior renewals, which is re-attestation rather than re-examination. The operator confirmed Roadmap 21's harness-economics lane is LIVE and that the governed, independently labeled post-W1a corpus this retires on is the next measurement work, tied to ADR-131. CORRECTED 2026-08-27 per ADR-138 (accepted the same day): the sentence above describing this as a boundary around retrieval 'introduced by ADR-112' overstates what runs. ADR-112's semantic retrieval stage has never executed in any configuration; loadVendoredEmbeddingPort has no vendored asset, so cosineSimilarity never runs and what this harness evaluates is trigramEmbed's LEXICAL character-trigram similarity, not semantic similarity. The offline boundary is unchanged and still correct; only its description was wrong."
+    },
+    {
+      "symbol": "readCatalogFromSource",
+      "file": "packages/arbor-governance/src/counts/catalog.ts",
+      "gap": "ADR-074",
+      "expires": "2026-10-30",
+      "reason": "The one-catalog-reader consolidation (todo 9) moved the runtime-catalog parse out of three divergent readers into this module, and gate:package-boundaries now forbids a packages/ file importing scripts/ in-process, so the two .mjs consumers reach it through the package's public index re-export. This gate's analysis is static and does not follow a re-export barrel, so both symbols read as unreachable while registration-integrity.mjs and catalog-parser.mjs genuinely call them. The alternative is a call site invented only to satisfy the gate, which would make the graph claim a consumption path that does not exist. AUTHORED 2026-09-30."
+    },
+    {
+      "symbol": "isDispatchableDirection",
+      "file": "packages/arbor-governance/src/counts/catalog.ts",
+      "gap": "ADR-074",
+      "expires": "2026-10-30",
+      "reason": "The one-catalog-reader consolidation (todo 9) moved the runtime-catalog parse out of three divergent readers into this module, and gate:package-boundaries now forbids a packages/ file importing scripts/ in-process, so the two .mjs consumers reach it through the package's public index re-export. This gate's analysis is static and does not follow a re-export barrel, so both symbols read as unreachable while registration-integrity.mjs and catalog-parser.mjs genuinely call them. The alternative is a call site invented only to satisfy the gate, which would make the graph claim a consumption path that does not exist. AUTHORED 2026-09-30."
+    },
+    {
+      "symbol": "replaySearchStep",
+      "file": "packages/arbor-core/src/search/step.ts",
+      "reason": "UCT search core (ADR-186, accepted 2026-10-06) is deliberately flag-off with no production caller until UCT Stage 3 wires the worktree-leased GEN/REFINE dispatcher into the campaign loop; operator decision 2026-10-07: dated waivers rather than an invented caller or un-exporting. Exercised by packages/arbor-core/tests/search/** and packages/arbor-search-runtime/tests/**. Retires when Stage 3 lands.",
+      "expires": "2026-11-06",
+      "gap": "UCT Stage 3",
+      "adr": "ADR-186"
+    },
+    {
+      "symbol": "runSearchStep",
+      "file": "packages/arbor-search-runtime/src/driver.ts",
+      "reason": "UCT search core (ADR-186, accepted 2026-10-06) is deliberately flag-off with no production caller until UCT Stage 3 wires the worktree-leased GEN/REFINE dispatcher into the campaign loop; operator decision 2026-10-07: dated waivers rather than an invented caller or un-exporting. Exercised by packages/arbor-core/tests/search/** and packages/arbor-search-runtime/tests/**. Retires when Stage 3 lands.",
+      "expires": "2026-11-06",
+      "gap": "UCT Stage 3",
+      "adr": "ADR-186"
+    },
+    {
+      "symbol": "createDedupingDispatcher",
+      "file": "packages/arbor-search-runtime/src/dedup.ts",
+      "reason": "UCT search core (ADR-186, accepted 2026-10-06) is deliberately flag-off with no production caller until UCT Stage 3 wires the worktree-leased GEN/REFINE dispatcher into the campaign loop; operator decision 2026-10-07: dated waivers rather than an invented caller or un-exporting. Exercised by packages/arbor-core/tests/search/** and packages/arbor-search-runtime/tests/**. Retires when Stage 3 lands.",
+      "expires": "2026-11-06",
+      "gap": "UCT Stage 3",
+      "adr": "ADR-186"
+    },
+    {
+      "symbol": "createGitTreeDigestPort",
+      "file": "packages/arbor-search-runtime/src/dedup.ts",
+      "reason": "UCT search core (ADR-186, accepted 2026-10-06) is deliberately flag-off with no production caller until UCT Stage 3 wires the worktree-leased GEN/REFINE dispatcher into the campaign loop; operator decision 2026-10-07: dated waivers rather than an invented caller or un-exporting. Exercised by packages/arbor-core/tests/search/** and packages/arbor-search-runtime/tests/**. Retires when Stage 3 lands.",
+      "expires": "2026-11-06",
+      "gap": "UCT Stage 3",
+      "adr": "ADR-186"
+    },
+    {
+      "symbol": "isArborAgentName",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "isC2IssuerAgent",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "isC2TargetAgent",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_ROLE_TIER",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_AGENTS",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "LIVE_MODEL_ORCHESTRATOR_AGENT",
+      "file": "packages/arbor-core/src/comms/roles.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "isRecord",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "utf8Bytes",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkKeys",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkId",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkText",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkEnum",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkTimestamp",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "checkIdList",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "result",
+      "file": "packages/arbor-core/src/comms/validate.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "isTerminalC2Reply",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "validateC2Command",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "validateC2Reply",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "answerSatisfiesClarify",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_TEXT_BOUNDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_COUNT_BOUNDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_COMMAND_KINDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_HALT_REASONS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_ANSWER_ACTIONS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_REPLY_KINDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_TERMINAL_REPLY_KINDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_BLOCKED_NEEDS",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_PROGRESS_PHASES",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_FAILURE_CLASSES",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_REPLY_A2A_STATE",
+      "file": "packages/arbor-core/src/comms/c2.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "authorizeC2Issue",
+      "file": "packages/arbor-core/src/comms/authority.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "canIssueC2",
+      "file": "packages/arbor-core/src/comms/authority.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "authorizeC2Reply",
+      "file": "packages/arbor-core/src/comms/authority.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "applyC2Reply",
+      "file": "packages/arbor-core/src/comms/authority.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "C2_REFUSAL_CODES",
+      "file": "packages/arbor-core/src/comms/authority.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "payloadCarriesFreeText",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "validateCommsEnvelope",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_CHANNELS",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_ENVELOPE_SCHEMA_VERSION",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_TEXT_MAX_BYTES",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_MAX_ADDRESSEES",
+      "file": "packages/arbor-core/src/comms/envelope.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "canOpenRoom",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "canBeRoomMember",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "roomMembershipViolations",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "canReadRoom",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "canPostToRoom",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "mentionsAreMembers",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "COMMS_ROOM_TIERS",
+      "file": "packages/arbor-core/src/comms/rooms.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "deliveryModeFor",
+      "file": "packages/arbor-core/src/comms/delivery.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    },
+    {
+      "symbol": "injectionLabel",
+      "file": "packages/arbor-core/src/comms/delivery.ts",
+      "reason": "Pure agent-communication contracts (comms stage S1, operator decisions 2026-10-07) ahead of their wiring; intra-comms helpers are not in the @arbor/core barrel. Covered by packages/arbor-core/tests/comms/**. Operator decision 2026-10-07: dated waivers until the ledger-backed inbox (S2) and the C2 channel (S3) give them production callers.",
+      "expires": "2026-11-06",
+      "gap": "agent-comms S2/S3",
+      "adr": "ADR-083"
+    }
+  ]
+}

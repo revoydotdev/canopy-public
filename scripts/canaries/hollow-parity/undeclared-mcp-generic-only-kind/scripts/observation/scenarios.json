@@ -1,0 +1,712 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "production-deterministic-campaign",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "run",
+        "--once",
+        "--executor",
+        "deterministic",
+        "--persistence-dir",
+        "."
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 30000,
+      "expected_exit": 0,
+      "description": "The five-minute-quickstart deterministic campaign (docs/five-minute-quickstart.md), driven through the compiled production CLI entry instead of bin/arbor-mcp.mjs's esbuild bundle. CORRECTED 2026-08-20: an earlier version of this description claimed this scenario \"drives createProductionCampaignRunner through the arbor-opencode loop\" — verified false by reading cli.ts. `arbor run`/`arbor demo` (args[0] === \"run\"||\"demo\") dispatches straight to demo.ts's own `demomain`, which composes its own `WorktreeManager` and `createDemoConfig`/`runOneCampaign` and never calls `createCliRuntime`. `createProductionCampaignRunner` (cli.ts:607) is constructed only inside `createCliRuntime` (cli.ts:1169) and reached from `serve`/`webui`/`task`/`report`/`recover`/`debug prompt-input`/`project *` — confirmed empirically: its observations in this store come from production-mcp-approval-agent-dispatch, production-mcp-evidence-surface-dispatch, production-recover-preview-unknown-campaign and production-tui-headless-boot, never from this one. What this scenario actually does, absent worktree isolation (no real git repo in its scratch cwd — see production-git-repo-real-agent-loop-campaign for the git_init variant that clears that gate): exercises demo.ts's deterministic executor end to end up to the isolation-gate rejection on every one of the 8 demo-plan nodes (critic_agent: \"loop\")."
+    },
+    {
+      "id": "production-cli-help",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "--help"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 10000,
+      "expected_exit": 0,
+      "description": "Cheap coverage of the top-level argument dispatcher and usage text."
+    },
+    {
+      "id": "production-ledger-verify-empty",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "ledger",
+        "verify",
+        "--dir",
+        ".",
+        "--campaign",
+        "vi-observe-scenario",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 10000,
+      "expected_exit": 3,
+      "description": "ledger verify against a fresh temp dir with no campaign yet written. Exit 3 (PARTIAL) is the real, verified behavior: the ledger loader reports the campaign as intact but with tip_status sentinel_missing, not an error — verified empirically 2026-08-11 against packages/arbor-mcp/dist/cli.js."
+    },
+    {
+      "id": "production-doctor-json",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "doctor",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 10000,
+      "expected_exit": 0,
+      "description": "Native harness readiness inspection without probing providers or reading credentials — exercises config composition and readiness-assessment code paths."
+    },
+    {
+      "id": "production-project-status-unenrolled",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "status",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 4,
+      "description": "arbor project status against the scenario's own empty scratch cwd, which is never an enrolled project. Exit 4 is the real, verified behavior (state 'not_enrolled', six repairable findings) — verified empirically 2026-08-18, stable over three runs. Drives the project-lifecycle status path, which no prior scenario reached: the multi-project surface was entirely unobserved, so gate-relevant symbols in project-registry.ts and project-lifecycle.ts read as never-invoked."
+    },
+    {
+      "id": "production-project-enroll-new",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "enroll",
+        "--new"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 30000,
+      "expected_exit": 0,
+      "description": "arbor project enroll --new into the scenario's own scratch cwd. Hermetic and verified non-leaking: it writes the overlay, policy config, decisions/ and AGENTS.md into the temp dir only, and does NOT touch this repository's .arbor/project-registry.json (checked by hash before and after, three runs). Registration is then correctly REFUSED because a fresh temp dir has no resolvable git revision — so this scenario also covers the discharge-refusal path, not just the happy path. Exit 0 verified empirically 2026-08-18."
+    },
+    {
+      "id": "production-project-registry-list",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "registry",
+        "list",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor project registry list --json. Drives the registry read path (readSharedReservations and the registry loader) from a cwd holding no registry. Exit 0 verified empirically 2026-08-18, stable over three runs."
+    },
+    {
+      "id": "production-project-registry-verify",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "registry",
+        "verify",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor project registry verify --json. Drives verifyRegistryEntry and the discharge check — the half of the registry surface that list does not reach. Exit 0 verified empirically 2026-08-18, stable over three runs."
+    },
+    {
+      "id": "production-project-manage",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "manage",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor project manage --json, the one-pass reconciliation across enrolled projects. Over an empty registry it reconciles nothing and exits 0 — verified empirically 2026-08-18, stable over three runs. Included because manage is the entry point operators are pointed at, and it was wholly unobserved."
+    },
+    {
+      "id": "production-project-repair-apply",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "repair",
+        "--apply"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor project repair --apply against the scenario's own empty scratch cwd, which materialises the overlay and arbor.jsonc there. Added deliberately to close a hollow_candidate the FIRST catalog widening had just surfaced: repairProjectOverlay was production-reachable, tested and instrument-visible but invoked by nothing in the catalog. Hermetic and verified non-leaking — it writes only into the temp cwd and leaves this repository's .arbor/project-registry.json byte-identical (hash checked before and after, three runs). Exit 0 verified empirically 2026-08-18, stable over three runs."
+    },
+    {
+      "id": "production-tui-headless-boot",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "tui",
+        "--renderer",
+        "stdout"
+      ],
+      "env": {},
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor tui --renderer stdout against the scenario's own empty scratch cwd, with stdin closed immediately (vi-observe's default: no `input` given still yields an EOF'd child stdin, verified empirically against a minimal fixture). The TUI's own `stdin.once(\"end\", finish)` shutdown path turns that EOF into a clean exit — no --renderer opentui native dependency, no real terminal, no timing race. Drives the full boot sequence for real: createCliRuntime, RuntimeCatalogRouter, RuntimePortAdapter, HeadlessHarness (@arbor/tui), installScreens, TuiShell.start(), the initial campaign.list/dashboard/cockpit/projects product-surface queries, and StdoutRenderer's frame draw and restore() on shutdown. This is the ONLY scenario in the catalog that loads packages/arbor-tui at all — every prior scenario left it at zero invocations regardless of reachability or test coverage. Exit 0 verified empirically 2026-08-19 (real invocation, three runs, stable), confirmed to produce non-empty NODE_V8_COVERAGE for a packages/arbor-tui/dist/*.js file. count_semantics: \"presence_only\" -- same TUI background-timer wall-clock race as production-tui-resume-execution-status-poll (verified empirically 2026-09-18: widgets.ts render-path symbols isCombining/isWide/width vary run to run even though this scenario supplies static stdin with no stdin_linger_ms -- the race is inherent to spawning the TUI's several independent setInterval timers at all, not specific to the linger mechanism). See vi-observe.mjs's count_semantics handling."
+    },
+    {
+      "id": "production-recover-preview-unknown-campaign",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "recover",
+        "--campaign",
+        "vi-observe-no-such-campaign",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor recover --campaign <unknown> --json against the scenario's own empty scratch cwd. Drives runRecoveryCommand -> RecoveryService.previewContinuation over a real ArborRuntime with no interruption journal to find, returning {ok:true, authorized:false, plans:[]}. Genuinely exercises the crash-continuation preview path (recovery/recovery-command.ts, the recoveryService lookup, resumableReviewNodes' try/catch) rather than fabricating an interrupted-session fixture by hand — no prior scenario reached this module at all. A true mid-run SIGTERM-and-resume scenario was investigated and rejected: producing one deterministically would require either racing a real child process's timing (non-hermetic) or hand-writing an internal interruption-journal record (testing internals, not the real surface); this scenario is the honest, real-surface subset of that path. Exit 0 verified empirically 2026-08-19, stable over three runs. count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-governance-json-seeded",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "governance",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        "decisions/.gitkeep": ""
+      },
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor governance --json, the governance projection subcommand named as unobserved dispatch surface. Needs a decisions/ directory to exist under the scratch cwd (its absence is a real, verified exit 1 — ENOENT reading the decisions directory — confirmed empirically 2026-08-19; seeding an empty one is the minimal hermetic fixture that reaches the real success path instead). Drives buildGovernanceSnapshot, the legacy-decision classifier, policy-findings evaluation, and governance-event witnessing/ledger save, none of which any prior scenario reached. Exit 0 verified empirically 2026-08-19, stable over three runs."
+    },
+    {
+      "id": "production-project-registry-populated-list",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "registry",
+        "list",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        ".arbor/project-registry.json": "{\n  \"schema_version\": 1,\n  \"entries\": [\n    {\n      \"project_id\": \"vi-observe-fixture-project\",\n      \"path\": \"/nonexistent/vi-observe-fixture-project\",\n      \"profile_hash\": \"0000000000000000000000000000000000000000000000000000000000000000\",\n      \"verified_at_revision\": \"0000000000000000000000000000000000000000000000000000000000000000\",\n      \"verified_at\": \"2026-01-01T00:00:00.000Z\",\n      \"expires\": \"2020-01-01\"\n    }\n  ]\n}\n"
+      },
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor project registry list --json against a scratch cwd pre-seeded with one real-shaped project-registry.json entry (schema_version 1, all six required ProjectRegistryEntry fields). Every prior registry scenario ran against an EMPTY registry (the read-nothing path); this is the populated read path — loadProjectRegistry's entry-shape validation and formatRegistryList's non-empty formatting, neither reached before. Exit 0 verified empirically 2026-08-19, stable over three runs."
+    },
+    {
+      "id": "production-project-registry-populated-verify-fails",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "project",
+        "registry",
+        "verify",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        ".arbor/project-registry.json": "{\n  \"schema_version\": 1,\n  \"entries\": [\n    {\n      \"project_id\": \"vi-observe-fixture-project\",\n      \"path\": \"/nonexistent/vi-observe-fixture-project\",\n      \"profile_hash\": \"0000000000000000000000000000000000000000000000000000000000000000\",\n      \"verified_at_revision\": \"0000000000000000000000000000000000000000000000000000000000000000\",\n      \"verified_at\": \"2026-01-01T00:00:00.000Z\",\n      \"expires\": \"2020-01-01\"\n    }\n  ]\n}\n"
+      },
+      "run_class": "production",
+      "timeout_ms": 20000,
+      "expected_exit": 5,
+      "description": "arbor project registry verify --json against the same seeded registry entry, whose path (/nonexistent/vi-observe-fixture-project) does not exist and whose expires date (2020-01-01) is already past. This is the fault/error-injection scenario: evaluateProjectRegistry's real discharge check runs, genuinely fails with two deterministic failure codes (\"expired\", \"path_unreachable\"), and the CLI reports it via the real VIOLATION exit path (report.ok ? SUCCESS : EXIT_CODES.VIOLATION) rather than the happy path every prior scenario exercised. Exit 5 verified empirically 2026-08-19, stable over three runs — deterministic because both failure conditions are already true relative to any plausible CI clock (the registry entry expired in 2020) and the path is a fixed, guaranteed-absent literal, not a real filesystem probe of anything that could vary."
+    },
+    {
+      "id": "production-mcp-approval-agent-dispatch",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "serve",
+        "--persistence-dir",
+        ".arbor"
+      ],
+      "env": {},
+      "stdin": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"vi-observe\",\"version\":\"1\"}}}\n{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}\n{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_query\",\"arguments\":{\"kind\":\"agent.list\"}}}\n{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"approval.request\",\"request_id\":\"vi-observe-appr-1\",\"idempotency_key\":\"vi-observe-appr-1-key\",\"action\":\"campaign.halt\",\"subject\":\"campaign:vi-observe-scenario\",\"resource_id\":\"vi-observe-scenario\",\"proposer\":\"vi-observe\",\"rationale\":\"vi-observe fixture approval request\",\"expires_at\":\"2099-01-01T00:00:00.000Z\"}}}\n{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_query\",\"arguments\":{\"kind\":\"approval.list\"}}}\n",
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor serve fed a real MCP JSON-RPC session over stdin (initialize, notifications/initialized, then three tools/call requests) and closed with EOF — the same shutdown path bin.test.ts's and cli.test.ts's stdio-session tests already rely on, run here as a real child process instead of an in-process ArborMCPServer. Drives the arbor_query/arbor_command MCP tool boundary for two kinds nothing in the catalog had reached: agent.list (the whole @arbor agent catalog including zero live agents) and approval.request/approval.list (a full request-then-read roundtrip through RuntimeCatalogRouter.dispatchApprovalRequest and executeApprovalListQuery, including ApprovalService's real accept/lease-scope machinery). Exit 0 and all four JSON-RPC responses verified empirically 2026-08-19 (real invocation, three runs, stable; only the operation_id UUID varies run to run, which nothing here asserts on). count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-doctor-json-with-config-file",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "doctor",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        "arbor.jsonc": "{\n  // vi-observe fixture config: a real JSONC comment plus a trailing comma,\n  // exercised so stripJsonc's comment-scanner and trailing-comma-remover\n  // both run over real bytes instead of an inert, comment-free JSON body.\n  \"campaign\": {\n    \"id\": \"vi-observe-fixture\", /* inline comment */\n  },\n}\n"
+      },
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor doctor --json against a scratch cwd pre-seeded with a real arbor.jsonc containing both `//` and `/* */` comments and a trailing comma before a closing brace. Every prior scenario ran doctor/config-consuming commands against a cwd with NO arbor.jsonc, so `loadConfig`'s `existsSync(configPath)` branch always took the `structuredClone(DEFAULT_CONFIG)` path and never called `loadConfigFromString`/`stripJsonc` at all (hollow_candidate, packages/arbor-config/src/loader.ts). This seeds the minimal real config file that forces the file-present branch. Exit 0 and `config_sources.file_present: true` verified empirically 2026-08-19."
+    },
+    {
+      "id": "production-ledger-repair-sentinel-missing",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "ledger",
+        "repair",
+        "--dir",
+        ".",
+        "--campaign",
+        "vi-observe-repair-fixture",
+        "--reason",
+        "vi-observe fixture repair",
+        "--actor",
+        "vi-observe",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        ".git/HEAD": "ref: refs/heads/master\n",
+        ".git/config": "[core]\n\trepositoryformatversion = 0\n\tfilemode = true\n\tbare = false\n",
+        ".git/refs/heads/master": "abc1234000000000000000000000000000000000\n",
+        ".git/objects/.keep": ""
+      },
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "arbor ledger repair --dir . --campaign <id> --reason ... --actor ... against a scratch cwd with no audit ledger at all for that campaign. `ledger-command.ts`'s repair branch refuses (CONFLICT) only when the ledger is BOTH `valid` AND its `tip_status` is something other than `sentinel_missing` — a wholly absent campaign ledger genuinely reports `{valid: true, tip_status: \"sentinel_missing\"}` (the same real state `production-ledger-verify-empty` already exercises for `verify`), so it is NOT refused and the sanctioned-repair path genuinely runs (verified by reading persist.ts's `classifyTipStatus`/`loadLedgerResult`, not assumed). `resolveGitHead` requires a real, discoverable git repository at `--dir`'s resolved path (it shells out to `git -C <dir> rev-parse HEAD`, which only needs HEAD to textually resolve to a SHA-shaped ref — verified empirically that git does not require the referenced commit object to actually exist) — the seeded `.git/HEAD`+`config`+`refs/heads/master`+`objects/` skeleton is the minimal plain-text git repository that satisfies it, entirely inside the hermetic scratch cwd. Closes a hollow_candidate: `performSanctionedRepair` (packages/arbor-audit/src/repair-log.ts) was production-reachable only through this one dispatch site (ledger-command.ts:310) and nothing in the prior catalog invoked it. Exit 0 verified empirically 2026-08-19 (real invocation, three runs, stable; only `performed_at`/`content_hash` vary run to run, which nothing here asserts on)."
+    },
+    {
+      "id": "production-ledger-verify-corrupt-integrity",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "ledger",
+        "verify",
+        "--dir",
+        ".",
+        "--campaign",
+        "vi-observe-corrupt-fixture",
+        "--json"
+      ],
+      "env": {},
+      "seed_files": {
+        "audit/vi-observe-corrupt-fixture.jsonl": "{\"kind\":\"gate_checkpoint\",\"id\":\"trace_1\",\"campaign_id\":\"vi-observe-corrupt-fixture\",\"node_id\":\"root\",\"timestamp\":\"2026-08-19T23:38:15.380Z\",\"previous_hash\":null,\"checkpoint\":{\"transition\":\"campaign_start\",\"operation_id\":\"vi-observe-corrupt-fixture:campaign_start\",\"gate\":{\"gate\":\"admission\",\"result\":\"pass\",\"checked_at\":\"2026-08-19T23:38:15.380Z\",\"detail\":\"all checks passed\"},\"failures\":[],\"unresolved\":[]},\"content_hash\":\"0000000000000000000000000000000000000000000000000000000000000000\"}\n"
+      },
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 5,
+      "description": "arbor ledger verify --dir . --campaign <id> --json against a scratch cwd pre-seeded with a genuinely corrupted audit ledger: one real `gate_checkpoint` packet (captured verbatim from an actual `campaign.start` MCP dispatch against this same CLI, 2026-08-19) whose `content_hash` field has been hand-corrupted to an all-zero value that does not match the packet's real recomputed hash. `loadLedgerCore` (persist.ts) parses the JSON successfully, then `EvidenceLedger.verifyIntegrity()` detects the hash mismatch and the loader throws `AuditIntegrityError` — caught, quarantined, and surfaced as `diagnostics` — genuinely invoking the class nothing in the prior catalog constructed (hollow_candidate, packages/arbor-audit/src/audit.ts). This is corruption of one real field on a real record, not a hand-built ledger shape: the packet's structure, ids, and every other field are exactly what the production code path emits. Exit 5 (VIOLATION, since `valid: false`) verified empirically 2026-08-19, stable (no timestamps or ids here are regenerated at run time)."
+    },
+    {
+      "id": "production-mcp-evidence-surface-dispatch",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "serve",
+        "--persistence-dir",
+        ".arbor"
+      ],
+      "env": {},
+      "stdin": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"vi-observe\",\"version\":\"1\"}}}\n{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}\n{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"campaign.start\",\"campaign_id\":\"vi-observe-evidence-fixture\",\"plan_path\":\"plan.md\",\"root_action\":{\"description\":\"vi-observe fixture root\",\"estimated_gain\":1,\"estimated_cost\":1,\"category\":\"root\",\"delegate_to\":\"crown\"}}}}\n{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"userinput.ask\",\"campaign_id\":\"vi-observe-evidence-fixture\",\"node_id\":\"root\",\"question\":{\"operation_id\":\"vi-observe-ask\",\"question\":\"Continue?\",\"options\":[{\"id\":\"yes\",\"text\":\"Yes\",\"is_other\":false}],\"authority\":\"lead\",\"blocking\":\"blocking\",\"requester_role\":\"taproot\",\"idempotency_key\":\"vi-observe-ask\",\"as_of\":\"seq:1\"}}}}\n{\"jsonrpc\":\"2.0\",\"id\":4,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"userinput.answer\",\"campaign_id\":\"vi-observe-evidence-fixture\",\"node_id\":\"root\",\"record_id\":\"userinput_2\",\"answer\":{\"option_id\":\"yes\",\"custom_text\":\"\",\"answered_by\":\"vi-observe\",\"answered_at\":\"2026-08-19T23:00:00.000Z\"}}}}\n{\"jsonrpc\":\"2.0\",\"id\":5,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"compaction.record\",\"campaign_id\":\"vi-observe-evidence-fixture\",\"node_id\":\"root\",\"lifecycle\":{\"operation_id\":\"vi-observe-compaction\",\"trigger\":\"auto\",\"strategy\":\"local_model\",\"status\":\"completed\",\"pre_evidence_id\":\"vi-observe-pre\",\"post_evidence_id\":\"vi-observe-post\",\"anchor_summary_id\":\"vi-observe-anchor\",\"reason\":\"vi-observe fixture compaction\",\"partial_evidence_ids\":[],\"idempotency_key\":\"vi-observe-compaction\",\"as_of\":\"seq:3\"}}}}\n",
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "arbor serve fed a real MCP JSON-RPC session that creates a real campaign (`campaign.start`) and then drives three evidence-recording command kinds nothing in the prior catalog reached: `userinput.ask` (RuntimeCatalogRouter.dispatchUserInput -> manager.askForUserInput -> EvidenceLedger.recordRequestUserInput -> validateRequestUserInput), `userinput.answer` (-> manager.answerUserInput -> recordUserInputAnswer -> validateUserInputAnswer), and `compaction.record` (RuntimeCatalogRouter.dispatchCompactionRecord -> manager.recordCompactionLifecycle -> recordCompactionLifecycle -> validateCompactionLifecycle) — all three genuinely production-reachable MCP command kinds (`runtime-catalog.ts`'s own `RUNTIME_CATALOG`), matching exactly the payload shapes `liveness-runner.ts`'s own self-check trajectories already use for these same kinds. Closes three of the eleven hollow_candidate symbols in packages/arbor-audit/src/audit.ts. `record_id: \"userinput_2\"` is deterministic, not guessed: the ledger's id counter is a simple per-process sequence over every record kind, and this session always records exactly one prior packet (the campaign_start gate_checkpoint, `trace_1`) before the question is asked. Exit 0 and all four dispatches accepted verified empirically 2026-08-19 (real invocation, three runs, stable; only operation_id UUIDs and timestamps vary run to run, which nothing here asserts on). count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-git-repo-real-agent-loop-campaign",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "run",
+        "--once",
+        "--executor",
+        "deterministic",
+        "--persistence-dir",
+        "."
+      ],
+      "env": {},
+      "git_init": true,
+      "run_class": "production",
+      "timeout_ms": 45000,
+      "expected_exit": 0,
+      "description": "The same `arbor run --once --executor deterministic` shape as production-deterministic-campaign, but with `git_init: true` so the scratch cwd is a real one-commit git repository before the CLI is spawned. This is the scenario that closes the single highest-leverage gap in the catalog: `arbor run` always constructs a real `WorktreeManager` (demo.ts:709, ADR-001 isolation always on), whose `acquireLease` calls `git rev-parse HEAD` before `git worktree add` (worktree.ts). Against production-deterministic-campaign's non-git scratch cwd that HEAD lookup fails, `CampaignManager.expandNode` (manager.ts:550) sees `isolation.result === \"fail\"` and returns before `beginExpansion` (tree.ts) ever runs — the root cause the operator identified for the majority of `gate:vi-findings`' 63 red findings. With a real repo the isolation gate genuinely PASSES: `acquireLease` creates a real leased worktree under `.worktrees/`, `expandNode` reaches `beginExpansion`, and the deterministic executor carries the node through to `CampaignManager.recordResult`'s evidence gate and critic verdict — `checkEvidence` (arbor-gate/src/gate.ts) and `verifyNode` (arbor-core/src/tree.ts) both fire, verified empirically 2026-08-20 via a standalone coverage capture before this was added to the catalog (all three of beginExpansion/verifyNode/checkEvidence: 0 invocations in the prior catalog, nonzero here)."
+    },
+    {
+      "id": "production-task-submit-heuristic-arbiter",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "task",
+        "vi-observe hermetic smoke test task",
+        "--json"
+      ],
+      "env": {
+        "ARBOR_OPENCODE_BIN": "/__revoy_provider_unavailable__/opencode"
+      },
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 1,
+      "description": "`arbor task <text> --json` against a scratch cwd with no native provider configured and `ARBOR_OPENCODE_BIN` pinned to a guaranteed-missing absolute path. The scenario drives task-composer submission and ADR-062 arbiter intake: the zero-cost classifier records a real governed `arbiter_decision`, then the unavailable planner fails closed. The hardened product no longer fabricates an actionable proposal through a heuristic fallback; it returns a durable failed draft with recovery guidance and conflict exit 1. This is an expected governed refusal, not a successful task run, and its provider precondition cannot vary with the host PATH. count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-audit-show-forensic-four",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "audit",
+        "show",
+        "forensic-four",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "`arbor audit show forensic-four --json` — the `arbor audit` verb the prior catalog never drove at all. Loads and renders one real audit template (`.claude/skills/forensic-four-*`-backed fan spec) through `audit-command.ts`'s `show` path: template lookup, fan-width/section/deliverable/tool projection, and stdout formatting. `--json` is accepted but this subcommand's real behavior (verified empirically) still renders the human-readable summary regardless — an existing quirk of `audit-command.ts`, not something this scenario asserts on; only exit code and invocation are load-bearing here. Exit 0 verified empirically 2026-08-20, output is deterministic (template content is static, no timestamps or ids)."
+    },
+    {
+      "id": "production-ledger-audit-empty-campaign",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "ledger",
+        "audit",
+        "vi-observe-scenario",
+        "--dir",
+        ".",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 15000,
+      "expected_exit": 0,
+      "description": "`arbor ledger audit <campaign-id> --dir . --json` — the `audit` action of `arbor ledger`, distinct from `ledger verify`/`ledger repair` (both already covered) and never previously reached. Drives `ledger-command.ts`'s audit path against a scratch cwd with no ledger file for the named campaign, which is itself a real, valid outcome (`ledger_valid: true`, empty findings) rather than an error — exercises the same audit/quarantine machinery the corrupt-ledger scenario reaches from the opposite (violating) direction. Exit 0 verified empirically 2026-08-20, stable across runs (no timestamps/ids in this shape when the campaign has no ledger data)."
+    },
+    {
+      "id": "production-command-list-empty-catalog",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "command",
+        "list"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 10000,
+      "expected_exit": 0,
+      "description": "`arbor command list` — the `arbor command` verb the prior catalog never drove. Real invocation of `loadCommandCatalog` (cli.ts): builds a `CommandCatalog` from `~/.arbor/commands` and `<cwd>/.arbor/commands`, installs any locally-trusted plugin's registered commands, and prints its `list()`/`diagnostics()` projection. Against a scratch cwd with neither directory populated this legitimately returns an empty catalog with no diagnostics — still a real pass through `CommandCatalog.fromLocations` and `PluginRegistry.list()`, not a stub. Exit 0 verified empirically 2026-08-20, output is deterministic (`{\"commands\":[],\"diagnostics\":[]}` with nothing on disk to discover)."
+    },
+    {
+      "id": "production-liveness-attestation",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "liveness",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "`arbor liveness --json` — the `arbor liveness` verb the prior catalog never drove. Exercises every registered liveness seam and consumer (`liveness-runner.ts`'s self-check trajectories) against a scratch cwd, producing a real attestation report with a genuine mix of answered/refused/indeterminate seams (e.g. `governance.snapshot` refused with a real ENOENT on the scratch cwd's missing `decisions/` directory, `a2a.cards` refused as not configured) — real refusals from real absent state, not fabricated ones. `--json` is accepted but this command's real behavior (verified empirically) still renders the human-readable attestation text regardless, matching the same quirk noted on `audit show`; only exit code and invocation are load-bearing here. Exit 0 verified empirically 2026-08-20 (the attestation timestamp is the only thing that varies run to run)."
+    },
+    {
+      "id": "production-selfhost-dry-run-linked-worktree",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "selfhost",
+        "--max-iterations",
+        "1",
+        "--max-seconds",
+        "5",
+        "--dry-run",
+        "--target",
+        "linked-worktree",
+        "--run-id",
+        "vi-observe-selfhost-fixture",
+        "--task",
+        "vi-observe selfhost dry-run smoke"
+      ],
+      "env": {},
+      "git_init": true,
+      "git_linked_worktree": true,
+      "run_class": "production",
+      "timeout_ms": 30000,
+      "expected_exit": 0,
+      "description": "`arbor selfhost --dry-run` against a real LINKED git worktree — the `arbor selfhost` verb the prior catalog never drove at all, and structurally undrivable with a bare `git_init: true` repo: `evaluateTargetSafety` (selfhost.ts) refuses to target a repo's own PRIMARY checkout as a self-hosting safety boundary (`forbidden_primary_checkout`), and a fresh single-worktree repo IS its own primary checkout by construction — verified empirically (a plain `git_init` scratch repo targeting itself refuses with exactly that error). `git_linked_worktree: true` grows a genuine second, LINKED worktree of the same repo (`git worktree add`), and `--target linked-worktree` points selfhost at that non-primary checkout, which clears the guard for the real reason it exists — not by defeating the check, but by reproducing the actual distinction (primary vs. linked worktree) it is checking for. `--dry-run` composes the full campaign plan (worktree branch, campaign id, task, model config) and prints it without dispatching to a model, keeping this hermetic and network-free. `--run-id` pins the run identity so `campaign_id`/`worktree_branch` are deterministic rather than clock+random. Exit 0 verified empirically 2026-08-20."
+    },
+    {
+      "id": "cli-serve-junior-tier-denied-mutation",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "serve",
+        "--persistence-dir",
+        ".arbor"
+      ],
+      "env": {},
+      "stdin": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"method\": \"initialize\", \"params\": {\"protocolVersion\": \"2025-06-18\", \"capabilities\": {}, \"clientInfo\": {\"name\": \"vi-observe\", \"version\": \"1\"}}}\n{\"jsonrpc\": \"2.0\", \"method\": \"notifications/initialized\"}\n{\"jsonrpc\": \"2.0\", \"id\": 2, \"method\": \"arbor_command\", \"params\": {\"input\": {\"kind\": \"session.identity.mutate\", \"session_id\": \"vi-observe-cli-junior\", \"display_name\": \"should not persist\", \"provenance\": {\"tag\": \"claimed\", \"claimant\": \"vi-observe\"}, \"metadata\": {\"operation_id\": \"vi-observe-cli-junior-op\", \"idempotency_key\": \"vi-observe-cli-junior-op\", \"correlation_id\": \"vi-observe-cli-junior-op\", \"actor_id\": \"vi-observe\", \"requested_at\": \"2026-08-23T00:00:00.000Z\"}}}}\n{\"jsonrpc\": \"2.0\", \"id\": 3, \"method\": \"arbor_query\", \"params\": {\"input\": {\"kind\": \"session.identity.get\", \"session_id\": \"vi-observe-cli-junior\"}}}\n",
+      "run_class": "cli",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "T5.3 (2026-08-23 remediation) real-surface scenario, WA-10 pattern (packages/arbor-mcp/tests/cli.test.ts): arbor serve over real stdio with NO --trusted-client flag, so RuntimeCatalogRouter defaults to caller_tier junior (RuntimeRouterOptions.caller_tier's own doc comment). Drives a real session.identity.mutate command, which the router's authorized()/entitledActionClasses(caller_tier) check refuses at the capability-tier boundary, then a real session.identity.get query, which junior may still perform. This is the run_class:cli product-surface scenario hollow-parity.mjs item 2 watches: the denial must surface in outcomes.jsonl as a permission outcome, never a validation one - a caller_tier rejection and a malformed-input rejection are different Hollow-shape findings, and the ok:true envelope-level exit code (0) proves this scenario cannot be distinguished from a silent success without outcome-aware observation. count_semantics: \"presence_only\" -- sandbox-broker.ts's processRoot() walks /proc to count tasks owned by the operator's uid during sandbox admission; same real-host-process-count dependency as production-flight-director-lifecycle's note, verified empirically 2026-09-18. See vi-observe.mjs's count_semantics handling."
+    },
+    {
+      "id": "tui-real-stdin-scroll-and-select",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "tui",
+        "--renderer",
+        "stdout"
+      ],
+      "env": {},
+      "stdin": "\\1\u001b[6~\u001b[BR",
+      "run_class": "tui",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "T5.3 (2026-08-23 remediation) real-surface scenario, same chord pattern as packages/arbor-mcp/tests/tui-keyboard-scrolling.test.ts (WA-25/WA-26): real raw-terminal bytes over the scenario's stdin pipe, written before EOF rather than only closing stdin immediately the way production-tui-headless-boot does. Backslash then 1 (the Campaigns chord in SCREEN_NAV), ESC [ 6 ~ (PageDown), ESC [ B (Down arrow / row selection), then R - driving the terminal input decoder, the Campaigns screen's paging/selection reducer path, and whatever R dispatches through executeAction, none of which production-tui-headless-boot's immediately-closed stdin ever reaches. This is the run_class:tui product-surface scenario hollow-parity.mjs item 2 watches for a validation-outcome finding. count_semantics: \"presence_only\" -- same TUI background-timer wall-clock race, verified empirically 2026-09-18. See production-tui-headless-boot's note and vi-observe.mjs's count_semantics handling."
+    },
+    {
+      "id": "production-flight-director-lifecycle",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "flight",
+        "serve"
+      ],
+      "env": {},
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "git_init": true,
+      "http_probe": {
+        "ready_pattern": "Flight Director ready for ",
+        "bootstrap_operator_session": false,
+        "requests": [],
+        "shutdown_signal": "SIGINT"
+      },
+      "description": "Starts the real repository-local Flight Director in an isolated Git repository, observes its authenticated transport/operator/controller composition, and shuts it down through the production SIGINT lifecycle. No HTTP request is declared because Flight uses an authenticated Unix-domain socket; the readiness probe exists to exercise and terminate a long-lived service under coverage without inventing a second transport. count_semantics: \"presence_only\" -- repo-flight-process.ts's children()/descendantOf() enumerate every PID under /proc on the host machine to find this process's real descendants; their invocation count is a direct function of how many processes exist on the machine running vi:observe at that instant -- genuine external-environment state, not a defect in this repository or its harness. Verified empirically 2026-09-18 (count varied 432/438/438 across 3 consecutive runs with zero source changes). See vi-observe.mjs's count_semantics handling."
+    },
+    {
+      "id": "webui-http-surface-9-routes",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "webui",
+        "0"
+      ],
+      "env": {},
+      "run_class": "web",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "http_probe": {
+        "ready_pattern": "operator session: http://127\\.0\\.0\\.1:(\\d+)/\\?operator_token=([A-Za-z0-9_-]+)",
+        "bootstrap_operator_session": true,
+        "requests": [
+          {
+            "method": "GET",
+            "path": "/"
+          },
+          {
+            "method": "GET",
+            "path": "/api/campaigns"
+          },
+          {
+            "method": "POST",
+            "path": "/api/runtime/command",
+            "body": {
+              "kind": "campaign.start",
+              "campaign_id": "vi-observe-webui-fixture",
+              "plan_path": "plan.md",
+              "root_action": {
+                "description": "vi-observe webui fixture root",
+                "estimated_gain": 1,
+                "estimated_cost": 1,
+                "category": "root",
+                "delegate_to": "crown"
+              },
+              "metadata": {
+                "operation_id": "vi-observe-webui-fixture-start",
+                "idempotency_key": "vi-observe-webui-fixture-start",
+                "correlation_id": "vi-observe-webui-fixture-start",
+                "actor_id": "vi-observe",
+                "requested_at": "2026-08-23T00:00:00.000Z"
+              }
+            }
+          },
+          {
+            "method": "GET",
+            "path": "/api/campaigns/vi-observe-webui-fixture"
+          },
+          {
+            "method": "GET",
+            "path": "/api/campaigns/vi-observe-webui-fixture/kb"
+          },
+          {
+            "method": "GET",
+            "path": "/api/campaigns/vi-observe-webui-fixture/interrupt"
+          },
+          {
+            "method": "GET",
+            "path": "/api/campaigns/vi-observe-no-such-campaign"
+          },
+          {
+            "method": "GET",
+            "path": "/api/stream",
+            "sse": true,
+            "wait_ms": 200
+          },
+          {
+            "method": "POST",
+            "path": "/api/runtime/query",
+            "body": "{not valid json"
+          }
+        ],
+        "shutdown_signal": "SIGINT"
+      },
+      "description": "T5.3 (2026-08-23 remediation) real-surface scenario: arbor webui 0 started as a real child process, its one-use operator URL exchanged for the opaque session cookie, then probed over real HTTP against its own ephemeral loopback port and shut down with SIGINT - the same interrupt-driven path a real operator Ctrl-C takes. Hits all 9 of ArborWebUIServer.handleRequest's route branches in one authenticated session: GET / (index), GET /api/campaigns (list, empty), POST /api/runtime/command (a real campaign.start, creating the fixture campaign every later request depends on), GET /api/campaigns/:id (snapshot), GET /api/campaigns/:id/kb, GET /api/campaigns/:id/interrupt, GET /api/campaigns/:id for an unknown id (a real 404, WA-22/WA-23's own regression target), GET /api/stream (a live SSE connection, read once then destroyed), and POST /api/runtime/query with deliberately malformed JSON (a real 400 from readJsonBody's parse guard, J6-20's regression target). This is the run_class:web product-surface scenario hollow-parity.mjs item 2 watches for a validation-outcome finding. count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-taskcomposer-retry-resets-intent-turn",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "serve",
+        "--persistence-dir",
+        ".arbor",
+        "--trusted-client"
+      ],
+      "env": {
+        "ARBOR_OPENCODE_BIN": "/__revoy_provider_unavailable__/opencode"
+      },
+      "seed_files": {
+        ".arbor/task-composer/drafts.json": "{\"schema_version\":1,\"drafts\":[{\"id\":\"draft-vi-observe-resetturn-fixture\",\"revision\":1,\"status\":\"failed\",\"task\":\"vi-observe fixture: closes the resetIntentTurn hollow-candidate\",\"source\":\"cli\",\"parent_campaign_id\":null,\"evidence_ids\":[],\"proposal\":null,\"planner\":{\"kind\":\"failed\",\"session_id\":null,\"model_identity\":null,\"error\":\"vi-observe fixture seeded failure\",\"usage\":{\"kind\":\"unavailable\",\"reason\":\"vi-observe fixture\"}},\"arbiter_decision\":null,\"campaign_id\":null,\"job_id\":null,\"rejection_reason\":null,\"created_at\":\"2026-01-01T00:00:00.000Z\",\"updated_at\":\"2026-01-01T00:00:00.000Z\"}],\"idempotency\":[]}"
+      },
+      "stdin": "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"initialize\",\"params\":{\"protocolVersion\":\"2025-06-18\",\"capabilities\":{},\"clientInfo\":{\"name\":\"vi-observe\",\"version\":\"1\"}}}\n{\"jsonrpc\":\"2.0\",\"method\":\"notifications/initialized\"}\n{\"jsonrpc\":\"2.0\",\"id\":2,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"taskcomposer.retry\",\"draft_id\":\"draft-vi-observe-resetturn-fixture\",\"expected_revision\":1,\"idempotency_key\":\"vi-observe-reset-retry-1\"}}}\n{\"jsonrpc\":\"2.0\",\"id\":3,\"method\":\"tools/call\",\"params\":{\"name\":\"arbor_command\",\"arguments\":{\"kind\":\"taskcomposer.retry\",\"draft_id\":\"draft-vi-observe-resetturn-fixture\",\"expected_revision\":3,\"idempotency_key\":\"vi-observe-reset-retry-2\"}}}\n",
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 30000,
+      "expected_exit": 0,
+      "description": "Closes a hollow-candidate: `resetIntentTurn` (packages/arbor-core/src/intent-admission.ts) is reached only from `TaskComposer.admitIntent` (task-composer.ts) when a draft is retried by a process that already ran `admitIntent` for that same draft once before -- `intentAdmissionStates` is in-memory only (never persisted; see `TaskComposer.restore()`), so this genuinely requires two `taskcomposer.retry` dispatches inside the SAME `arbor serve` process, not two CLI invocations. `draft_id` is normally server-assigned (`draft-${randomUUID()}`), unknowable at authoring time and unusable in vi-observe's static stdin -- worked around by seeding a real-shaped `TaskComposerDraft` (status `failed`, revision 1) directly into `.arbor/task-composer/drafts.json` under a fixed id `TaskComposer.restore()` loads at boot, so retry's stable `draft_id` (only `revision` advances) is known ahead of time. `--trusted-client` is required: `taskcomposer.retry` needs the `senior` capability tier, refused for the default junior caller (verified empirically). First `taskcomposer.retry` (expected_revision 1) has no prior admission state in this fresh process, so `admitIntent` calls `createIntentAdmissionState` and fails again via `plan()`'s real opencode-spawn ENOENT (`ARBOR_OPENCODE_BIN` pinned missing, same trick as production-task-submit-heuristic-arbiter) -- revision advances 1->3 (`retry()`'s own \"planning\" update, then `plan()`'s \"failed\" update). Second `taskcomposer.retry` (expected_revision 3) now finds a prior admission state for this draft id in `intentAdmissionStates` and `admitIntent` calls `resetIntentTurn` instead -- verified empirically 2026-09-18 by a temporary debug probe against the compiled dist (not committed) confirming the exact call, and by three stable real runs of this scenario (revision sequence 1->3->5, both `taskcomposer.retry` dispatches `accepted:true`, exit 0). count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-task-direct-tier-isolation-gate-refusal",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "task",
+        "create vi-observe-fixture.txt with the text hello",
+        "--tier",
+        "direct",
+        "--json"
+      ],
+      "env": {},
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 30000,
+      "expected_exit": 3,
+      "description": "Closes a hollow-candidate: `latestGateRefusal` (cli.ts) is called unconditionally inside `awaitConfirmedCampaign` once a task-composer confirm genuinely admits and awaits a real campaign -- reachable only past `taskcomposer.confirm`, a path no prior scenario reached (production-task-submit-heuristic-arbiter fails during `plan()`, before any campaign exists, so `awaitConfirmedCampaign` returns at its own early `draft.campaign_id === null` guard without ever calling `latestGateRefusal`). `--tier direct` (an operator-forced governance tier) bypasses the native planner entirely, so no provider/credentials are needed; the task text names a concrete file so `classifyAndRepairMutatingActions` can derive a `high_risk_tool_scope` and admission succeeds. With no `git_init` (the scratch cwd is not a git repository), `CampaignManager.expandNode`'s isolation gate genuinely fails on the root node (`WorktreeManager.acquireLease`'s `git rev-parse HEAD` has nothing to resolve) -- the same real isolation-gate mechanism production-deterministic-campaign and production-git-repo-real-agent-loop-campaign already exercise from the `arbor run` side, reached here from the task-composer side instead. The halted campaign's node carries a real, non-\"pass\" `gate_records` entry; `latestGateRefusal` finds it and the CLI's JSON `campaign_result.gate_refusal` is populated (`gate: \"isolation\"`, `code: \"gate_isolation_fail\"`) rather than null. Exit 3 and a non-null `gate_refusal` verified empirically 2026-09-18, stable over three runs. count_semantics: \"presence_only\" -- same /proc-walking sandbox admission read as cli-serve-junior-tier-denied-mutation's note, verified empirically 2026-09-18."
+    },
+    {
+      "id": "production-tui-console-docs-open-document",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "tui",
+        "--renderer",
+        "stdout"
+      ],
+      "env": {},
+      "seed_files": {
+        "vi-observe-console-doc.md": "# vi-observe fixture document\n\nThis is a real markdown fixture used to exercise the TUI Console screen's\ndocs inspector tab and `readConsoleDocument`'s production path.\n"
+      },
+      "stdin": "`\t\t\r",
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 20000,
+      "expected_exit": 0,
+      "description": "Closes a hollow-candidate: `readConsoleDocument` (console-documents.ts) is reached only from the TUI Console screen's \"docs\" inspector tab when an operator opens a discovered local document -- no prior scenario ever navigated to the Console screen's docs tab. Real raw-terminal bytes over stdin, same chord-driven pattern as tui-real-stdin-scroll-and-select: backtick (the Console screen's SCREEN_NAV key) switches screens, two Tab presses cycle the inspector from its default \"project\" tab through \"adrs\" to \"docs\" (and set `consoleInspectorFocused`, needed for Enter to route to `openConsoleAdr` rather than the console input composer), then Enter/return opens the selected document. `discoverConsoleDocuments` only finds top-level `*.md`/`*.mdx`/`*.markdown`/`*.txt` files or a `docs/` subdirectory, so a hermetic scratch cwd needs a seeded document to discover; `vi-observe-console-doc.md` at the scratch cwd's root is picked up and becomes `consoleSelectedDocument`'s default (`consoleDocuments[0]`), so no arrow-key selection is needed before Enter. Exit 0 and a real `readConsoleDocument(cwd, \"vi-observe-console-doc.md\")` invocation verified empirically 2026-09-18 (temporary debug probe against the compiled dist, not committed), stable over three runs. count_semantics: \"presence_only\" -- same TUI background-timer wall-clock race, verified empirically 2026-09-18. See production-tui-headless-boot's note and vi-observe.mjs's count_semantics handling."
+    },
+    {
+      "id": "production-tui-resume-execution-status-poll",
+      "argv": [
+        "node",
+        "packages/arbor-mcp/dist/cli.js",
+        "tui",
+        "--renderer",
+        "stdout",
+        "--resume"
+      ],
+      "env": {},
+      "seed_files": {
+        ".arbor/attestation/heads.jsonl": "{\"kind\":\"arbor_ledger_head_attestation\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"ledger_head_hash\":\"4e1235aa97203b1eff4a5d5558d121eec504aa9d9cc3006846c477fd5d71c6ad\",\"entry_count\":7,\"at\":\"2026-09-18T16:05:28.970Z\",\"content_hash\":\"dcbfc71f903716fe3ae1fe568fbfac2b3c619f5938a479ffb2f559f1520f0367\"}\n",
+        ".arbor/audit/composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894.jsonl": "{\"kind\":\"gate_checkpoint\",\"id\":\"trace_1\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"timestamp\":\"2026-09-18T16:05:28.887Z\",\"previous_hash\":null,\"checkpoint\":{\"transition\":\"campaign_start\",\"operation_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:campaign_start\",\"gate\":{\"gate\":\"admission\",\"result\":\"pass\",\"checked_at\":\"2026-09-18T16:05:28.887Z\",\"detail\":\"all checks passed\"},\"failures\":[],\"unresolved\":[]},\"content_hash\":\"ec77d6e3ad94ac1067933108ba17f8b29cac1c728fdef892c7daf737ab090f7c\"}\n{\"kind\":\"telemetry_observation\",\"id\":\"telemetry_2\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"timestamp\":\"2026-09-18T16:05:28.955Z\",\"previous_hash\":\"ec77d6e3ad94ac1067933108ba17f8b29cac1c728fdef892c7daf737ab090f7c\",\"observation\":{\"operation_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:select\",\"epoch\":1,\"type\":\"phase_timing\",\"phase\":\"select\",\"outcome\":\"success\",\"duration_ms\":0,\"source_evidence_id\":\"trace_1\",\"idempotency_key\":\"phase:composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:select:select:1\",\"provenance\":{\"tag\":\"generated\",\"generator\":\"arbor-loop-telemetry\",\"input_hash\":\"a053c4b7f7ee0bffd73c7489f27214175ae5ba598d34c1d04c8ad7730b8e5c5b\"}},\"content_hash\":\"0998480eba83b31836839441e2a54da33dc007723e7fd16b4ea2b6641f858d67\"}\n{\"kind\":\"gate_checkpoint\",\"id\":\"trace_3\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"timestamp\":\"2026-09-18T16:05:28.963Z\",\"previous_hash\":\"0998480eba83b31836839441e2a54da33dc007723e7fd16b4ea2b6641f858d67\",\"checkpoint\":{\"transition\":\"node_expansion\",\"operation_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:node_expansion\",\"gate\":{\"gate\":\"isolation\",\"result\":\"fail\",\"checked_at\":\"2026-09-18T16:05:28.963Z\",\"detail\":\"worktree not isolated; no active lease on worktree\"},\"failures\":[\"worktree not isolated\",\"no active lease on worktree\"],\"unresolved\":[]},\"content_hash\":\"1ce9b731e268f91ac0005c2d2446131b5039ebb4035bb849a5a97783b75a939d\"}\n{\"kind\":\"telemetry_observation\",\"id\":\"telemetry_4\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"timestamp\":\"2026-09-18T16:05:28.963Z\",\"previous_hash\":\"1ce9b731e268f91ac0005c2d2446131b5039ebb4035bb849a5a97783b75a939d\",\"observation\":{\"operation_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:expand\",\"epoch\":1,\"type\":\"phase_timing\",\"phase\":\"expand\",\"outcome\":\"failure\",\"duration_ms\":1,\"source_evidence_id\":\"trace_3\",\"idempotency_key\":\"phase:composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:expand:expand:1\",\"provenance\":{\"tag\":\"generated\",\"generator\":\"arbor-loop-telemetry\",\"input_hash\":\"3f6833f5845fd00fc2571a05e8da1cdcea47d5374314e1a08ce45d80a9d4ea21\"}},\"content_hash\":\"8a494089826c965de3dee6c14abf0a09be84f520cbca68f4dd02d4cfc9a7a0be\"}\n{\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"parent_id\":\"root\",\"timestamp\":\"2026-09-18T16:05:28.965Z\",\"action_description\":\"create vi-observe-fixture.txt with the text hello\",\"action_category\":\"general\",\"specialist_agent\":\"seed\",\"critic_agent\":\"loop\",\"node_state_before\":\"pending\",\"node_state_after\":\"failed\",\"provenance\":{\"tag\":\"claimed\",\"claimant\":\"loop\"},\"specialist_output\":\"Isolation gate rejected: repository status could not be inspected before isolation: fatal: not a git repository (or any parent up to mount point /)\\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\",\"critic_verdict_approved\":false,\"critic_root_cause\":\"isolation gate failed: repository status could not be inspected before isolation: fatal: not a git repository (or any parent up to mount point /)\\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\",\"score_before\":0,\"score_after\":0,\"gates\":[{\"gate\":\"isolation\",\"result\":\"fail\",\"checked_at\":\"2026-09-18T16:05:28.963Z\",\"detail\":\"worktree not isolated; no active lease on worktree\"}],\"kb_entries_written\":[],\"kind\":\"trace\",\"id\":\"trace_5\",\"previous_hash\":\"8a494089826c965de3dee6c14abf0a09be84f520cbca68f4dd02d4cfc9a7a0be\",\"content_hash\":\"388c8825a066585b12e737c6654dc80d69a6017ae7e9d44d0ff398a1d79b454a\"}\n{\"kind\":\"memory_fact\",\"id\":\"memory_6\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"timestamp\":\"2026-09-18T16:05:28.965Z\",\"previous_hash\":\"388c8825a066585b12e737c6654dc80d69a6017ae7e9d44d0ff398a1d79b454a\",\"fact\":{\"tier\":\"specialist_visible\",\"source_evidence_id\":\"trace_5\",\"idempotency_key\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:node_mu75gvjt_1:result:0:failure_mode:71c39689ac532975f6d6478457debf24a422f2c26414276dd7fafafaeab9fc92\",\"scope\":{\"kind\":\"campaign\"},\"type\":\"failure_mode\",\"content\":\"repository status could not be inspected before isolation: fatal: not a git repository (or any parent up to mount point /)\\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\",\"provenance\":{\"tag\":\"generated\",\"generator\":\"campaign_manager.kb_extractor\",\"input_hash\":\"c6da3f29fd445d63870402b9648f7edde1618b469c5cd5a2c58c094a1645a809\"},\"tags\":[\"general\"]},\"content_hash\":\"f427e0e63e67f342de46388cd0f3ef0d92bf8d8c934c9f14bf85149d3ac8cd77\"}\n{\"kind\":\"gate_checkpoint\",\"id\":\"trace_7\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"timestamp\":\"2026-09-18T16:05:28.968Z\",\"previous_hash\":\"f427e0e63e67f342de46388cd0f3ef0d92bf8d8c934c9f14bf85149d3ac8cd77\",\"checkpoint\":{\"transition\":\"campaign_halt\",\"operation_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894:auto-halt:no_nodes\",\"gate\":{\"gate\":\"audit\",\"result\":\"bypass\",\"checked_at\":\"2026-09-18T16:05:28.968Z\",\"detail\":\"campaign auto-halted: no_nodes; independent audit deferred to operator\",\"bypass_evidence_deficit\":\"no independent auditor for auto-halt (no_nodes)\"},\"failures\":[],\"unresolved\":[]},\"content_hash\":\"4e1235aa97203b1eff4a5d5558d121eec504aa9d9cc3006846c477fd5d71c6ad\"}\n",
+        ".arbor/audit-tips/composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894.json": "{\"kind\":\"arbor_audit_tip_sentinel\",\"version\":2,\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"record_count\":7,\"tip_hash\":\"4e1235aa97203b1eff4a5d5558d121eec504aa9d9cc3006846c477fd5d71c6ad\",\"repair_count\":0,\"repair_tip_hash\":null,\"content_hash\":\"d3acd1f1e3913fa8074d6c471f702b94081a5af612b4d94c542f5cecb6e6d93b\"}\n",
+        ".arbor/audit-tips/manifest.json": "{\"kind\":\"arbor_audit_tip_manifest\",\"version\":1,\"campaigns\":[\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\"],\"content_hash\":\"14d57ad866b10167d8b5ca1871f626c387c7801e4e4edcc11adc3d1d0b89372f\"}\n",
+        ".arbor/boulder.json": "{\n  \"active_plan\": \".arbor/task-composer/draft-0bc78009-dae3-49fe-b7a1-281b273d1894.json\",\n  \"active_campaign\": \"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n  \"session_ids\": [],\n  \"started_at\": \"2026-09-18T16:05:28.889Z\",\n  \"plan_name\": \"draft-0bc78009-dae3-49fe-b7a1-281b273d1894.json\"\n}",
+        ".arbor/campaign-run-attempts/attempts.json": "{\n  \"schema_version\": 1,\n  \"saved_at\": \"2026-09-18T16:05:28.890Z\",\n  \"attempts\": [\n    {\n      \"schema_version\": 1,\n      \"attempt_id\": \"crun_510477b1-3867-4c2c-97b8-b4d437dc175f\",\n      \"campaign_id\": \"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"attempt_ordinal\": 1,\n      \"supervisor_task_id\": \"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"operation_id\": \"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"supersedes_attempt_id\": null,\n      \"created_at\": \"2026-09-18T16:05:28.890Z\",\n      \"refusal\": null\n    }\n  ]\n}",
+        ".arbor/devtools/devtools.log": "{\"schema\":\"arbor.devtools/v1\",\"seq\":1,\"ts\":\"2026-09-18T16:05:28.889Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"event_kind\":\"gate.recorded\",\"event\":{\"kind\":\"gate.recorded\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"gate\":\"admission\",\"result\":\"pass\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":2,\"ts\":\"2026-09-18T16:05:28.889Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":null,\"event_kind\":\"campaign.changed\",\"event\":{\"kind\":\"campaign.changed\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"change\":\"created\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":3,\"ts\":\"2026-09-18T16:05:28.889Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"event_kind\":\"tree.node_changed\",\"event\":{\"kind\":\"tree.node_changed\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"state\":\"pending\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":4,\"ts\":\"2026-09-18T16:05:28.963Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"event_kind\":\"gate.recorded\",\"event\":{\"kind\":\"gate.recorded\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"gate\":\"isolation\",\"result\":\"fail\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":5,\"ts\":\"2026-09-18T16:05:28.967Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":null,\"event_kind\":\"kb.entry_added\",\"event\":{\"kind\":\"kb.entry_added\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"entry_id\":\"memory_1f1e8220a4be1b0022df7e44183c025539ca2ba753fa0ca72c149748ed4a2046\"},\"source_record_id\":\"memory_1f1e8220a4be1b0022df7e44183c025539ca2ba753fa0ca72c149748ed4a2046\",\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":6,\"ts\":\"2026-09-18T16:05:28.968Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":null,\"event_kind\":\"audit.evidence_recorded\",\"event\":{\"kind\":\"audit.evidence_recorded\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"evidence_id\":\"trace_5\"},\"source_record_id\":\"trace_5\",\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":7,\"ts\":\"2026-09-18T16:05:28.968Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"event_kind\":\"tree.node_changed\",\"event\":{\"kind\":\"tree.node_changed\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"node_mu75gvjt_1\",\"state\":\"failed\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":8,\"ts\":\"2026-09-18T16:05:28.969Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"event_kind\":\"gate.recorded\",\"event\":{\"kind\":\"gate.recorded\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"gate\":\"audit\",\"result\":\"bypass\",\"bypass_evidence_deficit\":\"no independent auditor for auto-halt (no_nodes)\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":9,\"ts\":\"2026-09-18T16:05:28.970Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"event_kind\":\"gate.recorded\",\"event\":{\"kind\":\"gate.recorded\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":\"root\",\"gate\":\"audit\",\"result\":\"bypass\",\"bypass_evidence_deficit\":\"no independent auditor for auto-halt (no_nodes)\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n{\"schema\":\"arbor.devtools/v1\",\"seq\":10,\"ts\":\"2026-09-18T16:05:28.970Z\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"node_id\":null,\"event_kind\":\"campaign.changed\",\"event\":{\"kind\":\"campaign.changed\",\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"change\":\"halted\"},\"source_record_id\":null,\"source_content_hash\":null,\"synthetic\":false,\"loop_event\":null}\n",
+        ".arbor/intent-ledger/draft-0bc78009-dae3-49fe-b7a1-281b273d1894_1.json": "{\"schema_version\":1,\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"records\":[{\"schema_version\":1,\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:decided\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"sequence\":0,\"occurred_at\":\"2026-09-18T16:05:28.884Z\",\"actor_id\":\"cli\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"phase\":\"intent\",\"kind\":\"intent.decided\",\"decision\":{\"schema_version\":1,\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"actor_id\":\"cli\",\"requested_at\":\"2026-09-18T16:05:28.884Z\",\"request_digest\":\"sha256:9f914ede663a5aae301d9ca2a1996713a8ea0c09463bef9633b408925be89af0\",\"summary\":\"create vi-observe-fixture.txt with the text hello\",\"classification\":\"build\",\"confidence\":\"high\",\"disposition\":\"admit\",\"route_category\":\"seed-quick\",\"rationale\":\"operator-forced via --tier\",\"requires_plan\":false,\"requires_review\":false,\"refusal\":null}},{\"schema_version\":1,\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"actor_id\":\"task-composer\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:review\",\"sequence\":1,\"occurred_at\":\"2026-09-18T16:05:28.885Z\",\"phase\":\"review\",\"kind\":\"intent.reviewed\",\"reviewer_id\":\"task-composer-admission\",\"verdict\":\"approved\",\"rationale\":\"materialized proposal passed composer admission gate\"},{\"schema_version\":1,\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:dispatch\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"sequence\":2,\"occurred_at\":\"2026-09-18T16:05:28.962Z\",\"actor_id\":\"task-composer\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"phase\":\"dispatch\",\"kind\":\"intent.dispatched\",\"operation_id\":\"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"agent_id\":\"seed\",\"worktree_id\":null}]}\n",
+        ".arbor/intent-ledger/draft-0bc78009-dae3-49fe-b7a1-281b273d1894_1.jsonl": "{\"schema_version\":1,\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:decided\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"sequence\":0,\"occurred_at\":\"2026-09-18T16:05:28.884Z\",\"actor_id\":\"cli\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"phase\":\"intent\",\"kind\":\"intent.decided\",\"decision\":{\"schema_version\":1,\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"actor_id\":\"cli\",\"requested_at\":\"2026-09-18T16:05:28.884Z\",\"request_digest\":\"sha256:9f914ede663a5aae301d9ca2a1996713a8ea0c09463bef9633b408925be89af0\",\"summary\":\"create vi-observe-fixture.txt with the text hello\",\"classification\":\"build\",\"confidence\":\"high\",\"disposition\":\"admit\",\"route_category\":\"seed-quick\",\"rationale\":\"operator-forced via --tier\",\"requires_plan\":false,\"requires_review\":false,\"refusal\":null}}\n{\"schema_version\":1,\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"actor_id\":\"task-composer\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:review\",\"sequence\":1,\"occurred_at\":\"2026-09-18T16:05:28.885Z\",\"phase\":\"review\",\"kind\":\"intent.reviewed\",\"reviewer_id\":\"task-composer-admission\",\"verdict\":\"approved\",\"rationale\":\"materialized proposal passed composer admission gate\"}\n{\"schema_version\":1,\"record_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1:dispatch\",\"intent_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"decision_id\":\"intent-decision:draft-0bc78009-dae3-49fe-b7a1-281b273d1894:1\",\"sequence\":2,\"occurred_at\":\"2026-09-18T16:05:28.962Z\",\"actor_id\":\"task-composer\",\"correlation_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"phase\":\"dispatch\",\"kind\":\"intent.dispatched\",\"operation_id\":\"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"agent_id\":\"seed\",\"worktree_id\":null}\n",
+        ".arbor/kb/failure-modes.jsonl": "{\"kind\":\"arbor_kb_stream\",\"version\":1,\"stream\":\"failure_mode\"}\n{\"kind\":\"arbor_kb_seal\",\"version\":1,\"stream\":\"failure_mode\",\"entry_count\":0,\"tip_hash\":null,\"content_hash\":\"c0e24688c9d368584243c8e931d3b3868d9c0fab3a3440481fdbc0f9dbc79f28\"}\n",
+        ".arbor/kb/parameter-findings.jsonl": "{\"kind\":\"arbor_kb_stream\",\"version\":1,\"stream\":\"parameter_finding\"}\n{\"kind\":\"arbor_kb_seal\",\"version\":1,\"stream\":\"parameter_finding\",\"entry_count\":0,\"tip_hash\":null,\"content_hash\":\"6837ccd18df1ca9e1cad0b265557cd341a2dd50ff00e6057e88541f42eebdadd\"}\n",
+        ".arbor/kb/success-patterns.jsonl": "{\"kind\":\"arbor_kb_stream\",\"version\":1,\"stream\":\"success_pattern\"}\n{\"kind\":\"arbor_kb_seal\",\"version\":1,\"stream\":\"success_pattern\",\"entry_count\":0,\"tip_hash\":null,\"content_hash\":\"b7e581a1d2bc4b88f8f9e46fa3cfd45b0b1d32c907c1ab5b24d65522f77af071\"}\n",
+        ".arbor/notification-inbox/records.json": "{\"schema_version\":1,\"records\":[{\"id\":\"campaign-halted-ebe05e6c0e70094811f8533ac9478e7a5dd7d1c14eac235a96ad835ff3b47f83\",\"fingerprint\":\"campaign-halted:ebe05e6c0e70094811f8533ac9478e7a5dd7d1c14eac235a96ad835ff3b47f83\",\"project_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"severity\":\"error\",\"title\":\"Campaign failed: no_nodes\",\"body\":\"Campaign composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894 halted (no_nodes); 0 of 2 node(s) verified.\",\"actions\":[{\"label\":\"Inspect campaign\",\"action\":\"campaign.report\"}],\"delivery\":{\"channels\":[\"tui\",\"terminal\"],\"quiet_hours\":null},\"provenance\":{\"tag\":\"generated\",\"generator\":\"arbor-runtime/campaign-halt\",\"input_hash\":\"b44cf01fa089110f727f115299f32c774ef71d61a52e4fd888f7cfbbdb4d3e7e\"},\"created_at\":\"2026-09-18T16:05:28.970Z\",\"updated_at\":\"2026-09-18T16:05:28.970Z\",\"read_at\":null,\"occurrences\":1}],\"idempotency\":[[\"campaign-halted-notification:composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",{\"fingerprint\":\"525d013400b2c5d57c6e87d0244aea8687d4cfba02820a26d7231b55007da75e\",\"notification_id\":\"campaign-halted-ebe05e6c0e70094811f8533ac9478e7a5dd7d1c14eac235a96ad835ff3b47f83\"}]]}\n",
+        ".arbor/operations/registry.json": "{\n  \"schema_version\": 1,\n  \"saved_at\": \"2026-09-18T16:07:46.156Z\",\n  \"operations\": [\n    {\n      \"operation_id\": \"cli:task:d72b7003-2288-4862-82d9-80b61d09fd53\",\n      \"idempotency_key\": \"cli:task:d72b7003-2288-4862-82d9-80b61d09fd53\",\n      \"fingerprint\": \"{\\\"kind\\\":\\\"taskcomposer.submit\\\",\\\"task\\\":\\\"create vi-observe-fixture.txt with the text hello\\\",\\\"source\\\":\\\"cli\\\",\\\"idempotency_key\\\":\\\"cli:task:d72b7003-2288-4862-82d9-80b61d09fd53\\\",\\\"tier_override\\\":\\\"direct\\\",\\\"auto_confirm\\\":true}\",\n      \"correlation_id\": \"cli:task:d72b7003-2288-4862-82d9-80b61d09fd53\",\n      \"actor_id\": \"cli-operator\",\n      \"capability\": \"taskcomposer.write\",\n      \"state\": \"completed\",\n      \"task_id\": null,\n      \"result_summary\": \"task composer draft draft-0bc78009-dae3-49fe-b7a1-281b273d1894 is admitted\",\n      \"error\": null,\n      \"accepted_at\": \"2026-09-18T16:05:28.882Z\",\n      \"completed_at\": \"2026-09-18T16:05:28.971Z\"\n    }\n  ]\n}",
+        ".arbor/product-integrations.json": "{\"schema_version\":1,\"states\":{\"browser.uncomposed\":\"unavailable\",\"github.app\":\"discovered\",\"ide.vscode\":\"discovered\",\"remote.control\":\"unavailable\",\"scheduler.control\":\"discovered\"},\"overrides\":{\"browser.uncomposed\":{\"state\":\"unavailable\",\"version\":null,\"rollback\":null},\"github.app\":{\"state\":\"discovered\",\"version\":null,\"rollback\":null},\"ide.vscode\":{\"state\":\"discovered\",\"version\":null,\"rollback\":null},\"remote.control\":{\"state\":\"unavailable\",\"version\":null,\"rollback\":null},\"scheduler.control\":{\"state\":\"discovered\",\"version\":null,\"rollback\":null}}}\n",
+        ".arbor/routing/difficulty-observations.json": "{\"general\":{\"successes\":0,\"failures\":1}}",
+        ".arbor/supervisor/tasks.json": "{\n  \"schema_version\": 1,\n  \"saved_at\": \"2026-09-18T16:07:46.156Z\",\n  \"tasks\": [\n    {\n      \"id\": \"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"operation_id\": \"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"kind\": \"campaign.run\",\n      \"owner_scope_id\": \"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n      \"parent_id\": null,\n      \"state\": \"completed\",\n      \"started_at\": \"2026-09-18T16:05:28.889Z\",\n      \"deadline_at\": null,\n      \"progress\": 1,\n      \"retry_attempt\": 0,\n      \"cleanup\": \"pending\"\n    }\n  ]\n}",
+        ".arbor/task-composer/drafts.json": "{\"schema_version\":1,\"drafts\":[{\"id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"revision\":3,\"status\":\"admitted\",\"task\":\"create vi-observe-fixture.txt with the text hello\",\"source\":\"cli\",\"parent_campaign_id\":null,\"evidence_ids\":[],\"attachments\":[],\"proposal\":{\"summary\":\"create vi-observe-fixture.txt with the text hello\",\"assumptions\":[],\"questions\":[],\"root_action\":{\"description\":\"create vi-observe-fixture.txt with the text hello\",\"estimated_gain\":1,\"estimated_cost\":1,\"category\":\"general\",\"delegate_to\":\"seed\"},\"actions\":[{\"description\":\"create vi-observe-fixture.txt with the text hello\",\"estimated_gain\":1,\"estimated_cost\":1,\"category\":\"general\",\"delegate_to\":\"seed\"}],\"acceptance_checks\":[],\"acceptance_mapping\":[],\"risk_notes\":[\"operator-forced via --tier\"]},\"answered_questions\":[],\"planner\":{\"kind\":\"native\",\"session_id\":null,\"model_identity\":null,\"error\":null,\"usage\":{\"kind\":\"unavailable\",\"reason\":\"no planning call has completed for this draft yet\"}},\"arbiter_decision\":{\"tier\":\"direct\",\"rationale\":\"operator-forced via --tier\",\"blast_radius\":{\"reversibility\":\"unknown\"},\"source\":\"operator_forced\",\"decided_at\":\"2026-09-18T16:05:28.883Z\",\"turn_budget_estimate\":12},\"campaign_id\":\"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"job_id\":\"task-composer-run:draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\"rejection_reason\":null,\"mode\":\"execute\",\"reference_answer\":null,\"auto_confirm\":true,\"created_at\":\"2026-09-18T16:05:28.883Z\",\"updated_at\":\"2026-09-18T16:05:28.962Z\",\"guidance\":{\"kind\":\"started\",\"headline\":\"Work started\",\"detail\":\"Campaign composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894 is handling the request.\",\"recommendation\":\"Follow progress here; Revoy will surface questions or a verified result.\",\"retryable\":false}}],\"idempotency\":[[\"cli:task:d72b7003-2288-4862-82d9-80b61d09fd53\",{\"fingerprint\":\"7ec6d8b3afc2171566c3170f75ba1a166ce812626430a9d5ee829741d18cbfee\",\"draft_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\"}],[\"confirm:auto:9fd6443df59c58b3a08096436bcfa5be11f2ae89d9a1590c\",{\"fingerprint\":\"498637c0271d5735d15606653554ce606f5be435f2b93bb583abebf66cfc02f6\",\"draft_id\":\"draft-0bc78009-dae3-49fe-b7a1-281b273d1894\"}]]}\n",
+        ".arbor/tree/composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894.json": "{\n  \"id\": \"composer-draft-0bc78009-dae3-49fe-b7a1-281b273d1894\",\n  \"plan_path\": \".arbor/task-composer/draft-0bc78009-dae3-49fe-b7a1-281b273d1894.json\",\n  \"config\": {\n    \"max_seconds\": 0,\n    \"min_score\": 0.1,\n    \"convergence_iterations\": 2,\n    \"score_config\": {\n      \"exploration_constant\": 1.4142135623730951\n    }\n  },\n  \"root_id\": \"root\",\n  \"started_at\": \"2026-09-18T16:05:28.889Z\",\n  \"iterations_completed\": 0,\n  \"iterations_without_kb_entry\": 0,\n  \"best_score\": 0,\n  \"halted\": true,\n  \"halt_reason\": \"no_nodes\",\n  \"nodes\": [\n    {\n      \"id\": \"root\",\n      \"action\": {\n        \"description\": \"create vi-observe-fixture.txt with the text hello\",\n        \"estimated_gain\": 1,\n        \"estimated_cost\": 1,\n        \"category\": \"general\",\n        \"delegate_to\": \"seed\",\n        \"mutating\": \"mutating\"\n      },\n      \"score\": 0,\n      \"state\": \"claimed\",\n      \"parent_id\": null,\n      \"children_ids\": [\n        \"node_mu75gvjt_1\"\n      ],\n      \"visit_count\": 0,\n      \"edge_visit_count\": 1,\n      \"value_estimate\": 0,\n      \"provenance\": {\n        \"tag\": \"claimed\",\n        \"claimant\": \"planner\"\n      },\n      \"kb_entries_extracted\": 0,\n      \"created_at\": \"2026-09-18T16:05:28.889Z\",\n      \"gate_records\": [\n        {\n          \"gate\": \"audit\",\n          \"result\": \"bypass\",\n          \"checked_at\": \"2026-09-18T16:05:28.968Z\",\n          \"detail\": \"campaign auto-halted: no_nodes; independent audit deferred to operator\",\n          \"bypass_evidence_deficit\": \"no independent auditor for auto-halt (no_nodes)\"\n        }\n      ],\n      \"memory_mode\": \"accumulate\",\n      \"memory_mode_version\": 1\n    },\n    {\n      \"id\": \"node_mu75gvjt_1\",\n      \"action\": {\n        \"description\": \"create vi-observe-fixture.txt with the text hello\",\n        \"estimated_gain\": 1,\n        \"estimated_cost\": 1,\n        \"category\": \"general\",\n        \"delegate_to\": \"seed\",\n        \"mutating\": \"mutating\",\n        \"high_risk_tool_scope\": {\n          \"write_paths\": [\n            \"vi-observe-fixture.txt\"\n          ],\n          \"command_argv\": [],\n          \"scope_provenance\": \"mined\"\n        }\n      },\n      \"score\": 0,\n      \"state\": \"failed\",\n      \"parent_id\": \"root\",\n      \"children_ids\": [],\n      \"visit_count\": 0,\n      \"edge_visit_count\": 1,\n      \"value_estimate\": 0,\n      \"provenance\": null,\n      \"kb_entries_extracted\": 0,\n      \"created_at\": \"2026-09-18T16:05:28.889Z\",\n      \"gate_records\": [\n        {\n          \"gate\": \"isolation\",\n          \"result\": \"fail\",\n          \"checked_at\": \"2026-09-18T16:05:28.963Z\",\n          \"detail\": \"worktree not isolated; no active lease on worktree\"\n        }\n      ],\n      \"memory_mode\": \"accumulate\",\n      \"memory_mode_version\": 1,\n      \"specialist_output\": \"FAILED: isolation gate failed: repository status could not be inspected before isolation: fatal: not a git repository (or any parent up to mount point /)\\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\"\n    }\n  ],\n  \"run_diagnostic\": {\n    \"message\": \"isolation gate rejected node node_mu75gvjt_1: repository status could not be inspected before isolation: fatal: not a git repository (or any parent up to mount point /)\\nStopping at filesystem boundary (GIT_DISCOVERY_ACROSS_FILESYSTEM not set).\",\n    \"recorded_at\": \"2026-09-18T16:05:28.964Z\"\n  },\n  \"governance\": {\n    \"tier\": \"direct\",\n    \"rationale\": \"operator-forced via --tier\",\n    \"blast_radius\": {\n      \"reversibility\": \"unknown\"\n    },\n    \"source\": \"operator_forced\",\n    \"decided_at\": \"2026-09-18T16:05:28.883Z\",\n    \"turn_budget_estimate\": 12\n  }\n}"
+      },
+      "stdin_linger_ms": 4500,
+      "run_class": "production",
+      "count_semantics": "presence_only",
+      "timeout_ms": 30000,
+      "expected_exit": 0,
+      "description": "Closes a hollow-candidate: `shouldRefreshFocusedTree` (operator-campaign-focus.ts) has exactly one call site, inside `refreshExecutionStatus`, itself invoked ONLY by a 2000ms `setInterval` (`executionStatusTimer`) -- no eager call at boot. Every prior TUI scenario supplies static stdin that vi-observe's `spawnSync`-based process runner writes and closes essentially instantly (sub-second, verified empirically 2026-09-18), so the TUI's own `stdin.once(\"end\", finish)` shutdown always won the race against this timer and the function was never invoked. This scenario uses the new `stdin_linger_ms` scenario field (vi-observe.mjs's `runLingeringStdinScenario`, added alongside this catalog widening): stdin is written immediately but held open for 4500ms of real wall-clock time -- long enough for the interval to fire at least once -- before EOF triggers the normal shutdown path, still one real spawned dist entry with the same coverage/outcome-sink wiring as every other scenario, no second transport. `refreshExecutionStatus` also needs a genuinely \"active\" campaign: `arbor tui`'s normal (non-`--resume`) launch hides every campaign that existed at boot from `displayCampaignId()` via `preexistingCampaignIds` (`options.resume === true ? new Set() : new Set(listCampaigns())`) -- so `--resume` and a seeded, real, previously-admitted campaign are both required, not optional. `seed_files` is a verbatim capture of the full `.arbor/` persistence tree (19 files) a real, credential-free `arbor task \"create vi-observe-fixture.txt with the text hello\" --tier direct --json` run produced against an isolated scratch cwd on 2026-09-18 -- a real halted campaign (`composer-draft-...`), not a hand-built fixture. Verified empirically: `shouldRefreshFocusedTree(campaignId, currentTree)` invoked with the seeded campaign's real id, stable over three runs. count_semantics: \"presence_only\" (2026-09-18 determinism remediation, worktree feat/observe-determinism) -- this scenario's downstream symbols (TUI render/query dispatch reached from the 2000ms executionStatusTimer, the 500ms haltWatchTimer, the 1000ms outputDetailTimer, and other independent setInterval timers in tui.ts) fire a real-time-dependent number of times inside the stdin_linger_ms window -- verified empirically over 3 consecutive full-catalog `vi:observe` runs and 5 isolated single-scenario runs on 2026-09-18: presence (was the symbol invoked at least once) was 100% stable across all 8 runs, but raw V8 invocation counts for timer-reached symbols varied by up to ~30% run to run (e.g. newestVisibleCampaignId: 20, 26, 26 across 3 runs) purely from OS scheduling jitter in how many timer ticks landed inside the real-wall-clock window. shouldRefreshFocusedTree itself (the symbol this scenario exists to close a hollow-candidate lead on) was stable at count 1 in every run. See vi-observe.mjs's count_semantics handling for what this clamps and why."
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "name": "canary-registration-integrity",
+  "private": true,
+  "scripts": {
+    "gate:canary-dispatch": "bun scripts/canary-gate.mjs"
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "id": "scrolling",
+  "title": "X14 scrolling on a long list",
+  "covers": [
+    "X14",
+    "S26"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "=",
+      "label": "Capabilities",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "End",
+      "label": "end",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageUp",
+      "label": "page up",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Home",
+      "label": "home",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Down",
+      "label": "one row",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Up",
+      "label": "one row",
+      "hold_s": 1.0
+    }
+  ]
+}

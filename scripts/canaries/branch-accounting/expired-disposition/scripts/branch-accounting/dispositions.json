@@ -1,0 +1,15 @@
+{
+  "_comment": [
+    "Canary fixture for `gate:branch-accounting`.",
+    "One disposition whose expiry is in the past. An expired disposition accounts for",
+    "nothing, so the gate must name it as a blocker rather than silently reading the",
+    "store as 'these branches are accounted for'."
+  ],
+  "entries": [
+    {
+      "branch": "canary/expired",
+      "reason": "Synthetic canary entry. It is expired on purpose.",
+      "expires": "2020-01-01"
+    }
+  ]
+}

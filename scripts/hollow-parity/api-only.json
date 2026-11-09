@@ -1,0 +1,13 @@
+{
+  "_purpose": "Allowlist for scripts/hollow-parity.mjs's item-3 surface-scoped-reachability check. An entry here is a catalog kind the check found MCP-generic-only (no CLI/TUI/Web/liveness producer) that a human has reviewed and accepted as deliberately API-only. A kind that IS MCP-generic-only and is NOT listed here is a live finding — the gate stays red for it until D42 (audit/2026-08-23-50-defects.md WA-35) resolves each one. Do not add an entry without a reviewed reason; do not remove a finding by adding a placeholder reason.",
+  "entries": [
+    {
+      "kind": "campaign.start",
+      "reason": "scripts/tui-catalog-parity/dispositions.json's own audited reason: starting a campaign needs a plan reference and an authority-bearing submission form, not a bare key binding or CLI flag set — cli.ts has zero literal 'campaign.start' occurrence (verified: `grep -a -c '\"campaign.start\"' packages/arbor-mcp/src/cli.ts` = 0) and dispositions.json marks it authoring_required, not live_control. Consistent with audit/2026-08-23-50-defects.md §50.2 naming campaign.start/snapshot as deliberate. It is reached in practice through the governed task-composer/approval flow (taskcomposer.confirm), not as its own direct operator verb."
+    }
+  ],
+  "_disputed_not_seeded": {
+    "note": "audit/2026-08-23-50-defects.md §50.2 flags fold.*/playbook.*/harness.propose|approve|evaluate as DISPUTED (native-model-driven governance triad vs missing operator surface) and the full WA-35 list as orphaned-looking. Both are left UNLISTED here deliberately so the gate stays red until an operator disposition lands (see /revoy2-interview) — seeding a reason for a disputed or unreviewed kind would fabricate consent this lane was not given.",
+    "kinds_left_unlisted_on_purpose": ["see audit/2026-08-23-50-defects.md WA-35 and §50.2 for the full disputed/orphaned list"]
+  }
+}

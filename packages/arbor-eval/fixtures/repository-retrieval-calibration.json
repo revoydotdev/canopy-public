@@ -1,0 +1,49 @@
+{
+  "cohort_id": "revoy2-repository-retrieval-calibration-2026-08-14",
+  "scope": "calibration",
+  "provenance": {
+    "tag": "generated",
+    "generator": "revoy2-maintainer-calibration",
+    "input_hash": "repository-retrieval-calibration-2026-08-14"
+  },
+  "tasks": [
+    { "task_id": "uct-policy", "prompt": "evaluate Agent UCT cost-aware tree search scoring", "required_path_groups": [["packages/arbor-eval/src/agent-uct.ts"]] },
+    { "task_id": "action-tree", "prompt": "change ActionTree selection expansion and backtracking", "required_path_groups": [["packages/arbor-core/src/tree.ts"]] },
+    { "task_id": "openai-prefix", "prompt": "fix OpenAI compatible provider prompt cache projection", "required_path_groups": [["packages/arbor-harness/src/openai-compatible.ts"]] },
+    { "task_id": "context-retention", "prompt": "change NativeContextManager pruning retention and folding", "required_path_groups": [["packages/arbor-harness/src/context-manager.ts"]] },
+    {
+      "task_id": "repository-graph",
+      "prompt": "continue attempt zzqv",
+      "required_path_groups": [["packages/arbor-mcp/src/repository-graph.ts"]],
+      "signals": { "memory": [{
+        "terms": ["RepositoryGraphIndex"],
+        "evidence_pointer": "audit:calibration:repository-graph",
+        "provenance": { "tag": "verified", "cmd": "bun run test", "exit": 0, "stdout_hash": "sha256:calibration-repository-graph" }
+      }] }
+    },
+    { "task_id": "campaign-loop", "prompt": "change campaign loop retry context behavior", "required_path_groups": [["packages/arbor-opencode/src/loop.ts"]] },
+    { "task_id": "audit-telemetry", "prompt": "add EvidenceLedger telemetry observation validation", "required_path_groups": [["packages/arbor-audit/src/audit.ts"]] },
+    { "task_id": "knowledge-base", "prompt": "change KnowledgeBase capability-gated KB entry query", "required_path_groups": [["packages/arbor-kb/src/kb.ts"]] },
+    { "task_id": "tui-theme", "prompt": "add TUI theme palette", "required_path_groups": [["packages/arbor-tui/src/theme.ts"]] },
+    { "task_id": "status-cost", "prompt": "change TUI status bar cost display", "required_path_groups": [["packages/arbor-tui/src/status-bar.ts"]] },
+    { "task_id": "native-secret", "prompt": "change native provider environment secret loading", "required_path_groups": [["packages/arbor-config/src/native-secret.ts", "packages/arbor-config/src/env.ts"]] },
+    { "task_id": "native-executor", "prompt": "change NativeAgentExecutor specialist dispatch", "required_path_groups": [["packages/arbor-mcp/src/native-agent-executor.ts"]] },
+    { "task_id": "worktree", "prompt": "fix WorktreeManager isolated execution", "required_path_groups": [["packages/arbor-opencode/src/worktree.ts"]] },
+    { "task_id": "critic-contract", "prompt": "change native critic verdict contract", "required_path_groups": [["packages/arbor-mcp/src/native-critic-contract.ts"]] },
+    { "task_id": "runtime-catalog", "prompt": "change RuntimeCatalogRouter MCP operation dispatch", "required_path_groups": [["packages/arbor-mcp/src/runtime-catalog.ts"]] },
+    { "task_id": "governance-counts", "prompt": "change governance repository counts derivation", "required_path_groups": [["packages/arbor-governance/src/counts/derive.ts"]] },
+    {
+      "task_id": "retry-capsule",
+      "prompt": "continue attempt zzqv",
+      "required_path_groups": [["packages/arbor-opencode/src/retry-context-capsule.ts"]],
+      "signals": { "changed_paths": ["packages/arbor-opencode/src/retry-context-capsule.ts"] }
+    },
+    { "task_id": "cost-attribution", "prompt": "change node cost attribution spans", "required_path_groups": [["packages/arbor-opencode/src/cost-attribution.ts"]] },
+    { "task_id": "token-boundary", "prompt": "change token economy dispatch boundary", "required_path_groups": [["packages/arbor-opencode/src/token-economy-boundary.ts"]] },
+    { "task_id": "usage-budget", "prompt": "change NativeUsageBudget prospective admission", "required_path_groups": [["packages/arbor-harness/src/usage-budget.ts"]] },
+    { "task_id": "prompt-composition", "prompt": "change botanical role prompt composition", "required_path_groups": [["packages/arbor-mcp/src/native-role-composer.ts"]] },
+    { "task_id": "governed-context", "prompt": "change GovernedContextService retrieval overlay", "required_path_groups": [["packages/arbor-mcp/src/governed-context-service.ts"]] },
+    { "task_id": "output-evidence", "prompt": "change output evidence capture policy", "required_path_groups": [["packages/arbor-audit/src/output-evidence.ts"]] },
+    { "task_id": "task-supervisor", "prompt": "change TaskSupervisor child task lifecycle", "required_path_groups": [["packages/arbor-core/src/task-supervisor.ts"]] }
+  ]
+}

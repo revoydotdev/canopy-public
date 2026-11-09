@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "cohort": "external-cohort-2026-10",
+  "selected_by": "operator decision 2026-10-06",
+  "pinned_at": "2026-10-06",
+  "claim_boundary": "Compatibility with the exact named revisions and the Revoy-injected requirement only. Not upstream endorsement, mergeability, or arbitrary-repository performance.",
+  "requirement_origin": "revoy_injected_compatibility_requirement",
+  "members": [
+    {
+      "id": "yocto-queue",
+      "language": "javascript",
+      "repository": "https://github.com/sindresorhus/yocto-queue.git",
+      "upstream_name": "sindresorhus/yocto-queue",
+      "revision": "72a8fa96a9d389765cdf2bb9c6daba8302fc375d",
+      "license": "MIT",
+      "toolchain": [
+        {
+          "tool": "node",
+          "min_version": "18"
+        },
+        {
+          "tool": "npm",
+          "min_version": "9"
+        }
+      ],
+      "prepare": [
+        "npm",
+        "install",
+        "--ignore-scripts",
+        "--no-audit",
+        "--no-fund",
+        "--no-package-lock"
+      ],
+      "acceptance": [
+        "npm",
+        "test"
+      ],
+      "tier": "reviewed",
+      "task": "Edit exactly index.js, index.d.ts and readme.md; Add a documented Queue#enqueueAll(values) method to index.js, with its TypeScript declaration in index.d.ts and a readme.md entry. It must accept any iterable, preserve FIFO order, keep .size correct, handle queue.enqueueAll(queue) without looping forever, and consume the input completely before mutating the queue so an iterator failure leaves the queue unchanged. The test file revoy-enqueue-all.test.js specifies the behaviour; make `npm test` pass. Do not weaken, skip, or remove any test.",
+      "requirements": [
+        {
+          "path": "revoy-enqueue-all.test.js",
+          "sha256": "ab98e8620e61a4fdd1113d3e368515aa510d43b6420e9bff9c80637e0aadc1f9",
+          "contents": [
+            "import test from 'ava';",
+            "import Queue from './index.js';",
+            "",
+            "test('.enqueueAll() appends iterables in FIFO order', t => {",
+            "\tconst queue = new Queue();",
+            "\tqueue.enqueue('first');",
+            "\tqueue.enqueueAll(['second', 'third']);",
+            "\tt.deepEqual([...queue], ['first', 'second', 'third']);",
+            "\tt.is(queue.size, 3);",
+            "",
+            "\tconst self = new Queue();",
+            "\tself.enqueue('a');",
+            "\tself.enqueue('b');",
+            "\tself.enqueueAll(self);",
+            "\tt.deepEqual([...self], ['a', 'b', 'a', 'b']);",
+            "});",
+            "",
+            "test('.enqueueAll() is atomic when input iteration fails', t => {",
+            "\tconst queue = new Queue();",
+            "\tqueue.enqueue('stable');",
+            "\tconst values = (function * () {",
+            "\t\tyield 'must-not-be-appended';",
+            "\t\tthrow new Error('input failed');",
+            "\t})();",
+            "",
+            "\tt.throws(() => queue.enqueueAll(values), {message: 'input failed'});",
+            "\tt.deepEqual([...queue], ['stable']);",
+            "\tt.is(queue.size, 1);",
+            "});",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "more-itertools",
+      "language": "python",
+      "repository": "https://github.com/more-itertools/more-itertools.git",
+      "upstream_name": "more-itertools/more-itertools",
+      "revision": "1ea82a711c69f590054987b5cb194157f8ce8ac4",
+      "license": "MIT",
+      "toolchain": [
+        {
+          "tool": "python3",
+          "min_version": "3.10"
+        }
+      ],
+      "prepare": null,
+      "acceptance": [
+        "python3",
+        "-m",
+        "unittest"
+      ],
+      "tier": "reviewed",
+      "task": "Edit exactly more_itertools/more.py, more_itertools/more.pyi and docs/api.rst; Add a documented more_itertools.count_where(iterable, pred=bool) function that returns how many items of iterable satisfy pred, consuming the iterable exactly once. Implement it in more_itertools/more.py, add it to that module's __all__, add a type stub in more_itertools/more.pyi, and list it in docs/api.rst next to related counting functions. The test file tests/test_revoy_count_where.py specifies the behaviour; make `python3 -m unittest` pass. Do not weaken, skip, or remove any test.",
+      "requirements": [
+        {
+          "path": "tests/test_revoy_count_where.py",
+          "sha256": "dcf1ef9e202763ac69c85ac9daa46bb3634eaca67371de1697038080c9cafc58",
+          "contents": [
+            "import unittest",
+            "",
+            "from more_itertools import count_where",
+            "",
+            "",
+            "class RevoyCountWhereTests(unittest.TestCase):",
+            "    def test_default_predicate_counts_truthy_items(self):",
+            "        self.assertEqual(count_where([0, 1, '', 'a', None, [], [0]]), 3)",
+            "",
+            "    def test_custom_predicate(self):",
+            "        self.assertEqual(count_where(range(10), lambda x: x % 3 == 0), 4)",
+            "",
+            "    def test_empty_iterable(self):",
+            "        self.assertEqual(count_where([], lambda x: True), 0)",
+            "",
+            "    def test_consumes_iterator_once(self):",
+            "        it = iter([1, 2, 3, 4])",
+            "        self.assertEqual(count_where(it, lambda x: x > 2), 2)",
+            "        self.assertEqual(list(it), [])",
+            ""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semver",
+      "language": "rust",
+      "repository": "https://github.com/dtolnay/semver.git",
+      "upstream_name": "dtolnay/semver",
+      "revision": "280ebcb6edac3aa4cdc545dbff8a26c5ac4861fe",
+      "license": "MIT OR Apache-2.0",
+      "toolchain": [
+        {
+          "tool": "cargo",
+          "min_version": "1.68"
+        },
+        {
+          "tool": "rustc",
+          "min_version": "1.68"
+        }
+      ],
+      "prepare": null,
+      "acceptance": [
+        "cargo",
+        "test",
+        "--quiet"
+      ],
+      "acceptance_network": {
+        "mode": "egress",
+        "reason": "dtolnay/semver commits no Cargo.lock, so cargo test must resolve and fetch crates from the crates.io index (cargo fetch) before it can build"
+      },
+      "tier": "reviewed",
+      "task": "Edit exactly src/lib.rs; Add a documented public method Version::is_prerelease(&self) -> bool to the semver crate that returns true exactly when the version has a non-empty pre-release identifier; build metadata must not affect the result. Keep no_std support and existing behaviour unchanged. The test file tests/revoy_is_prerelease.rs specifies the behaviour; make `cargo test --quiet` pass. Do not weaken, skip, or remove any test.",
+      "requirements": [
+        {
+          "path": "tests/revoy_is_prerelease.rs",
+          "sha256": "758d8ac5be0522d85e00617a74b80c43a4f77fbdb6ef36a74fee5576e23eeeac",
+          "contents": [
+            "use semver::Version;",
+            "",
+            "#[test]",
+            "fn is_prerelease_reflects_only_the_pre_release_identifier() {",
+            "    assert!(!Version::parse(\"1.2.3\").unwrap().is_prerelease());",
+            "    assert!(Version::parse(\"1.2.3-alpha.1\").unwrap().is_prerelease());",
+            "    assert!(Version::parse(\"0.0.0-0\").unwrap().is_prerelease());",
+            "    assert!(!Version::parse(\"1.2.3+build.5\").unwrap().is_prerelease());",
+            "    assert!(Version::parse(\"1.2.3-rc.1+build.5\").unwrap().is_prerelease());",
+            "}",
+            ""
+          ]
+        }
+      ]
+    }
+  ],
+  "task_revision": 2,
+  "task_revision_note": "Revision 2 prefixes each task with an explicit 'Edit exactly <files>;' clause. Revision 1 named bare code filenames, which the mined-scope heuristic (arbiter-intake extractPathMentions) does not admit, so a verified direct-tier result was unadoptable (halt scope_unadoptable)."
+}

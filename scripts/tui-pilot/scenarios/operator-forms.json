@@ -1,0 +1,101 @@
+{
+  "id": "operator-forms",
+  "title": "X09 operator forms: open several through the palette and cancel",
+  "covers": [
+    "X09"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "C-p",
+      "label": "palette",
+      "hold_s": 1.0
+    },
+    {
+      "type": "Submit job",
+      "label": "filter",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Enter",
+      "label": "open form",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Escape",
+      "label": "cancel",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-p",
+      "label": "palette",
+      "hold_s": 1.0
+    },
+    {
+      "type": "Ask the operator",
+      "label": "filter",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Enter",
+      "label": "open form",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Tab",
+      "label": "next field",
+      "hold_s": 0.6
+    },
+    {
+      "type": "x",
+      "label": "type in field",
+      "hold_s": 0.6
+    },
+    {
+      "key": "Escape",
+      "label": "cancel",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-p",
+      "label": "palette",
+      "hold_s": 1.0
+    },
+    {
+      "type": "Enroll remote",
+      "label": "filter",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Enter",
+      "label": "open form",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Escape",
+      "label": "cancel",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-n",
+      "label": "New Task form",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Escape",
+      "label": "cancel",
+      "hold_s": 1.0
+    }
+  ]
+}

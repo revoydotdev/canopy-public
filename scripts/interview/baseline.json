@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "_doc": "ADR-158. Every interview record written before the recorder started minting receipts is HISTORICAL: it predates the mechanism and nobody can retroactively attest it. Records held on or before this date are accepted without a receipt; records after it must match one. This date may move EARLIER as history is pruned, never later -- moving it later would grandfather a fabrication.",
+  "records_historical_through": "2026-08-31",
+  "historical_count_at_adoption": 40,
+  "adr": 158
+}

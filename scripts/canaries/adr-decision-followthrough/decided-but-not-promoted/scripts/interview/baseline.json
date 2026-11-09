@@ -1,0 +1,4 @@
+{
+  "records_historical_through": "2026-01-01",
+  "note": "Canary fixture baseline. Deliberately very early, so the one ledger record beside it is POST-baseline and therefore required to carry a receipt. The real store at scripts/interview/baseline.json is untouched by this canary."
+}

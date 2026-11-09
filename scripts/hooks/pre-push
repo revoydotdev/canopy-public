@@ -1,0 +1,228 @@
+#!/bin/sh
+# revoy2 pre-push hook — installed by scripts/install-git-hooks.mjs.
+#
+# ADR-025: the repo cannot achieve the strength ladder's BLOCKED tier today
+# (private repo, GitHub free plan, branch protection returns 403 — see
+# ROADMAP.md's Strength ladder section and ADR-025 for the full context).
+# This hook is the closest achievable substitute: real *local* refusal, on
+# the machine that installed it, for the blocking quality/freshness gates plus
+# a clean build.
+#
+# THIS IS NOT SERVER-SIDE ENFORCEMENT. It only runs on machines that ran the
+# installer, and it is bypassed by `git push --no-verify` — a standard git
+# escape hatch, not a bug in this hook. Do not describe this hook anywhere
+# as making a push impossible; it makes a push that ignores a red run
+# require a deliberate flag, on this machine only.
+#
+# The installed hook is a stable launcher. It executes this checked-in source
+# on every push, so updating this file takes effect without reinstalling a
+# stale copied hook body.
+#
+# revoy2-pre-push-hook-marker (used by the installer to detect its own hook)
+#
+# Bun runtime migration (2026-08-07, docs/bun-migration-plan.md): every
+# `bun run` is the repository command surface. `docs-truth.mjs` is called
+# directly a few lines down and runs fine under either `node` or `bun` — it
+# now pins its own internal vitest child process to a literal `node` binary
+# regardless of which runtime executes the file, since vitest's worker pool
+# needs Node's `node:sqlite` and produces spurious failures when spawned
+# through Bun's `process.execPath`. `bun run build` still runs `tsc
+# --build`; Bun transpiles but does not typecheck.
+
+set -eu
+
+# Governance is enforced by the Canopy harness, not imposed on whoever happens
+# to run git. This hook acts only inside a harness run, which sets
+# ARBOR_GOVERNED_RUN=1 on every process it spawns (GOVERNED_RUN_ENV,
+# packages/arbor-core/src/governed-run.ts). A host agent session (Claude Code,
+# Codex) or a human terminal never carries it, so the hook is inert there.
+[ "${ARBOR_GOVERNED_RUN:-}" = "1" ] || exit 0
+
+fail() {
+  echo "revoy2 pre-push: $*" >&2
+  exit 1
+}
+
+is_zero_oid() {
+  case "${1:-}" in
+    ""|*[!0]*) return 1 ;;
+    *) return 0 ;;
+  esac
+}
+
+# Git supplies one line per proposed ref update on stdin:
+#   <local ref> <local sha> <remote ref> <remote sha>
+#
+# This hook is intentionally authoritative only for the canonical tracked
+# branch update. A multi-ref push cannot be proven to have one candidate tree,
+# and a tag/delete/other branch has no authority to pass these repository gates.
+remote_name="${1:-}"
+remote_url="${2:-}"
+[ -n "$remote_name" ] || fail "refusing push without Git's remote name argument."
+[ -n "$remote_url" ] || fail "refusing push without Git's remote URL argument."
+
+candidate_sha=""
+candidate_local_ref=""
+candidate_remote_ref=""
+update_count=0
+while IFS=' ' read -r local_ref local_sha remote_ref remote_sha extra || [ -n "${local_ref:-}${local_sha:-}${remote_ref:-}${remote_sha:-}${extra:-}" ]; do
+  [ -n "${local_ref:-}" ] && [ -n "${local_sha:-}" ] && [ -n "${remote_ref:-}" ] && [ -n "${remote_sha:-}" ] && [ -z "${extra:-}" ] \
+    || fail "received a malformed ref update from Git."
+  update_count=$((update_count + 1))
+  [ "$update_count" -eq 1 ] || fail "refusing a multi-ref push; exactly one tracked-branch update is required."
+  case "$local_ref" in
+    refs/heads/master) ;;
+    HEAD)
+      current_branch="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" \
+        || fail "refusing detached HEAD push; an attached governed branch is required."
+      [ "$current_branch" = "master" ] \
+        || fail "refusing HEAD push from branch '$current_branch'; expected master."
+      [ "$(git rev-parse HEAD 2>/dev/null)" = "$local_sha" ] \
+        || fail "HEAD push candidate does not match the checked-out commit."
+      ;;
+    *) fail "refusing source ref '$local_ref'; expected refs/heads/master or an exact attached HEAD." ;;
+  esac
+  [ "$remote_ref" = "refs/heads/master" ] || fail "refusing destination ref '$remote_ref'; expected refs/heads/master."
+  is_zero_oid "$local_sha" && fail "refusing deletion of refs/heads/master."
+  is_zero_oid "$remote_sha" && :
+  candidate_sha="$local_sha"
+  candidate_local_ref="$local_ref"
+  candidate_remote_ref="$remote_ref"
+done
+
+[ "$update_count" -eq 1 ] || fail "refusing push without exactly one ref update."
+
+if [ "$candidate_local_ref" = "HEAD" ]; then
+  branch_name="$(git symbolic-ref --quiet --short HEAD 2>/dev/null)" \
+    || fail "refusing detached HEAD push; an attached governed branch is required."
+else
+  branch_name="${candidate_local_ref#refs/heads/}"
+fi
+configured_remote="$(git config --get "branch.$branch_name.remote" 2>/dev/null)" \
+  || fail "source branch '$branch_name' has no configured authoritative remote."
+configured_merge="$(git config --get "branch.$branch_name.merge" 2>/dev/null)" \
+  || fail "source branch '$branch_name' has no configured upstream ref."
+[ "$remote_name" = "$configured_remote" ] \
+  || fail "refusing push through remote '$remote_name'; branch '$branch_name' is governed by '$configured_remote'."
+[ "$candidate_remote_ref" = "$configured_merge" ] \
+  || fail "destination '$candidate_remote_ref' does not match branch '$branch_name' upstream '$configured_merge'."
+configured_push_url="$(git remote get-url --push "$configured_remote" 2>/dev/null)" \
+  || fail "could not resolve '$configured_remote' configured push URL."
+[ "$remote_url" = "$configured_push_url" ] \
+  || fail "remote URL does not match '$configured_remote' configured push URL."
+
+# Resolve the object before creating the snapshot. This both rejects a bogus
+# stdin SHA and makes the later detached worktree bind to the immutable commit,
+# not to whichever branch happens to be checked out when the hook runs.
+candidate_sha="$(git rev-parse --verify "${candidate_sha}^{commit}" 2>/dev/null)" \
+  || fail "candidate SHA is not a locally available commit."
+
+# `git rev-parse --show-toplevel` fails with "fatal: this operation must be
+# run in a work tree" if this checkout's core.bare is ever (mis)set to true
+# — which has happened in practice (a shared .git/config flipped to
+# core.bare=true outside any of this repo's own tooling). A bare failure here
+# used to surface as `cd: null directory`, which gives a contributor nothing
+# to act on. Fail loudly with the actual cause instead.
+toplevel="$(git rev-parse --show-toplevel)" || {
+  echo "revoy2 pre-push: 'git rev-parse --show-toplevel' failed — this checkout cannot resolve a work tree." >&2
+  echo "  Most likely cause: core.bare is set to true on this repo's .git/config (check 'git config core.bare')." >&2
+  echo "  Fix with: git config core.bare false" >&2
+  exit 1
+}
+# Serialize the whole candidate-build + gate phase per checkout. Nothing
+# below this point was ever mutually exclusive: two overlapping `git push`
+# invocations (or a push racing a manual `bun run vi:refresh`) each get their
+# own worktree and their own fleet of tsserver processes, then compete for
+# the same CPU while gate:vi-prepush-policy's LSP-backed reproduction check
+# runs under a fixed 60s-per-request deadline. That contention was diagnosed
+# as the actual source of an apparently nondeterministic "DIFFERS" verdict —
+# the extraction pipeline itself (vi-extract-ts.mjs, vi-lsp-facts.mjs) sorts
+# every output deterministically and reproduced byte-identically across
+# repeated clean, serialized runs; only overlapping/contended runs disagreed.
+# `flock`'s lock is held by an open file descriptor, not a PID file, so it is
+# released automatically if the holder crashes — no stale-lock cleanup is
+# needed. A bounded wait (not infinite) keeps a genuinely stuck holder from
+# blocking every future push on this machine forever.
+# In a linked worktree "$toplevel/.git" is a FILE, so the lock lives in the
+# repository's common git dir instead: every worktree of one repository then
+# serializes on the same lock, which is the stated intent.
+git_common_dir="$(git rev-parse --git-common-dir)" \
+  || fail "could not resolve the repository's common git directory."
+git_common_dir="$(cd "$git_common_dir" && pwd -P)" \
+  || fail "could not resolve '$git_common_dir' to an absolute path."
+prepush_lock_file="$git_common_dir/revoy2-prepush.lock"
+exec 8>"$prepush_lock_file"
+if ! flock -w 1800 8; then
+  fail "could not acquire the pre-push serialization lock on '$prepush_lock_file' within 1800s — another push's gates appear to still be running on this machine. Wait for it to finish (or investigate with 'lsof \"$prepush_lock_file\"' if this persists)."
+fi
+
+snapshot_root="$(mktemp -d "${TMPDIR:-/tmp}/revoy2-pre-push-XXXXXX")" \
+  || fail "could not create a candidate snapshot directory."
+candidate_root="$snapshot_root/candidate"
+snapshot_created=false
+
+cleanup() {
+  # The candidate worktree is deliberately read-only while gates run. Restore
+  # owner write permission before asking Git to remove it; cleanup itself must
+  # never convert an already-failed gate into a false successful push.
+  if [ "$snapshot_created" = true ]; then
+    chmod u+w "$candidate_root" 2>/dev/null || true
+    rm -rf "$candidate_root/node_modules" 2>/dev/null || true
+    find "$candidate_root" -type d -exec chmod u+w {} + 2>/dev/null || true
+    git -C "$toplevel" worktree remove --force "$candidate_root" >/dev/null 2>&1 || rm -rf "$candidate_root"
+  fi
+  rm -rf "$snapshot_root"
+}
+trap cleanup EXIT HUP INT TERM
+
+git -C "$toplevel" worktree add --detach "$candidate_root" "$candidate_sha" >/dev/null \
+  || fail "could not create a detached worktree for candidate $candidate_sha."
+snapshot_created=true
+[ "$(git -C "$candidate_root" rev-parse HEAD)" = "$candidate_sha" ] \
+  || fail "detached worktree did not resolve to Git's candidate SHA."
+
+# Install from the frozen lockfile inside the snapshot. Linking the caller's
+# node_modules is unsafe here: workspace-package symlinks resolve back to the
+# live checkout, causing analyzers to follow bytes outside the candidate root.
+(cd "$candidate_root" && bun install --frozen-lockfile) \
+  || fail "could not install candidate dependencies from the frozen lockfile."
+# `bun run build` is the authoritative typecheck and deliberately emits into
+# each composite project's dist/ plus tsconfig.tsbuildinfo. Pre-create only
+# those bounded output zones before freezing the snapshot. Tracked source files
+# stay read-only, while directory entries remain writable because Vite emits a
+# transient bundled config beside vitest.config.ts before removing it.
+find "$candidate_root" -path "$candidate_root/node_modules" -prune -o -name tsconfig.json -type f -print |
+while IFS= read -r config; do
+  project_dir="$(dirname "$config")"
+  mkdir -p "$project_dir/dist"
+  [ -e "$project_dir/tsconfig.tsbuildinfo" ] || : > "$project_dir/tsconfig.tsbuildinfo"
+done
+find "$candidate_root" -path "$candidate_root/node_modules" -prune -o -type f -exec chmod a-w {} + \
+  || fail "could not make candidate files read-only."
+find "$candidate_root" -path '*/dist' -type d -exec chmod -R u+w {} +
+find "$candidate_root" -name tsconfig.tsbuildinfo -type f -exec chmod u+w {} +
+# .visual-intelligence/graph/ is gitignored (never committed) and so is
+# already absent from this fresh worktree; only the small, committed
+# manifest.json/findings/observed/etc. were checked out. The reproducibility
+# gate (gate:vi-reproducible / gate:vi-prepush-policy) regenerates the graph
+# fresh here and writes the manifest's input_binding — treat the whole
+# directory as a declared mutable output zone.
+[ ! -d "$candidate_root/.visual-intelligence" ] || chmod -R u+w "$candidate_root/.visual-intelligence"
+cd "$candidate_root"
+
+echo "revoy2 pre-push: candidate $candidate_sha in detached immutable worktree"
+echo "revoy2 pre-push: build + declarative revision-bound prepush profile"
+echo "  (bypass with 'git push --no-verify' if you deliberately need to push past a red run)"
+echo ""
+
+# Non-blocking, read-only hygiene sweep (never fails the push): reports
+# prunable registrations and locked worktrees whose recorded PID is gone.
+# Pruning is an explicit maintenance action and never occurs in this hook.
+bun run gate:worktree-hygiene || true
+
+# The shared execution profile owns roster, ordering, dependency reuse,
+# candidate-local build, identity, timeouts, and aggregate attestation.
+bun run enforcement:prepush -- --candidate "$candidate_sha" --repo "$candidate_root" --prepared-snapshot "$candidate_root"
+
+echo ""
+echo "revoy2 pre-push: all checks passed."

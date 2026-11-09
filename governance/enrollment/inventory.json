@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "mode": "required",
+  "organization": "revoydotdev",
+  "canonical_repository": "revoydotdev/canopy",
+  "scope": {
+    "kind": "allowlist",
+    "detail": "Only repositories explicitly listed below are in the governed enforcement regime; authenticated receipts report all other observed organization repositories as out of scope rather than claiming organization-wide coverage."
+  },
+  "provider": {
+    "kind": "github_api_receipt_required",
+    "status": "unverifiable_without_authenticated_receipt"
+  },
+  "repositories": [
+    {
+      "repository": "revoydotdev/canopy",
+      "required_profile_version": "2026.08.enforcement.1"
+    }
+  ]
+}

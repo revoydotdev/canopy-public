@@ -1,0 +1,53 @@
+#!/bin/sh
+# revoy2-commit-msg-hook-marker
+#
+# revoy2 commit-msg hook — installed by scripts/install-git-hooks.mjs.
+#
+# Two refusals, both at the only moment they are free to fix:
+#
+#   1. AI/Claude attribution in the message. Preserved verbatim from the
+#      hand-installed hook this replaced; the repo's commit convention forbids
+#      Co-Authored-By and generated-by lines outright.
+#
+#   2. A governed-path change that claims no `ADR:` trailer
+#      (scripts/adr-trailer-check.mjs).
+#
+# WHY (2) IS HERE AND NOT ONLY IN gate:adr-trace. The gate enforces the same
+# rule, but it reads COMMITTED history and runs in the stop tier, so it can only
+# report a commit that already exists. By then `evidence:rebind` has usually
+# bound the VI graph to that commit's OID, and rewording to add the trailer
+# changes the OID — which makes gate:vi-freshness fail with "graph revision is
+# not an ancestor of HEAD" and costs a second ~6-minute rebind. That loop ran
+# three times in one session on 2026-08-29/30. The rule was never unclear; only
+# its timing was.
+#
+# This is the early guard, not the authority. gate:adr-trace still owns history
+# and still catches anything committed with --no-verify or pulled from
+# elsewhere.
+set -e
+
+# Governance is enforced by the Canopy harness, not imposed on whoever happens
+# to run git. This hook acts only inside a harness run, which sets
+# ARBOR_GOVERNED_RUN=1 on every process it spawns (GOVERNED_RUN_ENV,
+# packages/arbor-core/src/governed-run.ts). A host agent session (Claude Code,
+# Codex) or a human terminal never carries it, so the hook is inert there.
+[ "${ARBOR_GOVERNED_RUN:-}" = "1" ] || exit 0
+
+message_file=$1
+repo_root=$(git rev-parse --show-toplevel)
+
+if grep -Eiq '(^|[[:space:]])Co-Authored-By:.*(Claude|Anthropic|noreply@anthropic\.com)|(^|[[:space:]])Claude-Session:|Generated (with|by).*Claude' "$message_file"; then
+    printf '%s\n' 'Commit rejected: AI/Claude attribution is prohibited.' >&2
+    exit 1
+fi
+
+# Never let the guard itself break committing: if the checker cannot run, say so
+# and allow the commit. gate:adr-trace remains the backstop, so a missing
+# interpreter degrades to the previous behaviour rather than blocking all work.
+if command -v node >/dev/null 2>&1; then
+    node "$repo_root/scripts/adr-trailer-check.mjs" "$message_file" || exit 1
+else
+    printf '%s\n' 'commit-msg: node not found; skipping the ADR trailer check (gate:adr-trace still enforces it).' >&2
+fi
+
+exit 0

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "_doc": "ADR-154. The breaker used to release on batteries that named no gate, so the journal carries historical release records with empty blocking and advisory sets. Those are evidence of the defect, not regressions against its fix, and deleting them would destroy the evidence. Records at or before this instant are historical; any AFTER it means the guard regressed and gate:stop-guard-releases blocks. This instant may be moved EARLIER as history is pruned, never later: moving it later would relabel a real regression as history.",
+  "empty_release_records_historical_through": "2026-08-30T05:16:28.118Z",
+  "historical_count_at_adoption": 31,
+  "adr": 154
+}

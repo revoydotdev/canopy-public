@@ -1,0 +1,69 @@
+#!/bin/sh
+# revoy2 pre-commit hook — installed by scripts/install-git-hooks.mjs.
+#
+# Auto-refreshes the claim-ledger store (scripts/claim-ledger-precommit.mjs)
+# when it is trailing HEAD by more than half its store-freshness-gate.mjs
+# budget, so the commit that pushes it over budget pays the cheap (~6s)
+# refresh cost instead of whoever runs the test suite next — see
+# claim-ledger-precommit.mjs's header for the full rationale and the two
+# real incidents (2026-08-11) that motivated it.
+#
+# Deliberately narrow: only the claim ledger auto-refreshes here.
+# completion-depth and the determinism baseline stay manual (ADR-034) — this
+# hook must stay fast on every ordinary commit, and is a no-op when the
+# store is within budget.
+#
+# Also runs the decisions interlock (scripts/decisions-precommit-gate.mjs,
+# ADR-072): a commit that touches decisions/ must pass
+# `adr-registry.mjs verify`, or be bypassed with ARBOR_SKIP_DECISION_GATE=1
+# (a bypass that is always logged, never silent — see that script's header).
+# Zero added cost on a commit that does not touch decisions/.
+#
+# Do not edit this copy directly for a one-off change — edit
+# scripts/hooks/pre-commit (the checked-in source) and re-run
+# `bun scripts/install-git-hooks.mjs` so the next contributor gets the fix
+# too. This file is a generated copy.
+#
+# revoy2-pre-commit-hook-marker (used by the installer to detect its own hook)
+
+set -e
+
+# Governance is enforced by the Canopy harness, not imposed on whoever happens
+# to run git. This hook acts only inside a harness run, which sets
+# ARBOR_GOVERNED_RUN=1 on every process it spawns (GOVERNED_RUN_ENV,
+# packages/arbor-core/src/governed-run.ts). A host agent session (Claude Code,
+# Codex) or a human terminal never carries it, so the hook is inert there.
+[ "${ARBOR_GOVERNED_RUN:-}" = "1" ] || exit 0
+
+toplevel="$(git rev-parse --show-toplevel)" || {
+  echo "revoy2 pre-commit: 'git rev-parse --show-toplevel' failed — this checkout cannot resolve a work tree." >&2
+  echo "  Most likely cause: core.bare is set to true on this repo's .git/config (check 'git config core.bare')." >&2
+  exit 1
+}
+cd "$toplevel"
+
+# This hook reaches foreign repositories through a global core.hooksPath (a
+# seed project's first commit failed on it, EC-022 / blockers C4). A checkout
+# without this repository's own hook source is not ours to gate.
+if [ ! -f "$toplevel/scripts/hooks/pre-commit" ] || [ ! -f "$toplevel/packages/arbor-mcp/src/repo-session-lifecycle.ts" ]; then
+  exit 0
+fi
+
+# Commits are deferred to the session close: an open agent session with no
+# commit window refuses here, with the remedy. ARBOR_COMMIT_WINDOW=1 is the
+# explicit, logged escape. The lifecycle is native
+# (packages/arbor-mcp/src/repo-session-lifecycle.ts); this entry point exists
+# because a hook needs an exit code, not a report.
+bun packages/arbor-mcp/src/cli.ts repo-session-assert-window || exit 1
+
+if [ -n "${REVOY_TRUNK_SUBMIT_ID:-}" ] || [ -n "${REVOY_TRUNK_SUBMIT_TOKEN:-}" ]; then
+  bun run enforcement:precommit -- --variant trunk_submit
+  # This is not an environment bypass. The authority script requires the
+  # exclusive transaction lock, matching private journal token, recognized
+  # phase, and phase-correct staged paths. Any mismatch aborts the commit.
+  bun scripts/trunk-submit-hook-authority.mjs
+else
+  # The declarative profile owns this exact managed-hook roster, ordering,
+  # omission declarations, and fail-fast status emission.
+  bun run enforcement:precommit
+fi

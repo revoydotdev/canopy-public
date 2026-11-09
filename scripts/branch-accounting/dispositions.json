@@ -1,0 +1,15 @@
+{
+  "_comment": [
+    "Dated dispositions for branches that are deliberately not merged into an integration branch.",
+    "",
+    "Same discipline as scripts/reachability/allowlist.json: every entry states a REASON and an",
+    "EXPIRY, and an expired entry is itself a blocker. A disposition is a decision with a shelf",
+    "life, not a permanent exemption — the whole point is that 'we meant to leave this here' has",
+    "to be re-affirmed rather than quietly inherited.",
+    "",
+    "A dispositioned branch also becomes an ACCOUNTED REF: commits it holds count as accounted",
+    "for every other branch too. That is what collapses the 306 arbor/* pointer branches from",
+    "'unaccounted' to 'contained' — they hold nothing the feature branch does not."
+  ],
+  "entries": []
+}

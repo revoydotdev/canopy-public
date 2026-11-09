@@ -1,0 +1,113 @@
+# No trailing slash: dependency reuse in detached/self-host worktrees may use
+# a node_modules symlink, which Git classifies as a file rather than a directory.
+node_modules
+dist/
+coverage/
+*.js
+*.d.ts
+*.js.map
+*.d.ts.map
+*.tsbuildinfo
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# editor / IDE state (never commit)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# local dev / orchestration state (never commit)
+.omo/
+.worktrees/
+.claude/worktrees/
+.codegraph/
+
+# revoy orchestration state (never commit)
+.revoy/
+.arbor/
+
+# secrets / credentials (never commit)
+.env
+.env.*
+!.env.example
+!.env.sample
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+id_ecdsa*
+*_rsa
+*_ed25519
+*credentials*.json
+*credentials*.yml
+*credentials*.yaml
+.npmrc
+.netrc
+.pgpass
+
+# package-manager / tool logs and caches (never commit)
+npm-debug.log*
+yarn-error.log*
+.npm/
+.cache/
+*.tgz
+
+# Bun — bun.lock (the JSONC text lockfile) IS committed; it's the reviewable
+# artifact scripts/lockfile-check.mjs (G-28) checks. bun.lockb is the legacy
+# binary lockfile format bunfig.toml's saveTextLockfile=true opts out of —
+# ignored so an accidental `--lockfile-format binary` or older-bun run
+# doesn't slip a second, unreadable lockfile into a commit.
+bun.lockb
+bun-debug-*.log
+
+# repository-visual-intelligence
+# The graph (nodes/edges/evidence.jsonl, lsp-facts.json, ~28MB) is NOT
+# committed: proven to be a pure, deterministic function of committed source
+# (gate:vi-reproducible/gate:vi-prepush-policy verify this on every run — two
+# clean serialized regenerations against the same revision reproduce
+# byte-identically), so git history carried zero governance value for it while
+# accounting for ~70% of this repository's .git size (measured 2026-09-24:
+# ~564MB of ~791MB, git's own delta compression already applied). Rendered
+# views were never committed for the same underlying reason — a one-line
+# semantic change reshuffles every coordinate, and that churn drowns the
+# signal in every PR — this just applies the same "deleting the tier must be
+# lossless, or it was authored wrong" principle (see .visual-intelligence/
+# README.md) one tier earlier. manifest.json (small, metadata-only) IS still
+# committed — see gate:vi-freshness, which reads only that file.
+.visual-intelligence/graph/
+.visual-intelligence/views/
+.visual-intelligence/.dirty
+.visual-intelligence/.vi-active
+
+# hook-liveness attestation
+# The manifest and wrapper are committed — they declare intent and do the work.
+# The invocation log is session-local, machine-specific, and bounded; committing
+# it would mean merging one machine's hook history into another's.
+.hook-liveness/invocations.jsonl
+
+# Transient runner scripts written by e2e-substrate-concurrency.test.mjs. They must
+# live under REPO_ROOT so @arbor/* workspace imports resolve, but they are test
+# scaffolding, not evidence input: store-provenance hashes `git ls-files -co
+# --exclude-standard`, so leaving them un-ignored made their creation/removal
+# perturb the repository content hash mid-run and fail the store-freshness
+# fixtures in any parallel suite.
+scripts/tests/.e2e-substrate-runners/
+
+# Local reference audits and artifacts for the external compatibility study.
+# Keep the Revoy-owned implementation; exclude reference-named evidence.
+compliance/assimilation/[aA][rR][cC][hH][iI][fF][yY]/
+**/*[aA][rR][cC][hH][iI][fF][yY]*
+
+# TUI pilot seed projects carry their own .git; the receipt and frames are the evidence
+artifacts/tui-hardening-baseline/pty/*/run-*/project/
+
+# governance record store (packages/arbor-governance/src/record/store.ts)
+# The published-revision index and its publish lock are derived from the ADR
+# files and rebuilt on demand. Left untracked they also count as an untracked
+# input under decisions/, which evidence:rebind refuses.
+decisions/.governance-index.json
+decisions/.governance-publish.lock

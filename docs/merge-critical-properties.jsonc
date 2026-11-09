@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  // Matching is deliberately conservative: changing a watched implementation,
+  // its test, its ADR, or this registry reruns the property.
+  "properties": [
+    {
+      "property_id": "worktree.gate-order",
+      "adr": "ADR-023",
+      "statement": "isolation precedes evidence and audit in the fixed process-gate lifecycle",
+      "watch_globs": ["packages/arbor-gate/src/*.ts", "packages/arbor-core/src/tree.ts"],
+      "test_id": "packages/arbor-gate/tests/gate-order.invariant.test.ts"
+    },
+    {
+      "property_id": "worktree.seed-isolation",
+      "adr": "ADR-023",
+      "statement": "a Seed's changes remain isolated until an explicit gated integration",
+      "watch_globs": ["packages/arbor-opencode/src/worktree.ts"],
+      "test_id": "packages/arbor-opencode/tests/worktree.test.ts"
+    },
+    {
+      "property_id": "audit.append-only",
+      "adr": "ADR-023",
+      "statement": "the evidence ledger detects rewrite, reorder, duplication, and truncation",
+      "watch_globs": ["packages/arbor-audit/src/*.ts"],
+      "test_id": "packages/arbor-audit/tests/hash-chain-integrity.test.ts"
+    },
+    {
+      "property_id": "catalog.tier-enforcement",
+      "adr": "ADR-028",
+      "statement": "a junior caller cannot reach a mutating catalog kind regardless of transport capabilities",
+      "watch_globs": ["packages/arbor-core/src/capability.ts", "packages/arbor-mcp/src/runtime-catalog.ts", "packages/arbor-mcp/src/tools.ts"],
+      "test_id": "packages/arbor-mcp/tests/capability-tier-enforcement.test.ts"
+    },
+    {
+      "property_id": "recovery.effect-classification",
+      "adr": "ADR-043",
+      "statement": "every interrupted operation is classified without dispatch before continuation authority is considered",
+      "watch_globs": ["packages/arbor-mcp/src/recovery/effect-classifier.ts", "packages/arbor-mcp/src/recovery/continuation-plan.ts"],
+      "test_id": "packages/arbor-mcp/tests/recovery/effect-classifier.test.ts"
+    },
+    {
+      "property_id": "recovery.fresh-authority",
+      "adr": "ADR-043",
+      "statement": "continuation cannot dispatch before fresh admission is durable and indeterminate effects have an explicit disposition",
+      "watch_globs": ["packages/arbor-mcp/src/recovery-service.ts", "packages/arbor-mcp/src/recovery/continuation-plan.ts", "packages/arbor-mcp/src/recovery/recovery-command.ts"],
+      "test_id": "packages/arbor-mcp/tests/recovery/continuation-service.test.ts"
+    },
+    {
+      "property_id": "sandbox.grade-honesty",
+      "adr": "ADR-044",
+      "statement": "OS confinement is reported only after the complete broker profile succeeds and denied-network fallback refuses",
+      "watch_globs": ["packages/arbor-mcp/src/sandbox/*.ts"],
+      "test_id": "packages/arbor-mcp/tests/sandbox-broker.test.ts"
+    },
+    {
+      "property_id": "sandbox.native-routing",
+      "adr": "ADR-044",
+      "statement": "file.read, file.write, file.patch, shell.execute, and verification.run route through the injected sandbox broker",
+      "watch_globs": ["packages/arbor-mcp/src/native-tool-host.ts", "packages/arbor-mcp/src/sandbox/workspace-file.ts"],
+      "test_id": "packages/arbor-mcp/tests/native-tool-host.test.ts"
+    },
+    {
+      "property_id": "hooks.reduction-only",
+      "adr": "ADR-049",
+      "statement": "effective_allow implies base_allow for every hook-composed tool decision",
+      "watch_globs": ["packages/arbor-mcp/src/hooks/*.ts"],
+      "test_id": "packages/arbor-mcp/tests/hooks/bus.test.ts"
+    },
+    {
+      "property_id": "hooks.live-fail-closed",
+      "adr": "ADR-049",
+      "statement": "tool and session vetoes are live and deny on invalid, throwing, or over-time decisions",
+      "watch_globs": ["packages/arbor-mcp/src/hooks/*.ts", "packages/arbor-mcp/src/native-agent-executor.ts"],
+      "test_id": "packages/arbor-mcp/tests/hooks/e2e.test.ts"
+    },
+    {
+      "property_id": "commands.role-reduction",
+      "adr": "ADR-052",
+      "statement": "a user command cannot expand the selected role's tools or bypass governed task admission",
+      "watch_globs": ["packages/arbor-mcp/src/extensibility/command-catalog.ts", "packages/arbor-mcp/src/extensibility/command-cli.ts"],
+      "test_id": "packages/arbor-mcp/tests/extensibility/command-catalog.test.ts"
+    },
+    {
+      "property_id": "plugins.tier-reduction",
+      "adr": "ADR-052",
+      "statement": "plugin signature, evidence tier, and connector routing bound every granted plugin effect",
+      "watch_globs": ["packages/arbor-mcp/src/extensibility/plugin-*.ts"],
+      "test_id": "packages/arbor-mcp/tests/extensibility/plugin-registry.test.ts"
+    },
+    {
+      "property_id": "adr.acceptance-authority",
+      "adr": "ADR-059",
+      "statement": "ADR acceptance is a later status-only authority act, never bundled with authorship or substantive content changes",
+      "watch_globs": ["scripts/adr-acceptance-gate.mjs", "scripts/lib/adr-acceptance.mjs", "scripts/claim-ledger.ts", "scripts/hooks/pre-commit", "scripts/lib/conductor/land.mjs"],
+      "test_id": "scripts/tests/adr-acceptance-gate.test.mjs"
+    }
+  ]
+}

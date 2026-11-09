@@ -1,0 +1,31 @@
+{
+  "id": "composer-editor",
+  "title": "X08 composer: external editor handoff",
+  "covers": [
+    "X08"
+  ],
+  "seed": "greenfield",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "type": "draft in editor",
+      "label": "type",
+      "hold_s": 0.5
+    },
+    {
+      "key": "C-e",
+      "label": "open external editor (EDITOR=true)",
+      "hold_s": 2.0
+    },
+    {
+      "key": "Escape",
+      "label": "after editor returns",
+      "hold_s": 1.0
+    }
+  ]
+}

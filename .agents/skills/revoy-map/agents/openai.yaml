@@ -1,0 +1,4 @@
+interface:
+  display_name: "Revoy Map"
+  short_description: "Build verified interactive system maps"
+  default_prompt: "Use $revoy-map to create a verified interactive map of this system."

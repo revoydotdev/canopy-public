@@ -1,0 +1,23 @@
+{
+  "name": "@arbor/search-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Revoy-owned, harness-agnostic search runtime: drives @arbor/core's pure per-step search policies against an attempt dispatcher and a write-ahead ledger (UCT plan Stage 2 skeleton; Stage 3 supplies the worktree-backed dispatcher).",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run tests/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@arbor/core": "*"
+  },
+  "license": "MIT"
+}

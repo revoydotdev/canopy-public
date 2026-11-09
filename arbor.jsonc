@@ -1,0 +1,13 @@
+{
+  // revoy2's own project configuration. Non-secret. The native lane (provider, model,
+  // pricing, budget) is a per-machine choice and lives in the user scope
+  // (~/.arbor/arbor.jsonc, ADR-110); keys live in ~/.config/revoy/revoy.env.
+  "verification": {
+    // What verifies a change to this repository when a plan declares no command of its own.
+    // Run in order, fail-fast, by the harness, in the node's worktree.
+    "acceptance_commands": [
+      ["bun", "run", "tests:typecheck"],
+      ["bun", "run", "test"]
+    ]
+  }
+}

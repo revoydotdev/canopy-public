@@ -1,0 +1,2 @@
+{"source":"sym:canary.main","target":"sym:canary.helper","relation":"calls","evidence_location":"packages/canary/src/main.ts:4","attributes":{}}
+{"source":"sym:canary.ghost","target":"entrypoint:set","relation":"reachable_from","evidence_location":"unknown","attributes":{}}

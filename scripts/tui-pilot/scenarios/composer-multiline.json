@@ -1,0 +1,77 @@
+{
+  "id": "composer-multiline",
+  "title": "X07 composer: multiline entry, correction, cancel",
+  "covers": [
+    "X07",
+    "S01"
+  ],
+  "seed": "greenfield",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "type": "Add a health check endpoint",
+      "label": "type first line",
+      "hold_s": 0.8
+    },
+    {
+      "key": "S-Enter",
+      "label": "newline",
+      "hold_s": 1.0
+    },
+    {
+      "type": "and a test for it",
+      "label": "type second line",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Left",
+      "label": "cursor left",
+      "hold_s": 0.5
+    },
+    {
+      "key": "Left",
+      "label": "cursor left",
+      "hold_s": 0.5
+    },
+    {
+      "key": "BSpace",
+      "label": "backspace mid-line",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Home",
+      "label": "home",
+      "hold_s": 0.5
+    },
+    {
+      "key": "End",
+      "label": "end",
+      "hold_s": 0.5
+    },
+    {
+      "key": "Up",
+      "label": "cursor up",
+      "hold_s": 0.8
+    },
+    {
+      "key": "Escape",
+      "label": "blur with text retained",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Enter",
+      "label": "refocus",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-u",
+      "label": "clear line (if bound)",
+      "hold_s": 0.8
+    }
+  ]
+}

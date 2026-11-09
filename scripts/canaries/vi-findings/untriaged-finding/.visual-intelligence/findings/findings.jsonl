@@ -1,0 +1,1 @@
+{"id":"vi-canary-untriaged-1","title":"canary: a committed finding with no recorded human verdict","severity":"medium","affected_nodes":["packages/arbor-core/src/canary.ts"],"detector":"canary","first_seen":"canary"}

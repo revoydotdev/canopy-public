@@ -1,0 +1,2347 @@
+{
+  "schema_version": 1,
+  "generated_by": "scripts/hollow-parity-generate.mjs",
+  "note": "Committed artefact (T5.2/T5.3). Regenerate with `bun scripts/hollow-parity-generate.mjs`; do not hand-edit.",
+  "kinds": [
+    {
+      "kind": "campaign.start",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "campaign.halt",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "tree.branch",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "tree.prune",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "tree.interrupt",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "operation.cancel",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "task.retry",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "recovery.retry",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "recovery.abandon",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "campaign.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "campaign.snapshot",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "campaign.tree",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "git.workspace",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "git.worktree.create",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "git.worktree.switch",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "git.worktree.cleanup",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "control.status",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "control.discover",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "control.inbox",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "operation.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "inspect.action",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "operation.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "recovery.pending",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "task.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "event.resume",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "communication.record",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "communication.selection",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "communication.history",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "output.capture",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "output.descriptor",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "output.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "output.raw",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "surveillance.scan",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "surveillance.findings",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "capability.introspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "governance.snapshot",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "governance.backlog",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "governance.record.search",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "governance.record.read",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "kb.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "audit.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "config.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "doctor.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "migration.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "migration.preview",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "migration.apply",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "migration.rollback",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.admit",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "remote.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "scheduler.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.install",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.enable",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.disable",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.update",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "integration.rollback",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "remote.control",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "scheduler.control",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "native.budget.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.submit",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.answer",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.confirm",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.cancel",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.retry",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.reject",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "taskcomposer.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.scope.authorize",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.adopt",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.revert",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.review.workspace",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.review.comment",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.review.request_revision",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.review.editor_handoff",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "session.identity.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "session.identity.search",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "session.identity.mutate",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.verification.get",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "result.verification.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "notification.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "notification.read",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "followup.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "followup.create",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "agent.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.submit",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.cancel",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.retry",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.pause",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.resume",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "job.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "approval.request",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "approval.approve",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "approval.reject",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "approval.expire",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "approval.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "trust.session.enroll",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "trust.session.rotate",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "trust.session.revoke",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "trust.session.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "trust.session.status",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "compaction.record",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "compaction.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "compaction.guard",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "phase_message.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "userinput.ask",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "userinput.answer",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "userinput.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "userinput.awaiting",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "bus.record",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "bus.history",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "bus.thread.send",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "bus.thread.ack",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "bus.thread.history",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "peer.grant",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "peer.query",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "peer.reply",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "peer.history",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "peer.grants",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "sibling.status",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "sibling.spawn",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "foreground.derive",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "nodecard.resolve",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "a2a.send",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "a2a.receive",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "a2a.cards",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "context.artifact.capture",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "context.workspace",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "context.overlays",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "context.governance",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "fold.propose",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "fold.approve",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "fold.rollback",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "playbook.propose",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "playbook.approve",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.propose",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.approve",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.rollback",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.evaluate",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.promote",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "subagent.execute",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "subagent.executions",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.evaluation.start",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.evaluation.candidates",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.evaluation.runs",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.evaluation.detail",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.quarantine",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.connector.inventory",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.native.readiness",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "project.registry.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": false,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "project.manage",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.interrupt",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.steer",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.resume",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.fork",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.respawn",
+      "direction": "command",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.list",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.inspect",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.events",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.attach",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": false,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "harness.session.availability",
+      "direction": "query",
+      "supported": true,
+      "surfaces": {
+        "cli": true,
+        "tui": true,
+        "web": true,
+        "liveness": true,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.status",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.sessions",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.clearances",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.drains",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.gate",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.deliveries",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.effects",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.runs",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.profile",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": true,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.telemetry",
+      "direction": "query",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.session.enroll",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.session.reconcile",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.session.drain",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.session.quiesce",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.clearance.request",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.clearance.renew",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.clearance.revoke",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.drain.request",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.drain.ack",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.drain.activate",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.drain.release",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.gate.request",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.gate.ack",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.gate.activate",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.gate.run",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.delivery.sent",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.delivery.transition",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.effect.reconcile",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.run.create",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.run.authorize",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.run.transition",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    },
+    {
+      "kind": "repo.flight.execution.schedule",
+      "direction": "command",
+      "supported": false,
+      "surfaces": {
+        "cli": false,
+        "tui": false,
+        "web": false,
+        "liveness": false,
+        "mcp_generic": true
+      }
+    }
+  ]
+}

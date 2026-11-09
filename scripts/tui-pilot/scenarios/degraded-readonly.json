@@ -1,0 +1,30 @@
+{
+  "id": "degraded-readonly",
+  "title": "degraded: read-only .arbor",
+  "covers": [
+    "S01"
+  ],
+  "seed": "readonly-arbor",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "hold_s": 3,
+      "label": "observe"
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "v",
+      "label": "Audit",
+      "hold_s": 1.0
+    }
+  ]
+}

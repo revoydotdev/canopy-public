@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# ADR-147: one Linux authority path. The immutable aggregate owns install,
+# build, test typechecking, coverage, OpenTUI, VI reproduction, and every
+# registered CI gate for one candidate/profile/toolchain identity. Standalone
+# Linux jobs would replay the same evidence and are therefore forbidden.
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  platform-smoke-windows:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    name: "platform smoke (Windows / Node 22)"
+    runs-on: [self-hosted, Windows, X64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: "1.4.0"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Platform smoke
+        run: bun scripts/platform-smoke.mjs --expect-platform win32
+
+  platform-smoke-macos:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    name: "platform smoke (macOS / Node 22)"
+    runs-on: [self-hosted, macOS, X64]
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: "1.4.0"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Platform smoke
+        run: bun scripts/platform-smoke.mjs --expect-platform darwin
+
+  enforcement-control-plane:
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
+    name: "aggregate revision-bound Linux enforcement authority"
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: "1.4.0"
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Execute immutable declarative CI profile
+        id: battery
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: bun run enforcement:ci .arbor/enforcement/aggregate-report.json
+      - name: Emit CI-produced aggregate attestation
+        if: always()
+        run: bun run attestation:emit -- --report .arbor/enforcement/aggregate-report.json --out .arbor/enforcement/aggregate-attestation.json
+      - name: Upload aggregate enforcement attestation
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: revoy2-aggregate-enforcement-attestation-${{ github.sha }}
+          path: |
+            .arbor/enforcement/aggregate-attestation.json
+            .arbor/enforcement/aggregate-report.json
+          retention-days: 30
+      - name: Fail after attestation publication when the profile is red
+        if: steps.battery.outcome == 'failure'
+        run: exit 1

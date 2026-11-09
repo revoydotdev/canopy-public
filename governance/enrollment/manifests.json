@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "schema_version": 1,
+      "repository": "revoydotdev/canopy",
+      "organization": "revoydotdev",
+      "profile_version": "2026.08.enforcement.1",
+      "ci_contract": {
+        "aggregate_check": "revoy2 / aggregate enforcement attestation",
+        "workflow_path": ".github/workflows/ci.yml",
+        "attestation_kind": "revoy2.aggregate_gate_attestation"
+      },
+      "attestation": {
+        "endpoint": "github://revoydotdev/canopy/actions/aggregate-enforcement",
+        "status": "platform_protection_pending"
+      }
+    }
+  ]
+}

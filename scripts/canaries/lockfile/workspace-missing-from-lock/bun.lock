@@ -1,0 +1,7 @@
+{
+  "lockfileVersion": 1,
+  "workspaces": {
+    "": { "name": "canary-lockfile" }
+  },
+  "packages": {}
+}

@@ -1,0 +1,19 @@
+// Canary fixture: a registry whose schema_version is not 1.
+//
+// The other four validators in `verifyMergeCriticalRegistry` (property_id
+// shape, adr resolution, statement, watch_globs, test_id reachability) are all
+// left satisfiable, so the ONLY error this fixture can produce is
+// `schema_version must equal 1`. A fixture that tripped several validators at
+// once would prove the wrapper is reachable but not which check fired.
+{
+  "schema_version": 2,
+  "properties": [
+    {
+      "property_id": "canary.property",
+      "adr": "ADR-900",
+      "statement": "Canary: a property whose only defect is the registry schema version.",
+      "watch_globs": ["scripts/canary/**"],
+      "test_id": "packages/canary/tests/canary.test.ts"
+    }
+  ]
+}

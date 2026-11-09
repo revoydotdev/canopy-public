@@ -1,0 +1,41 @@
+# Bun configuration — see docs/bun-migration-plan.md for why this repo runs
+# on Bun instead of Node (OpenTUI's native FFI does not initialize under
+# Node; it does under Bun).
+
+[install]
+# Pin the text-based lockfile format explicitly rather than relying on the
+# 1.2+ default. `bun.lock` is JSONC (JSON + trailing commas), diffs cleanly
+# in review, and is what scripts/lockfile-check.mjs (G-28) parses — an
+# accidental switch to the legacy binary `bun.lockb` would silently break
+# that gate.
+saveTextLockfile = true
+
+# REQUIRED, not cosmetic. Verified empirically (2026-08-07): Bun's own
+# default linker is "isolated" (a pnpm-style content-addressed store under
+# node_modules/.bun/, exposing only the root manifest's own direct deps at
+# the top level). That default does NOT create the flat
+# node_modules/@arbor/<name> -> packages/arbor-<name> symlinks this repo's
+# whole module-resolution strategy depends on (vitest.config.ts's own
+# comment: "npm workspaces symlink node_modules/@arbor/<name> ->
+# packages/<name>" — Node's/tsc's package-exports resolution finds the TS
+# source there with zero build step and zero alias map). Reproduced twice in
+# a clean, no-prior-lockfile scratch copy: default `bun install` yields 4
+# top-level node_modules entries and zero @arbor symlinks; `bun install
+# --linker hoisted` (or this setting) yields the correct 11 symlinks,
+# matching npm's layout exactly.
+#
+# The trap: `bun install` silently uses the correct hoisted layout ONLY
+# while migrating from an existing package-lock.json (bun.lock records
+# "configVersion": 0 in that path). The instant package-lock.json is gone —
+# which this migration does, see docs/bun-migration-plan.md — the *default*
+# silently flips to isolated ("configVersion": 1) with no error, no
+# warning, just a broken @arbor/* resolution. Pinning `linker = "hoisted"`
+# here makes the layout correct and deterministic independent of that
+# migration artifact.
+linker = "hoisted"
+
+# [test]
+# Reserved for the test-suite lane (packages/**/tests/**, vitest.config.ts,
+# coverage strategy). Left absent by the runtime/package-manager lane on
+# purpose — see docs/bun-migration-plan.md's lane table. Do not add a
+# `[test]` section here outside that lane's own change.

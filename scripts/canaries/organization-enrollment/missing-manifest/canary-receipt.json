@@ -1,0 +1,5 @@
+{
+  "_comment": "Canary fixture: a hermetic stand-in for the authenticated GitHub receipt, so the canary never reaches the network. It is deliberately not a valid receipt.",
+  "schema_version": 3,
+  "kind": "revoy2.github_enrollment_receipt"
+}

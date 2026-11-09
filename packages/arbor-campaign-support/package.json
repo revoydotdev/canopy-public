@@ -1,0 +1,24 @@
+{
+  "name": "@arbor/campaign-support",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Revoy-owned, harness-agnostic campaign support contracts (worktree leasing, panel-of-critics, retry-context capsule, token economy, communications, output evidence, cost attribution, sibling-scan, decomposition policy) split out of @arbor/opencode per ADR-061 step 1.",
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "scripts": {
+    "test": "vitest run tests/",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@arbor/audit": "*",
+    "@arbor/core": "*"
+  },
+  "license": "MIT"
+}

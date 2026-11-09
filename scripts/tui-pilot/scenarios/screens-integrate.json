@@ -1,0 +1,116 @@
+{
+  "id": "screens-integrate",
+  "title": "L8 integrate: connectors, readiness, config, registry, budget, composer, surveillance, review",
+  "covers": [
+    "M07",
+    "M10",
+    "S08",
+    "S13",
+    "S16",
+    "S17",
+    "S25",
+    "S33",
+    "S34",
+    "S37",
+    "S40"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "C-k",
+      "label": "Harness connectors",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-r",
+      "label": "Harness readiness",
+      "hold_s": 1.0
+    },
+    {
+      "key": "7",
+      "label": "Config",
+      "hold_s": 1.0
+    },
+    {
+      "key": "{",
+      "label": "Project registry",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-b",
+      "label": "Native budget",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-t",
+      "label": "Task composer",
+      "hold_s": 1.0
+    },
+    {
+      "key": ";",
+      "label": "Surveillance",
+      "hold_s": 1.0
+    },
+    {
+      "key": "S-r",
+      "label": "Diff review (expect refusal notification)",
+      "hold_s": 1.0
+    },
+    {
+      "key": "\\",
+      "label": "leader",
+      "hold_s": 1.0
+    },
+    {
+      "key": "1",
+      "label": "Campaigns",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-p",
+      "label": "palette",
+      "hold_s": 0.6
+    },
+    {
+      "type": "A2A",
+      "label": "filter A2A",
+      "hold_s": 0.6
+    },
+    {
+      "key": "Enter",
+      "label": "A2A Cards (fail-closed state)",
+      "hold_s": 1
+    },
+    {
+      "key": "C-p",
+      "label": "palette",
+      "hold_s": 0.6
+    },
+    {
+      "type": "Flight Control",
+      "label": "filter Flight Control",
+      "hold_s": 0.6
+    },
+    {
+      "key": "Enter",
+      "label": "Flight Control (fail-closed state)",
+      "hold_s": 1
+    },
+    {
+      "key": "`",
+      "label": "back to Console",
+      "hold_s": 1.0
+    }
+  ]
+}

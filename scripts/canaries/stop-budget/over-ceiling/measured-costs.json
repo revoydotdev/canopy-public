@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "kind": "revoy2.gate_measured_costs",
+  "gates": {},
+  "tiers": {
+    "stop": {
+      "gate_count": 3,
+      "recent_totals_ms": [88000, 91000, 93000, 96000, 99000]
+    }
+  }
+}

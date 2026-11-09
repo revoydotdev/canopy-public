@@ -1,0 +1,67 @@
+[
+  {
+    "id": "recover-after-isolation-safe-failure",
+    "description": "A first implementation fails and a later branch recovers using the failure record.",
+    "attempts": [
+      {
+        "id": "unsafe-change",
+        "description": "attempt an unsafe migration",
+        "baseline_success": false,
+        "governed_success": false,
+        "regression_detected": false,
+        "scripted_token_units": 120,
+        "rationale": "migration test fails before release",
+        "root_cause": "missing backwards compatibility"
+      },
+      {
+        "id": "compatible-change",
+        "description": "attempt the compatible migration",
+        "baseline_success": true,
+        "governed_success": true,
+        "regression_detected": false,
+        "scripted_token_units": 160,
+        "rationale": "compatibility test and critic review pass"
+      }
+    ]
+  },
+  {
+    "id": "regression-is-rejected-before-recovery",
+    "description": "The baseline accepts a superficially successful regression; the governed critic rejects it and recovers.",
+    "attempts": [
+      {
+        "id": "false-green",
+        "description": "propose a change that drops a negative test",
+        "baseline_success": true,
+        "governed_success": false,
+        "regression_detected": true,
+        "scripted_token_units": 90,
+        "rationale": "critic finds removed regression coverage",
+        "root_cause": "negative test was deleted"
+      },
+      {
+        "id": "preserve-coverage",
+        "description": "preserve the negative test and repair the implementation",
+        "baseline_success": true,
+        "governed_success": true,
+        "regression_detected": false,
+        "scripted_token_units": 140,
+        "rationale": "coverage preserved and verification succeeds"
+      }
+    ]
+  },
+  {
+    "id": "straight-through-control",
+    "description": "A simple control where both paths complete on their first attempt.",
+    "attempts": [
+      {
+        "id": "safe-change",
+        "description": "apply a bounded compatible change",
+        "baseline_success": true,
+        "governed_success": true,
+        "regression_detected": false,
+        "scripted_token_units": 70,
+        "rationale": "all scripted checks pass"
+      }
+    ]
+  }
+]

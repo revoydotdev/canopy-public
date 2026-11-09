@@ -1,0 +1,36 @@
+{
+  "id": "help-overlay",
+  "title": "X10 help overlay: open, filter, close",
+  "covers": [
+    "X10"
+  ],
+  "seed": "greenfield",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "?",
+      "label": "open help",
+      "hold_s": 1.0
+    },
+    {
+      "type": "Tree",
+      "label": "filter help",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "close help",
+      "hold_s": 1.0
+    }
+  ]
+}

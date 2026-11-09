@@ -1,0 +1,360 @@
+{
+  "$schemaNote": "Hand-authored, machine-read by scripts/reachability.mjs. Every way execution can begin in this repo. Reachability (6.2) is undefined without this file — it is the root set for the static reachability walk.",
+  "version": 1,
+  "verifiedDate": "2026-08-04",
+  "communicationProof": {
+    "$schemaNote": "ADR-083's blocking, source-level proof. It is intentionally a narrow claim about the native child communication surface: the parent-child ledger is its only declared mechanism; a required public root reaches the canonical landmarks; and each scoped port has one deterministic native-tool emission from the canonical factory.",
+    "version": 1,
+    "mechanisms": [
+      {
+        "id": "parent-child-ledger",
+        "native_tool_factory_file": "packages/arbor-mcp/src/native-tool-host.ts"
+      }
+    ],
+    "required_entry_points": ["arbor-mcp-cli"],
+    "scoped_ports": ["bus.thread.ack", "bus.thread.send", "sibling.status"],
+    "scope_checked_ports": ["bus.thread.ack", "bus.thread.send"],
+    "landmarks": [
+      { "id": "packages/arbor-mcp/src/cli.ts::nativeBusThreadForSession" },
+      { "id": "packages/arbor-mcp/src/native-agent-executor.ts::NativeAgentExecutor" },
+      { "id": "packages/arbor-mcp/src/native-tool-host.ts::createNativeBusThreadToolPorts" },
+      { "id": "packages/arbor-mcp/src/native-tool-host.ts::busThreadScopeMismatch" },
+      { "id": "packages/arbor-mcp/src/runtime-catalog.ts::RuntimeCatalogRouter" },
+      { "id": "packages/arbor-mcp/src/manager.ts::CampaignManager" },
+      { "id": "packages/arbor-mcp/src/conversation-bus.ts::parentChildThreadId" },
+      { "id": "packages/arbor-mcp/src/conversation-bus.ts::projectParentChildThread" }
+    ],
+    "scope_resolver": {
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "symbol": "nativeBusThreadForSession"
+    },
+    "factory": {
+      "symbol": "createNativeBusThreadToolPorts",
+      "scope_check_symbol": "busThreadScopeMismatch",
+      "scope_fields": ["campaign_id", "parent_node_id", "child_node_id"],
+      "port_handlers": {
+        "bus.thread.send": "busThreadSend",
+        "bus.thread.ack": "busThreadAck",
+        "sibling.status": "siblingStatus"
+      }
+    }
+  },
+  "entryPoints": [
+    {
+      "id": "arbor-claude-bridge-cli",
+      "package": "arbor-claude-bridge",
+      "file": "packages/arbor-claude-bridge/src/server.ts",
+      "kind": "library-export",
+      "symbol": "startBridge",
+      "description": "arbor-claude-bridge bin: externally launched toolless OpenAI-compatible endpoint backed by the local Claude Code CLI. The bin imports and invokes this named root."
+    },
+    {
+      "id": "arbor-mcp-cli",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "kind": "process-entry",
+      "description": "arbor-mcp bin: CLI dispatch, MCP stdio server, runTui, and the web server. Whole file executes top to bottom when the process starts, so every top-level statement in it is a live call site."
+    },
+    {
+      "id": "arbor-eval-stage0-cli",
+      "package": "arbor-eval",
+      "file": "packages/arbor-eval/src/stage0/cli.ts",
+      "kind": "process-entry",
+      "description": "UCT Stage 0 paired-evaluation instrument (ADR-131/095): `bun packages/arbor-eval/src/stage0/cli.ts build-fixtures|run|analyze|pilot-summary`, run directly by the operator per docs/research/uct-search/stage0-preregistration.md. Whole file executes top to bottom when the process starts."
+    },
+    {
+      "id": "arbor-eval-cli",
+      "package": "arbor-eval",
+      "file": "packages/arbor-eval/src/cli.ts",
+      "kind": "process-entry",
+      "description": "arbor-eval bin: eval harness CLI."
+    },
+    {
+      "id": "arbor-eval-native-safety-cli",
+      "package": "arbor-eval",
+      "file": "packages/arbor-eval/src/staged-native-safety-cli.ts",
+      "kind": "process-entry",
+      "description": "arbor-eval-native-safety bin: opt-in hermetic staged native-harness safety episodes."
+    },
+    {
+      "id": "arbor-opencode-plugin",
+      "package": "arbor-opencode",
+      "file": "packages/arbor-opencode/src/plugin.ts",
+      "kind": "library-export",
+      "symbol": "arborPlugin",
+      "description": "arborPlugin — a library export consumed by the opencode host process, which lives outside this repo. Only the named export is a live root (import side effects still count, but nothing calls arbitrary other exports of this file unless arborPlugin itself references them)."
+    },
+    {
+      "id": "revoy-release-verify-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "verifyRelease",
+      "description": "Published signed-release verification boundary used by supported distribution hosts."
+    },
+    {
+      "id": "revoy-release-manifest-schema-version-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "RELEASE_MANIFEST_SCHEMA_VERSION",
+      "description": "Published release-manifest schema discriminator used by external release producers."
+    },
+    {
+      "id": "revoy-release-fetch-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "fetchReleaseCandidate",
+      "description": "Published bounded HTTPS release discovery boundary."
+    },
+    {
+      "id": "revoy-release-activation-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "activateVerifiedRelease",
+      "description": "Published atomic activation boundary accepting only verified release values."
+    },
+    {
+      "id": "revoy-release-rollback-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "rollbackVerifiedRelease",
+      "description": "Published rollback boundary restricted to previously verified bytes."
+    },
+    {
+      "id": "revoy-release-trust-init-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "initializeReleaseTrustStore",
+      "description": "Published one-time out-of-band release trust bootstrap."
+    },
+    {
+      "id": "revoy-release-trust-load-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "loadReleaseTrustStore",
+      "description": "Published host-owned release trust-store reader."
+    },
+    {
+      "id": "revoy-release-active-version-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/distribution.ts",
+      "kind": "library-export",
+      "symbol": "activeReleaseVersion",
+      "description": "Published verified active-version projection used by launchers."
+    },
+    {
+      "id": "arbor-mcp-native-tool-risk-manifest-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/native-tool-risk-manifest.ts",
+      "kind": "library-export",
+      "symbol": "NATIVE_TOOL_RISK_MANIFEST",
+      "description": "Published flat-map compatibility view of native tool risks, barrel-exported from index.ts for callers that historically consumed a flat map before core switched to grouped declarations."
+    },
+    {
+      "id": "arbor-public-integration-sdk",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/sdk.ts",
+      "kind": "library-export",
+      "symbol": "defineIntegration",
+      "description": "Published data-only integration authoring boundary consumed by external packages."
+    },
+    {
+      "id": "arbor-config-organization-policy-domain-query",
+      "package": "arbor-config",
+      "file": "packages/arbor-config/src/organization-policy.ts",
+      "kind": "library-export",
+      "symbol": "isPolicyDomainAllowed",
+      "description": "Public organization-policy query for external composition roots."
+    },
+    {
+      "id": "arbor-config-organization-policy-schema",
+      "package": "arbor-config",
+      "file": "packages/arbor-config/src/organization-policy.ts",
+      "kind": "library-export",
+      "symbol": "ORGANIZATION_POLICY_JSON_SCHEMA",
+      "description": "Published schema used by editors and organization policy tooling."
+    },
+    {
+      "id": "arbor-config-organization-policy-filename",
+      "package": "arbor-config",
+      "file": "packages/arbor-config/src/organization-policy.ts",
+      "kind": "library-export",
+      "symbol": "ORGANIZATION_POLICY_FILENAME",
+      "description": "Published canonical organization-policy filename for enrollment tooling."
+    },
+    {
+      "id": "arbor-governance-admission-attestation-issuer-api",
+      "package": "arbor-governance",
+      "file": "packages/arbor-governance/src/admission-attestation.ts",
+      "kind": "library-export",
+      "symbol": "issueGovernanceAdmissionAttestation",
+      "description": "External governance authority boundary that issues an independently signed Flight admission attestation."
+    },
+    {
+      "id": "arbor-mcp-flight-execution-plan-signer-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-execution-plan.ts",
+      "kind": "library-export",
+      "symbol": "signRepoFlightExecutionPlan",
+      "description": "Profile-adapter boundary that signs an independently derived Flight execution plan."
+    },
+    {
+      "id": "arbor-mcp-flight-dual-authority-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-dual-authority.ts",
+      "kind": "library-export",
+      "symbol": "executeRepoFlightDualAuthorityTransaction",
+      "description": "Canonical Flight-first, legacy-second authority transaction for evidence publication and finalization migration."
+    },
+    {
+      "id": "arbor-mcp-flight-governance-trust-env-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-governance-adapter.ts",
+      "kind": "library-export",
+      "symbol": "REPO_FLIGHT_GOVERNANCE_TRUST_ENV",
+      "description": "Canonical environment key naming the public governance trust-state file."
+    },
+    {
+      "id": "arbor-mcp-flight-governance-issuer-env-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-governance-adapter.ts",
+      "kind": "library-export",
+      "symbol": "REPO_FLIGHT_GOVERNANCE_ISSUER_ENV",
+      "description": "Canonical environment key naming the external governance issuer configuration."
+    },
+    {
+      "id": "arbor-mcp-flight-governance-trust-loader-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-governance-adapter.ts",
+      "kind": "library-export",
+      "symbol": "loadRepoFlightGovernanceTrustState",
+      "description": "Closed public-key-only loader for Flight governance verification state."
+    },
+    {
+      "id": "arbor-mcp-flight-governance-issuer-client-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-governance-adapter.ts",
+      "kind": "library-export",
+      "symbol": "createRepoFlightGovernanceIssuerClient",
+      "description": "Bounded no-shell client for a governance-owned external admission issuer."
+    },
+    {
+      "id": "arbor-mcp-flight-governance-environment-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-governance-adapter.ts",
+      "kind": "library-export",
+      "symbol": "repoFlightGovernanceFromEnvironment",
+      "description": "Production composition boundary for external issuer and public trust configuration."
+    },
+    {
+      "id": "arbor-mcp-flight-telemetry-schema-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-telemetry.ts",
+      "kind": "library-export",
+      "symbol": "REPO_FLIGHT_TELEMETRY_SCHEMA_VERSION",
+      "description": "Published schema discriminator for repository-local Flight telemetry producers and readers."
+    },
+    {
+      "id": "arbor-mcp-flight-telemetry-validator-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-telemetry.ts",
+      "kind": "library-export",
+      "symbol": "validateRepoFlightTelemetryObservation",
+      "description": "Closed-schema validation boundary for repository-local Flight telemetry observations."
+    },
+    {
+      "id": "arbor-mcp-flight-performance-promotion-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-telemetry.ts",
+      "kind": "library-export",
+      "symbol": "evaluateRepoFlightPerformancePromotion",
+      "description": "Fixed ten-run nearest-rank evaluator for Flight performance-promotion cohorts."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-closure-verifier-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "verifyRepoFlightTransitiveClosureProof",
+      "description": "Trust-root validation boundary for a proof that a descendant candidate preserves a validation closure."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-coverage-artifact-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "validateRepoFlightEffectiveCoverageArtifactSet",
+      "description": "Closed artifact-set validator for Flight coverage publication and final audit."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-full-audit-verifier-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "verifyRepoFlightFullAuditForFinalization",
+      "description": "Exact-identity verifier for the uncached all-shard audit required before finalization."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-full-audit-cadence-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "repoFlightFullAuditRequired",
+      "description": "Fail-closed cadence rule for nightly and invalidation-triggered full audits."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-descendant-reuse-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "evaluateRepoFlightDescendantReuse",
+      "description": "Conservative signed-receipt evaluator for an unchanged descendant validation candidate."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-normalized-source-root-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "REPO_FLIGHT_NORMALIZED_SOURCE_ROOT",
+      "description": "Published normalized source-root discriminator for Flight coverage artifact consumers."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-receipt-signer-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "signRepoFlightValidationReceipt",
+      "description": "External validation-producer boundary that signs a revision-bound Flight receipt."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-shard-manifest-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "createRepoFlightValidationShardManifests",
+      "description": "Deterministic validation and coverage shard-manifest derivation boundary."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-shard-manifest-validator-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "validateRepoFlightValidationShardManifest",
+      "description": "Closed-schema validator for a revision-bound Flight validation shard manifest."
+    },
+    {
+      "id": "arbor-mcp-flight-validation-closure-signer-api",
+      "package": "arbor-mcp",
+      "file": "packages/arbor-mcp/src/repo-flight-validation-cache.ts",
+      "kind": "library-export",
+      "symbol": "signRepoFlightTransitiveClosureProof",
+      "description": "External static-analysis boundary that signs a Flight transitive-closure proof."
+    }
+  ]
+}

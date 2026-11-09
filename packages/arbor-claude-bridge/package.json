@@ -1,0 +1,23 @@
+{
+  "name": "@arbor/claude-bridge",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "OpenAI-compatible chat-completions endpoint backed by the local Claude Code CLI, so arbor's native transport can run on subscription auth with no provider API key.",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "bin": {
+    "arbor-claude-bridge": "./bin/arbor-claude-bridge.mjs"
+  },
+  "scripts": {
+    "test": "vitest run tests/",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT"
+}

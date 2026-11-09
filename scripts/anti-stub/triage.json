@@ -1,0 +1,530 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/manager.ts",
+      "symbol": "persistInterruption",
+      "verdict": "false_positive",
+      "reason": "request_record_id: null on the phase:\"requested\" record is semantically correct — that record IS the request, so it has no predecessor to point at. The following acknowledged record carries the real requestId. The rule sees a null literal in a ledger record and cannot tell a chain head from a placeholder."
+    },
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/manager.ts",
+      "symbol": "recordParentChildThreadMessage",
+      "verdict": "false_positive",
+      "reason": "A new direct-thread message has no retracted predecessor or parent unless it is a reply, and no deadline unless acknowledgement is requested. These nullable fields are validated typed absence; message identity, thread identity, body, sender, recipient, and correlation remain mandatory."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/project-registry.ts",
+      "symbol": "(anonymous/arrow)",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Genuine text-scraped control flow, and the same shape as parseCriticVerdict below. ADR-076 makes an entry's discharge a live conformance run, and evaluateConformance lives in scripts/project-conform.mjs while this module is in packages/arbor-mcp — importing across that boundary would invert the package dependency, the same constraint that shaped Roadmap 23 W4's anti-drift solution. So discharge shells out to `project-conform.mjs --root <path> --json` and parses stdout. Mitigated, not ignored: unparseable output returns a typed { ok: false, reasons: [...] } naming the offending text, never a silent pass."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/project-manage.ts",
+      "symbol": "enumerateGateCatalog",
+      "verdict": "false_positive",
+      "reason": "Parses package.json to discover the gate:* roster — reading that file IS the function's job, and it is read directly, not scraped from a subprocess. Flagged only because rule 4's weak arm fires on any JSON.parse in a file mentioning child_process, which this module does because it SPAWNS the gates it discovers. Same shape as loadProjectRegistry below. A malformed package.json throws rather than yielding an empty roster, so there is no silently-empty battery."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/result-adoption.ts",
+      "symbol": "readScopeExpansion",
+      "verdict": "false_positive",
+      "reason": "This JSON.parse reads the ScopeExpansionRecord file this module itself writes in recordScopeExpansion three lines up — parsing its own record is the function's job, the fromJSONL archetype the gate's header names. Flagged only because rule 4's weak arm fires on any JSON.parse in a file mentioning child_process, which this one does to run git for capture/apply. A missing or malformed record returns a typed null (absence is a value) and the adopt path then behaves exactly as if no acknowledgment exists — the fail-closed direction — so there is no silent-success path."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/project-registry.ts",
+      "symbol": "loadProjectRegistry",
+      "verdict": "false_positive",
+      "reason": "This JSON.parse reads the registry file this module itself owns and writes — parsing it is the function's job, exactly the fromJSONL case this gate's own header names as the archetypal false positive. It is flagged only because rule 4's weak arm fires on any JSON.parse in a file that mentions child_process, which this one does for discharge elsewhere. A corrupt registry throws rather than reading as governing nothing, so there is no silent-empty path here."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/opencode-executor.ts",
+      "symbol": "parseCriticVerdict",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Genuine text-scraped control flow: the subprocess transport parses a critic verdict out of opencode's stdout because that transport has no structured channel. This is a known architectural limit with a real alternative already built — `--transport server` returns a server-validated structured verdict. Accepted for the subprocess path, not denied."
+    },
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/governance-projection.ts",
+      "symbol": "recordGovernanceEvent",
+      "verdict": "false_positive",
+      "reason": "Derived governance projection records have no critic phase: nullable critic_agent, verdict, and root_cause are the schema's explicit typed absence for a generated projection, not placeholder evidence."
+    },
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/loop-ports-helper.ts",
+      "symbol": "recordCompactionLifecycle",
+      "verdict": "false_positive",
+      "reason": "The failed compaction arm records the captured preimage and typed null post/anchor fields because no postimage was produced. Treating failure absence as a fabricated identifier would be less honest."
+    },
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/liveness-runner.ts",
+      "symbol": "recordBusMessage",
+      "verdict": "false_positive",
+      "reason": "The disposable liveness fixture seeds a new delegate message, so it neither acknowledges nor retracts a predecessor. Both nulls are the communication schema's typed absence; the fixture supplies real campaign, node, author, recipient, correlation, idempotency, payload, and provenance identities."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/arbiter-intake.ts",
+      "symbol": "parseArbiterDecisionOutput",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "The arbiter intake boundary (ADR-062) accepts exactly one JSON object from model text — markdown fences and prose are deliberately invalid — and the catch converts a JSON.parse throw into the typed `{ ok: false, error }` arm that `validateArbiterDecisionOutput` then reinforces field by field. The throw is expected control flow at a text boundary, not a swallowed error: nothing is discarded, every rejection carries a reason, and the tier decision fails closed. Same shape and same standing as parseTaskComposerProposal below."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/native-critic-contract.ts",
+      "symbol": "extractCriticConfidence",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Confidence is self-reported by the critic inside its verdict JSON, so extraction is a text boundary and a parse throw means 'no usable confidence' — returned as null, which every caller already treats as absent rather than as zero. Failing closed here degrades to the pre-confidence behavior instead of fabricating a number. The module header records the standing deviation: no composed native port exposes logprobs, so `confidence_source` is always \"self_report\"; revisit if a port ever does."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/task-composer-contracts.ts",
+      "symbol": "parseTaskComposerProposal",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "The planner boundary deliberately accepts exactly one JSON object from model text, rejects fences/prose, and immediately runs the closed TaskComposerProposal validator. This is text-to-typed control flow, but it is explicit and fail-closed rather than an accidental stdout scrape; retain until every composed model port can guarantee the same structured-output contract."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/native-tools/evidence-refresh.ts",
+      "symbol": "parseFreshnessReport",
+      "verdict": "false_positive",
+      "reason": "This parses `store-freshness-gate.mjs --json`'s own stdout, a machine-readable mode this task added specifically so evidence.refresh would not scrape prose. The shape is validated field-by-field and fails closed (throws) on anything unrecognized rather than degrading silently; it is a structured-output boundary between two files in this repo, not a text-scrape of an unstructured external stream."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/opencode-decomposer.ts",
+      "symbol": "parseDecompositionResponse",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "The subprocess transport has no structured response channel, so decomposition must validate a JSON array extracted from stdout and fail closed when it is absent or malformed. The structured server transport is the available alternative; this parser is retained for subprocess compatibility."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/claude-code-campaign.ts",
+      "symbol": "parseClaudeJson",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Claude Code's documented --output-format json subprocess contract is the integration's structured response channel. The adapter parses exactly one JSON object, validates the result text and every optional token counter, and fails closed; retain until a non-subprocess Claude Code integration contract is available."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/codex-campaign.ts",
+      "symbol": "parseCodexJsonl",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Codex exec's documented --json subprocess contract is the integration's structured response channel. The adapter parses a byte-bounded JSONL stream, accepts only declared thread, agent-message, and token-usage event shapes, and fails closed on malformed or missing result events. This remains genuine subprocess-output control flow until a directly composed Codex transport replaces the CLI boundary."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-audit/src/audit.ts",
+      "symbol": "fromJSONL",
+      "verdict": "false_positive",
+      "reason": "Parsing JSONL is precisely what fromJSONL is for."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-kb/src/sqlite.ts",
+      "symbol": "rowToEntry",
+      "verdict": "false_positive",
+      "reason": "Deserializing a sqlite row's JSON column is the function's job."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-kb/src/sqlite.ts",
+      "symbol": "fromJSONL",
+      "verdict": "false_positive",
+      "reason": "Parsing JSONL is precisely what fromJSONL is for."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-campaign-support/src/worktree.ts",
+      "symbol": "parseLeaseFile",
+      "verdict": "false_positive",
+      "reason": "Reading a JSON lease file is the function's job."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-campaign-support/src/worktree.ts",
+      "symbol": "readOrphanMarks",
+      "verdict": "false_positive",
+      "reason": "Reading the worktree authority's own persisted orphan-observation JSON is the function's job."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-governance/src/vi/exceptions.ts",
+      "symbol": "readAllowlistEntries",
+      "verdict": "false_positive",
+      "reason": "Reading and validating the checked-in reachability allowlist JSON is the function's job."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-governance/src/vi/baseline.ts",
+      "symbol": "readAllowlistEntries",
+      "verdict": "false_positive",
+      "reason": "Reading the checked-in reachability allowlist JSON is the baseline probe's purpose."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-governance/src/vi/baseline.ts",
+      "symbol": "probeEntryPoints",
+      "verdict": "false_positive",
+      "reason": "Reading the checked-in entry-point manifest JSON is the baseline probe's purpose."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/opencode-server-executor.ts",
+      "symbol": "postJson",
+      "verdict": "false_positive",
+      "reason": "Parsing an HTTP JSON response body is the function's job."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/remote-transport-contracts.ts",
+      "symbol": "string",
+      "verdict": "false_positive",
+      "reason": "The strict I-JSON parser decodes one already-delimited JSON string token and rejects invalid Unicode; JSON.parse is the parser's job here, unrelated to the child-process import elsewhere in the module."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/openai-compatible.ts",
+      "symbol": "parseChunk",
+      "verdict": "false_positive",
+      "reason": "Parsing and validating one already-framed OpenAI-compatible SSE data event is the protocol adapter's job, not subprocess stdout control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/openai-compatible.ts",
+      "symbol": "finishStream",
+      "verdict": "false_positive",
+      "reason": "Provider tool-call arguments are specified as a JSON string; finishStream parses them and then applies the composed tool and human-input validators. The file-level child-process signal is unrelated."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/openai-compatible.ts",
+      "symbol": "parseStructuredContent",
+      "verdict": "false_positive",
+      "reason": "The function's declared purpose is bounded recovery and parsing of provider structured output; both parse sites fail closed and feed the caller's closed contract validator."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/openai-compatible.ts",
+      "symbol": "isParsableJson",
+      "verdict": "false_positive",
+      "reason": "This helper only tests whether a bounded candidate is JSON before parseStructuredContent returns it; it drives no subprocess-text control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/result-adoption.ts",
+      "symbol": "listCapturedResults",
+      "verdict": "false_positive",
+      "reason": "Listing the result store necessarily deserializes its own persisted JSON metadata and validates the schema discriminator and node identity before use."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/result-adoption.ts",
+      "symbol": "readCapturedSource",
+      "verdict": "false_positive",
+      "reason": "Reads this module's own captured-result metadata solely to validate its exact campaign/node identity, bounded file manifest, empty scope-violation record, and patch digest before argv-only git apply; malformed or mismatched data returns a typed failure and is never trusted as control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/result-adoption.ts",
+      "symbol": "readCapturedComposition",
+      "verdict": "false_positive",
+      "reason": "Reads this module's own bounded composition manifest to recover inherited-path baseline hashes. The parser enforces campaign/node identity, source and path bounds, safe paths, and sha256-or-null field shapes, returning null for malformed data; it is persisted-store deserialization, not subprocess-text control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/result-adoption.ts",
+      "symbol": "adoptCapturedResult",
+      "verdict": "false_positive",
+      "reason": "Adoption reads the selected captured-result metadata file for its file projection; patch applicability and mutation remain governed by separate git apply checks."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/doctor.ts",
+      "symbol": "inspectHarnessIntegrationEnvironment",
+      "verdict": "false_positive",
+      "reason": "The readiness probe parses Claude Code's documented auth-status JSON and exposes only bounded booleans and auth-method metadata; it does not derive campaign control flow from free-form subprocess text."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/doctor.ts",
+      "symbol": "reconcileStore",
+      "verdict": "false_positive",
+      "reason": "The non-mutating store reconciler necessarily parses its own campaign snapshot and JSONL ledger formats, then applies their closed validators and integrity verification; the module's child-process import is unrelated."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/remote/http-listener.ts",
+      "symbol": "readJson",
+      "verdict": "false_positive",
+      "reason": "The bounded HTTP request-body reader's job is to parse one complete JSON body and convert malformed input into a typed 400 error; it is unrelated to subprocess output."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "symbol": "loadPluginTrust",
+      "verdict": "false_positive",
+      "reason": "Loading and validating the operator-owned plugin-trust JSON file is this function's purpose; entry count, key size, and PEM byte size are bounded before authority uses it."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "symbol": "main",
+      "verdict": "false_positive",
+      "reason": "The version branch reads the package's own package.json and accepts only a string version; it is unrelated to subprocess output or model-driven control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "symbol": "(anonymous/arrow)",
+      "verdict": "false_positive",
+      "reason": "devtools tail parses each JSONL log line it streams; that is the command's purpose."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/claude-code-campaign.ts",
+      "symbol": "normalizeAndValidatePlanText",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Same structured subprocess contract as parseClaudeJson: the planner parses one provider proposal, applies only authority-narrowing normalization and the operator's explicit atomic topology, then validates the result through NATIVE_TASK_PLAN_CONTRACT before it can reach TaskComposer. Parse or semantic failure remains typed and fail-closed; retain until the provider integration supplies a directly composed typed plan."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/claude-code-campaign.ts",
+      "symbol": "hasCompletePlanEnvelope",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "This bounded parse decides only whether a structurally complete provider proposal is eligible for one session-preserving semantic repair. It cannot admit a plan, widen authority, or suppress validation; malformed and incomplete text skips repair and is rejected by TaskComposer's closed validator. Retain until the provider integration supplies a directly composed typed plan."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/claude-code-campaign.ts",
+      "symbol": "nonzeroExitDiagnostic",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "Same --output-format json contract as parseClaudeJson: on a nonzero exit this best-effort extracts an error/result field from that same structured stdout to build a human-readable diagnostic message, wrapped in try/catch that falls back to raw stdout when the parse fails. It only selects diagnostic text, not campaign control flow, but shares the parent's stdout-scrape shape; retain until the same non-subprocess Claude Code integration contract is available."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/opencode-campaign.ts",
+      "symbol": "parseOpenCodeJsonEvents",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "OpenCode's documented --format json subprocess stream is this integration's structured response channel. The adapter parses bounded JSONL events, accepts only the declared text and usage shapes, and fails closed when no usable result event is present. This remains genuine subprocess-output control flow, so it is a dated tradeoff until a non-subprocess OpenCode campaign transport is available."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/integrations/opencode-campaign.ts",
+      "symbol": "normalizeOpenCodePlanText",
+      "verdict": "accepted_tradeoff",
+      "expires": "2026-11-16",
+      "reason": "The OpenCode planner reshapes the provider's already-JSON-parsed proposal only to preserve the operator's atomic-action contract, then sends the result through parseTaskComposerProposal's closed schema validator. A parse failure returns the original provider text for that validator to reject rather than silently admitting a plan. This remains a dated subprocess-boundary tradeoff until OpenCode exposes a directly composed structured planning port."
+    },
+    {
+      "rule": "rule1",
+      "file": "packages/arbor-mcp/src/native-peer-channel.ts",
+      "symbol": "recordBusMessage",
+      "verdict": "false_positive",
+      "reason": "Native peer query, reply, and escalation records use the bus schema's typed nullable relationship fields honestly: a new query or escalation has no acknowledged, retracted, parent, or reply predecessor, while a reply supplies the real query message identifier in all three relationship fields and has no retraction or deadline. Campaign, node, author, recipient, conversation, correlation, idempotency, payload, intent, and provenance identities remain mandatory; inventing identifiers for absent relationships would corrupt the causal record."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/distributed-control-plane.ts",
+      "symbol": "restore",
+      "verdict": "false_positive",
+      "reason": "The distributed coordinator restore path deserializes its own atomically persisted JSON state and validates the recovered object before installing it. Parsing this owned persistence format is the function's job; the file's HTTP client/server facilities cause the coarse file-level child-process/text heuristic to report an unrelated JSON.parse site."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/distributed-control-plane.ts",
+      "symbol": "request",
+      "verdict": "false_positive",
+      "reason": "DistributedControlClient.request parses the complete JSON response of the authenticated control-plane HTTP protocol and validates the response envelope before returning it. This is a structured protocol boundary, not free-form subprocess text driving ad hoc control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/distributed-control-plane.ts",
+      "symbol": "readBody",
+      "verdict": "false_positive",
+      "reason": "The bounded HTTP request-body reader's declared job is to parse one complete JSON body after enforcing its byte limit, then reject values outside the finite JSON contract. It does not scrape subprocess output."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/fenced-result-adoption.ts",
+      "symbol": "(anonymous/arrow)",
+      "verdict": "false_positive",
+      "reason": "The list projection deserializes only the fenced-adoption service's own journal files, applies validEntry before exposing a record, supplies the versioned default for legacy action-less records, and sorts the result deterministically. The file-level signal exists only because separate git digest helpers use child_process; journal parsing is unrelated to subprocess text control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/webui.ts",
+      "symbol": "(anonymous/arrow)",
+      "verdict": "false_positive",
+      "reason": "readJsonBody and handleInterrupt parse an HTTP request body with JSON.parse — deserialising client input is the handler's job, not subprocess text scraping. Rule 4's weak arm fires because webui.ts mentions child_process elsewhere (editor handoff). A parse failure now answers HTTP 400 (audit 2026-08-23 J6-20), never an empty success. Two sites share this symbol name because both parses live in request-end callbacks."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/anthropic-messages.ts",
+      "symbol": "parseEvent",
+      "verdict": "false_positive",
+      "reason": "Parses a single Anthropic SSE `data:` line with JSON.parse — deserialising the provider's own event stream is the function's contract, the fromJSONL archetype. Rule 4's weak arm fires only because the file contains `/\\r?\\n\\r?\\n/g.exec(...)` (a RegExp.exec over the SSE buffer, NOT a subprocess), which fileImportsChildProcess's `\\bexec\\(` regex matches incidentally. A malformed event throws AnthropicMessagesAdapterError('protocol'), never a silent empty success."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/anthropic-messages.ts",
+      "symbol": "finishStream",
+      "verdict": "false_positive",
+      "reason": "JSON.parse of an accumulated tool_use input_json_delta buffer — reconstructing the provider's own streamed tool arguments is the function's job. Same incidental `exec(`-regex trigger as parseEvent; a non-JSON buffer throws AnthropicMessagesAdapterError('protocol'), never a silent pass."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-harness/src/anthropic-messages.ts",
+      "symbol": "parseStructuredContent",
+      "verdict": "false_positive",
+      "reason": "JSON.parse of the model's structured-output content block, which the Messages API guarantees is valid JSON as the first block — parsing it is the adapter's contract. Same incidental `exec(`-regex trigger; a parse failure throws AnthropicMessagesAdapterError('protocol'), never a silent pass."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/acp-ide-stdio.ts",
+      "symbol": "runAcpIdeStdio",
+      "verdict": "false_positive",
+      "reason": "ACP v1 is a typed newline-delimited JSON-RPC 2.0 wire protocol; parsing bounded JSON request frames is the protocol decoder itself, not text-scraped subprocess control flow."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-claude-bridge/src/claude-backend.ts",
+      "symbol": "parseBackendLine",
+      "verdict": "false_positive",
+      "reason": "parseBackendLine decodes one typed NDJSON frame from the Claude CLI stream, which is the function contract rather than ad hoc subprocess-text control flow. Malformed or irrelevant frames are ignored, but a stream without a validated terminal result produces an explicit backend error, so parse failure cannot become silent success."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "nativeCorpusVerification",
+      "verdict": "false_positive",
+      "reason": "Parses the repository-owned corpus summary and recorded evidence bundles from disk; no child-process output controls execution."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "runFrontierInterfaceCli",
+      "verdict": "false_positive",
+      "reason": "Parses operator-supplied recorded receipt JSON for validation; no child-process output controls execution."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "nativeRuntimeVerification",
+      "verdict": "false_positive",
+      "reason": "Parses the evaluator-owned checksummed runtime receipt from disk; it does not scrape subprocess stdout or branch on prose."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "verifyComparisonPerformance",
+      "verdict": "false_positive",
+      "reason": "The catch converts unreadable or malformed performance evidence into an explicit invalid result; it cannot create admissible evidence or a passing verdict."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "comparisonSide",
+      "verdict": "false_positive",
+      "reason": "The catch records a side-specific corpus error and downstream verification keeps the comparison side null; it fails closed instead of supplying a successful fallback."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-eval/src/frontier-interface-cli.ts",
+      "symbol": "aggregateBlindedComparison",
+      "verdict": "false_positive",
+      "reason": "The catches convert unreadable or malformed plan and observation artifacts into an explicit null aggregate with errors; no acceptance result is produced."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/repo-flight-git.ts",
+      "symbol": "isRepoFlightProvisionedWorkspace",
+      "verdict": "false_positive",
+      "reason": "This parses Revoy WorktreeManager lease records to verify exact campaign, node, base commit, active state, canonical path, and live git-worktree registration. Persisted lease deserialization is the function purpose; malformed or mismatched records are skipped and admission fails closed. The file imports child_process for independent Git probes, which is why the weak file-level rule fires."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/cli.ts",
+      "symbol": "repoFlightCommand",
+      "verdict": "false_positive",
+      "reason": "The Flight CLI parses one bounded operator JSON envelope from stdin and its own private process-owner record, validating closed schemas before use. Neither parse consumes subprocess stdout; the file-level child_process import serves unrelated launch and Git commands. Malformed input or owner identity fails closed."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-campaign-support/src/worktree.ts",
+      "symbol": "(anonymous/arrow)",
+      "verdict": "accepted_tradeoff",
+      "reason": "Decodes stdout from revoy2's OWN worktree-acquisition worker across a deliberate IPC boundary, not a foreign CLI's human output: the child emits a single JSON result, the parse is guarded by try/catch, and a malformed or empty result settles as an explicit named failure rather than falling through. The subprocess text channel is the tradeoff knowingly taken for process isolation. Recorded by the TUI surface-remediation session, which did not author this code; expires so the owner re-examines it.",
+      "expires": "2027-01-01"
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-campaign-support/src/worktree.ts",
+      "symbol": "tryBreakStaleLock",
+      "verdict": "false_positive",
+      "reason": "Parses the slot lock file it just read from disk (readFileSync(lockPath)) to judge whether its holder is dead — reading its own lock record is the function's job, nothing is scraped from a subprocess. Flagged only because rule 4's weak arm fires on any JSON.parse in a file that spawns git. An unparseable lock returns false (never broken, reported busy), the fail-closed direction."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/verification-script-vacuity.ts",
+      "symbol": "resolvePackageScript",
+      "verdict": "false_positive",
+      "reason": "Parses the target worktree's package.json (readFileSync, bounded to 256 KiB and confined under the worktree root) to resolve a 'run <script>' argv to its script text — reading that file is the function's job. Flagged only because the module inspects spawn-shaped argv. Malformed or oversized input returns null, i.e. no resolved script."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/verification-script-vacuity.ts",
+      "symbol": "hasVacuousPackageScript",
+      "verdict": "false_positive",
+      "reason": "Same read as resolvePackageScript: the worktree's own package.json, read from disk with a size bound and root confinement, never subprocess output. Any parse failure returns false (not vacuous), so a malformed manifest never manufactures a vacuity verdict."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-campaign-support/src/preservation.ts",
+      "symbol": "preserveWork",
+      "verdict": "false_positive",
+      "reason": "Re-reads the preservation manifest it just wrote atomically (readFileSync(manifestPath)) to verify the write round-trips before reporting ok — parsing its own record is the verification, nothing is scraped from a subprocess. Flagged only because the module spawns git to build the patch and bundle. A failed or mismatched read-back returns ok:false, which retains the worktree (fail closed)."
+    },
+    {
+      "rule": "rule4_weak",
+      "file": "packages/arbor-mcp/src/hooks/evidence-staleness-tropism.ts",
+      "symbol": "runStoreFreshness",
+      "verdict": "false_positive",
+      "reason": "Parses store-freshness-gate.mjs --json, the SAME machine-readable mode native-tools/evidence-refresh.ts::parseFreshnessReport already consumes and is triaged against. The mode exists so a consumer does not scrape prose; the parsed shape is validated field by field, and anything unrecognised returns null so the handler stays silent rather than asserting a verdict it did not read. Not text-scraped control flow."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/hooks/operator-decision-queue.ts",
+      "symbol": "parseReport",
+      "verdict": "false_positive",
+      "reason": "Parses decision-queue.mjs --json, whose own header documents --json as its machine report; the script exists to be consumed, not read as prose. The report is narrowed field by field (id/kind/summary/covered, hazard id/detail) and anything unparseable or absent returns null, so the handler declines to assert a queue rather than rendering a partial one. Subprocessing is the deliberate design: a second TypeScript derivation of the queue gate:decision-queue enforces would drift silently."
+    },
+    {
+      "rule": "rule4_strong",
+      "file": "packages/arbor-mcp/src/interview-command.ts",
+      "symbol": "parsePack",
+      "verdict": "false_positive",
+      "reason": "Parses interview-pack.mjs's JSON question pack, the script's documented machine output (same shape as operator-decision-queue.ts::parseReport). It checks kind, questions and pack_digest; anything else returns null and the command exits FAILURE (never 'nothing owed'). The recorder re-verifies the pack digest before writing. Operator verdict 2026-10-06 via native egress."
+    }
+  ]
+}

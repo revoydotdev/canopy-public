@@ -1,0 +1,67 @@
+{
+  "id": "resize",
+  "title": "X16 resize: reflow wide → narrow → wide on Console and Audit",
+  "covers": [
+    "X16",
+    "S21"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "resize": {
+        "cols": 80,
+        "rows": 24
+      },
+      "label": "resize to 80x24",
+      "hold_s": 1.5
+    },
+    {
+      "resize": {
+        "cols": 150,
+        "rows": 46
+      },
+      "label": "resize back to 150x46",
+      "hold_s": 1.5
+    },
+    {
+      "key": "v",
+      "label": "Audit",
+      "hold_s": 1.0
+    },
+    {
+      "resize": {
+        "cols": 80,
+        "rows": 24
+      },
+      "label": "Audit at 80x24",
+      "hold_s": 1.5
+    },
+    {
+      "resize": {
+        "cols": 60,
+        "rows": 20
+      },
+      "label": "Audit at 60x20",
+      "hold_s": 1.5
+    },
+    {
+      "resize": {
+        "cols": 150,
+        "rows": 46
+      },
+      "label": "Audit back to 150x46",
+      "hold_s": 1.5
+    }
+  ]
+}

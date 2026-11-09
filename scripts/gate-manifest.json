@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "_doc": "ADR-143. Every gate declares what it can measure. `language_agnostic` reads only artifacts, git, or text; `graph_derived` is portable exactly as far as the VI graph producer is; `languages` needs a per-language rule pack. A gate ABSENT from this file resolves to `undeclared`, never to a silent pass -- omission must not be how a new gate skips the declaration.",
+  "gates": {
+    "gate:adr-acceptance-staged": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-citations": {
+      "support": "graph_derived"
+    },
+    "gate:adr-decision-followthrough": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-registry": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-retirement-integrity": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-sections": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-status": {
+      "support": "language_agnostic"
+    },
+    "gate:adr-trace": {
+      "support": "language_agnostic",
+      "note": "reads source_roots for paths but text-matches; no grammar dependency (verified 2026-08-27)"
+    },
+    "gate:anti-stub": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:anti-stub:blocking": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:audit-disposition": {
+      "support": "language_agnostic"
+    },
+    "gate:branch-accounting": {
+      "support": "language_agnostic"
+    },
+    "gate:campaign-run-status": {
+      "support": "language_agnostic"
+    },
+    "gate:claim-ledger": {
+      "support": "graph_derived"
+    },
+    "gate:claim-ledger-precommit": {
+      "support": "language_agnostic"
+    },
+    "gate:closed-enum-hygiene": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:completion-depth": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:coverage": {
+      "support": "languages",
+      "languages": [
+        "typescript",
+        "javascript"
+      ],
+      "note": "runs vitest; coverage thresholds are JS/TS-runtime specific"
+    },
+    "gate:decision-queue": {
+      "support": "graph_derived"
+    },
+    "gate:decisions-precommit": {
+      "support": "language_agnostic"
+    },
+    "gate:determinism": {
+      "support": "language_agnostic"
+    },
+    "gate:docs-truth": {
+      "support": "language_agnostic",
+      "note": "reads source_roots for paths but text-matches; no grammar dependency (verified 2026-08-27)"
+    },
+    "gate:entrypoint-reachability": {
+      "support": "graph_derived"
+    },
+    "gate:eval-regression": {
+      "support": "language_agnostic"
+    },
+    "gate:evidence-transaction-observability": {
+      "support": "language_agnostic"
+    },
+    "gate:execution-profile": {
+      "support": "graph_derived"
+    },
+    "gate:finalization-progress": {
+      "support": "language_agnostic"
+    },
+    "gate:gap-status": {
+      "support": "language_agnostic"
+    },
+    "gate:governance-counts": {
+      "support": "language_agnostic",
+      "note": "reads source_roots for paths but text-matches; no grammar dependency (verified 2026-08-27)"
+    },
+    "gate:hollow-parity": {
+      "support": "graph_derived"
+    },
+    "gate:hook-liveness": {
+      "support": "language_agnostic"
+    },
+    "gate:hook-devolution": {
+      "support": "language_agnostic",
+      "note": "reads JSON registration/ledger files and text-matches three TypeScript declaration sites; no grammar dependency"
+    },
+    "gate:interview-attestation": {
+   "support": "language_agnostic"
+  },
+  "gate:language-census": {
+      "support": "language_agnostic"
+    },
+    "gate:ledger-audit": {
+      "support": "language_agnostic",
+      "note": "audits the .arbor JSONL ledger"
+    },
+    "gate:liveness": {
+      "support": "language_agnostic"
+    },
+    "gate:lockfile": {
+      "support": "language_agnostic"
+    },
+    "gate:merge-critical-check": {
+      "support": "language_agnostic"
+    },
+    "gate:obligations": {
+      "support": "language_agnostic"
+    },
+    "gate:organization-enrollment": {
+      "support": "language_agnostic"
+    },
+    "gate:opentui": {
+      "support": "languages",
+      "languages": ["typescript"],
+      "note": "runs the Bun-native TypeScript OpenTUI proof"
+    },
+    "gate:package-boundaries": {
+      "support": "languages",
+      "languages": ["typescript"],
+      "note": "parses literal workspace imports with the TypeScript compiler API"
+    },
+    "gate:project-conform": {
+      "support": "language_agnostic"
+    },
+    "gate:project-registry": {
+      "support": "language_agnostic"
+    },
+    "gate:projection-lifecycle": {
+      "support": "language_agnostic"
+    },
+    "gate:reachability": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:registration-integrity": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:repo-session-conformance": {
+      "support": "language_agnostic"
+    },
+    "gate:reuse-compliance": {
+      "support": "language_agnostic",
+      "note": "validates inventory, licenses, notices, attribution, and vendored hashes without claiming clean-room proof"
+    },
+    "gate:remedy-coverage": {
+      "support": "language_agnostic"
+    },
+    "gate:stop-budget": {
+   "support": "language_agnostic"
+  },
+  "gate:stop-guard-releases": {
+   "support": "language_agnostic"
+  },
+  "gate:store-freshness": {
+      "support": "graph_derived"
+    },
+    "gate:sur-05": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "derives catalog_kinds by parsing the RUNTIME_CATALOG declaration via the TypeScript compiler API"
+    },
+    "gate:tui-catalog-parity": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:typecheck-tests": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:vi-findings": {
+      "support": "graph_derived"
+    },
+    "gate:vi-freshness": {
+      "support": "graph_derived"
+    },
+    "gate:vi-prepush-policy": {
+      "support": "graph_derived",
+      "note": "selects exact binding or full reproduction from VI producer changes"
+    },
+    "gate:vi-reproducible": {
+      "support": "languages",
+      "languages": [
+        "typescript"
+      ],
+      "note": "parses TypeScript via the compiler API"
+    },
+    "gate:worktree-hygiene": {
+      "support": "language_agnostic"
+    }
+  }
+}

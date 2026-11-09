@@ -1,0 +1,2746 @@
+{
+  "schema_version": 1,
+  "profile_version": "2026.08.enforcement.3",
+  "execution": {
+    "contexts": {
+      "stop": {
+        "max_readers": 6,
+        "failure_policy": "complete_all",
+        "resource_limits": {
+          "light": 6,
+          "git_admin": 1,
+          "typescript": 1,
+          "vitest": 1,
+          "coverage": 1,
+          "lsp": 1,
+          "network": 1
+        }
+      },
+      "precommit": {
+        "max_readers": 1,
+        "failure_policy": "fail_fast",
+        "resource_limits": {
+          "light": 1,
+          "git_admin": 1,
+          "typescript": 1,
+          "vitest": 1,
+          "coverage": 1,
+          "lsp": 1,
+          "network": 1
+        }
+      },
+      "prepush": {
+        "max_readers": 6,
+        "failure_policy": "fail_fast",
+        "resource_limits": {
+          "light": 6,
+          "git_admin": 1,
+          "typescript": 1,
+          "vitest": 1,
+          "coverage": 1,
+          "lsp": 1,
+          "network": 1
+        }
+      },
+      "trunk_submit": {
+        "max_readers": 1,
+        "failure_policy": "fail_fast",
+        "resource_limits": {
+          "light": 1,
+          "git_admin": 1,
+          "typescript": 1,
+          "vitest": 1,
+          "coverage": 1,
+          "lsp": 1,
+          "network": 1
+        }
+      },
+      "ci": {
+        "max_readers": 8,
+        "failure_policy": "complete_all",
+        "resource_limits": {
+          "light": 8,
+          "git_admin": 1,
+          "typescript": 2,
+          "vitest": 1,
+          "coverage": 1,
+          "lsp": 1,
+          "network": 2
+        }
+      }
+    },
+    "gate_order": [
+      {
+        "id": "profile_admission",
+        "gates": [
+          "gate:execution-profile"
+        ]
+      },
+      {
+        "id": "snapshot_admission",
+        "gates": [
+          "gate:lockfile",
+          "gate:vi-freshness",
+          "gate:worktree-hygiene"
+        ]
+      },
+      {
+        "id": "source_integrity",
+        "gates": [
+          "gate:anti-stub",
+          "gate:anti-stub:blocking",
+          "gate:branch-accounting",
+          "gate:closed-enum-hygiene",
+          "gate:entrypoint-reachability",
+          "gate:finalization-progress",
+          "gate:hook-devolution",
+          "gate:hook-liveness",
+          "gate:language-census",
+          "gate:merge-critical-check",
+          "gate:package-boundaries",
+          "gate:registration-integrity",
+          "gate:repo-session-conformance",
+          "gate:reuse-compliance",
+          "gate:typecheck-tests",
+          "gate:vi-prepush-policy"
+        ]
+      },
+      {
+        "id": "decision_integrity",
+        "gates": [
+          "gate:adr-acceptance-staged",
+          "gate:adr-decision-followthrough",
+          "gate:adr-registry",
+          "gate:adr-retirement-integrity",
+          "gate:adr-sections",
+          "gate:adr-citations",
+          "gate:adr-status",
+          "gate:adr-trace",
+          "gate:decision-queue",
+          "gate:decisions-precommit",
+          "gate:interview-attestation",
+          "gate:governance-counts",
+          "gate:obligations",
+          "gate:remedy-coverage"
+        ]
+      },
+      {
+        "id": "evidence_admission",
+        "gates": [
+          "gate:reachability"
+        ]
+      },
+      {
+        "id": "evidence_projection",
+        "gates": [
+          "gate:docs-truth",
+          "gate:sur-05"
+        ]
+      },
+      {
+        "id": "evidence_and_projection",
+        "gates": [
+          "gate:audit-disposition",
+          "gate:claim-ledger",
+          "gate:claim-ledger-precommit",
+          "gate:completion-depth",
+          "gate:determinism",
+          "gate:ledger-audit",
+          "gate:stop-budget",
+          "gate:stop-guard-releases",
+          "gate:store-freshness",
+          "gate:vi-findings",
+          "gate:vi-reproducible",
+          "gate:evidence-transaction-observability",
+          "gate:campaign-run-status",
+          "gate:projection-lifecycle"
+        ]
+      },
+      {
+        "id": "project_admission",
+        "gates": [
+          "gate:project-registry"
+        ]
+      },
+      {
+        "id": "conformance_and_delivery",
+        "gates": [
+          "gate:coverage",
+          "gate:eval-regression",
+          "gate:gap-status",
+          "gate:hollow-parity",
+          "gate:liveness",
+          "gate:organization-enrollment",
+          "gate:opentui",
+          "gate:project-conform",
+          "gate:tui-catalog-parity"
+        ]
+      },
+      {
+        "id": "operator_aggregate",
+        "gates": [
+          "gate:all"
+        ]
+      }
+    ],
+    "finalization": {
+      "phases": [
+        {
+          "id": "source_candidate",
+          "depends_on": [],
+          "mutability": "read_only"
+        },
+        {
+          "id": "evidence_admission",
+          "depends_on": [
+            "source_candidate"
+          ],
+          "mutability": "read_only"
+        },
+        {
+          "id": "evidence_closure",
+          "depends_on": [
+            "evidence_admission"
+          ],
+          "mutability": "evidence_writer"
+        },
+        {
+          "id": "evidence_commit",
+          "depends_on": [
+            "evidence_closure"
+          ],
+          "mutability": "operator_commit"
+        },
+        {
+          "id": "immutable_prepush",
+          "depends_on": [
+            "evidence_commit"
+          ],
+          "mutability": "verification_sandbox"
+        }
+      ]
+    },
+    "managed_hooks": {
+      "precommit": {
+        "variants": {
+          "trunk_submit": {
+            "omitted_gates": {
+              "gate:claim-ledger-precommit": {
+                "code": "replaced_by_trunk_submit_authority",
+                "detail": "The trunk-submit authority performs phase-correct evidence admission under its exclusive transaction lock."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "gates": {
+    "gate:adr-acceptance-staged": {
+      "command": "bun run gate:adr-acceptance-staged",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": true,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "adr-acceptance-staged/index-status-contradiction",
+        "expected_failure_reason": "index says \"Accepted\", the file says \"Proposed\"",
+        "git_repo": true
+      }
+    },
+    "gate:adr-citations": {
+      "command": "bun run gate:adr-citations",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "observes": {
+        "min": 1
+      },
+      "canary": {
+        "fixture": "adr-citations/unresolvable-citation",
+        "expected_failure_reason": "does not exist"
+      }
+    },
+    "gate:adr-decision-followthrough": {
+      "command": "bun run gate:adr-decision-followthrough",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "adr-decision-followthrough/decided-but-not-promoted",
+        "expected_failure_reason": "but an interview already recorded a decision",
+        "git_repo": true
+      }
+    },
+    "gate:adr-registry": {
+      "command": "bun run gate:adr-registry",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "adr-registry/orphan-allocation",
+        "expected_failure_reason": "has no matching allocation"
+      }
+    },
+    "gate:adr-retirement-integrity": {
+      "command": "bun run gate:adr-retirement-integrity",
+      "inputs": [
+        "decisions/**"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "adr-retirement-integrity/one-way-supersession",
+        "expected_failure_reason": "is missing a back-reference marking it superseded by",
+        "args": [
+          "--decisions-dir",
+          "{repo}/decisions"
+        ]
+      }
+    },
+    "gate:adr-sections": {
+      "command": "bun run gate:adr-sections",
+      "inputs": [
+        "decisions/**"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "observes": {
+        "min": 1
+      },
+      "canary": {
+        "fixture": "adr-sections/stub-obligation",
+        "expected_failure_reason": "incomplete/stub section"
+      }
+    },
+    "gate:adr-status": {
+      "command": "bun run gate:adr-status",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "observes": {
+        "min": 1
+      },
+      "canary": {
+        "fixture": "adr-status/proposed-with-resolving-proof",
+        "expected_failure_reason": "status_suspect",
+        "link_repo_paths": [
+          "scripts",
+          "vitest.config.ts"
+        ]
+      }
+    },
+    "gate:adr-trace": {
+      "command": "bun run gate:adr-trace",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "adr-trace/unclaimed-governed-commit",
+        "expected_failure_reason": "touch governed paths and claim no ADR",
+        "git_repo": true
+      }
+    },
+    "gate:all": {
+      "command": "bun run gate:all",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "aggregate_runner_only",
+          "detail": "gate:all is an operator-facing aggregate and would recursively invoke the profile runner."
+        },
+        "precommit": {
+          "code": "aggregate_runner_only",
+          "detail": "gate:all is an operator-facing aggregate and would recursively invoke the profile runner."
+        },
+        "prepush": {
+          "code": "aggregate_runner_only",
+          "detail": "gate:all is an operator-facing aggregate and would recursively invoke the profile runner."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "aggregate_runner_only",
+          "detail": "gate:all is an operator-facing aggregate and would recursively invoke the profile runner."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "both",
+      "effect": "advisory",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "gate-all/roster-drift",
+        "expected_failure_reason": "is declared in package.json but has no tier in scripts/gate-all.mjs GATE_TIERS",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:anti-stub": {
+      "command": "bun run gate:anti-stub",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "operator_diagnostic_only",
+          "detail": "The report-only scan is an operator diagnostic; enforcement uses gate:anti-stub:blocking exactly once."
+        },
+        "precommit": {
+          "code": "operator_diagnostic_only",
+          "detail": "The report-only scan is an operator diagnostic; enforcement uses gate:anti-stub:blocking exactly once."
+        },
+        "prepush": {
+          "code": "operator_diagnostic_only",
+          "detail": "The report-only scan is an operator diagnostic; enforcement uses gate:anti-stub:blocking exactly once."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to managed hooks."
+        },
+        "ci": {
+          "code": "operator_diagnostic_only",
+          "detail": "The report-only scan is an operator diagnostic; enforcement uses gate:anti-stub:blocking exactly once."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "target",
+      "effect": "advisory",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "anti-stub/unreadable-triage",
+        "expected_failure_reason": "is unparseable",
+        "args": [
+          "--root",
+          "{repo}",
+          "--triage",
+          "{repo}/triage.json"
+        ]
+      }
+    },
+    "gate:anti-stub:blocking": {
+      "command": "bun run gate:anti-stub:blocking",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "anti-stub/untriaged-todo",
+        "expected_failure_reason": "FAIL (--blocking: untriaged findings)",
+        "args": [
+          "--root",
+          "{repo}",
+          "--triage",
+          "{repo}/triage.json"
+        ]
+      }
+    },
+    "gate:audit-disposition": {
+      "command": "bun run gate:audit-disposition",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": true,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "audit-disposition/undispositioned-audit",
+        "expected_failure_reason": "An audit ran and nobody answered for what it found"
+      }
+    },
+    "gate:branch-accounting": {
+      "command": "bun run gate:branch-accounting",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "branch-accounting/expired-disposition",
+        "expected_failure_reason": "expired 2020-01-01",
+        "git_repo": true
+      }
+    },
+    "gate:campaign-run-status": {
+      "command": "bun run gate:campaign-run-status",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "vitest",
+      "canary": {
+        "fixture": "campaign-run-status/unwired-runtime",
+        "expected_failure_reason": "does not declare a `campaignRunAttempts: CampaignRunAttemptIndex` field",
+        "link_repo_paths": [
+          "node_modules"
+        ],
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:claim-ledger": {
+      "command": "bun run gate:claim-ledger",
+      "prerequisites": [
+        "gate:docs-truth"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "claim-ledger/null-docs-truth",
+        "expected_failure_reason": "CL-C: docs-truth --json produced no usable report",
+        "git_repo": true,
+        "args": [
+          "--repo",
+          "{repo}"
+        ],
+        "env": {
+          "REVOY2_CLAIM_LEDGER_DIR": "{repo}/.claim-ledger"
+        }
+      }
+    },
+    "gate:claim-ledger-precommit": {
+      "command": "bun run gate:claim-ledger-precommit",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": true,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "prepush": {
+          "code": "precommit_writer_only",
+          "detail": "This command may refresh and stage the claim ledger; only the exclusive precommit transaction may invoke it."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "stop": {
+          "code": "precommit_writer_only",
+          "detail": "This command may refresh and stage the claim ledger; only the exclusive precommit transaction may invoke it."
+        },
+        "ci": {
+          "code": "precommit_writer_only",
+          "detail": "This command may refresh and stage the claim ledger; only the exclusive precommit transaction may invoke it."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "evidence_writer",
+      "required": false,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "claim-ledger-precommit/store-behind-half-budget",
+        "expected_failure_reason": "claim-ledger auto-refresh FAILED",
+        "args": [
+          "--repo",
+          "{repo}"
+        ],
+        "env": {
+          "GIT_DIR": "{repo}/.canary-git",
+          "GIT_WORK_TREE": "{repo}"
+        }
+      }
+    },
+    "gate:closed-enum-hygiene": {
+      "command": "bun run gate:closed-enum-hygiene",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "closed-enum-hygiene/unreadable-waiver-store",
+        "expected_failure_reason": "has no \"entries\" array",
+        "args": [
+          "--waivers",
+          "{repo}/waivers.json"
+        ]
+      }
+    },
+    "gate:completion-depth": {
+      "command": "bun run gate:completion-depth",
+      "prerequisites": [
+        "gate:vi-freshness"
+      ],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "completion-depth/guard-assigned-only-by-a-test",
+        "expected_failure_reason": "CD-X",
+        "git_repo": true
+      }
+    },
+    "gate:coverage": {
+      "command": "bun run gate:coverage",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 1800000,
+      "cost_class": "full",
+      "mutability": "verification_sandbox",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "coverage"
+    },
+    "gate:decision-queue": {
+      "command": "bun run gate:decision-queue",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "decision-queue/aged-operator-decision",
+        "expected_failure_reason": "FAIL \u2014 decisions are owed and no interview covers them."
+      }
+    },
+    "gate:decisions-precommit": {
+      "command": "bun run gate:decisions-precommit",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": true,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "decisions-precommit/staged-decisions-change",
+        "expected_failure_reason": "has no matching allocation",
+        "args": [
+          "--repo",
+          "{repo}"
+        ],
+        "env": {
+          "GIT_DIR": "{repo}/.canary-git",
+          "GIT_WORK_TREE": "{repo}"
+        }
+      }
+    },
+    "gate:determinism": {
+      "command": "bun run gate:determinism",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 1800000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "determinism/flaky-seam-store",
+        "expected_failure_reason": "DB-B: 1 seam(s) above the 20% flake ceiling",
+        "env": {
+          "REVOY2_DETERMINISM_DIR": "{repo}"
+        }
+      }
+    },
+    "gate:docs-truth": {
+      "command": "bun run gate:docs-truth",
+      "prerequisites": [
+        "gate:reachability"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "docs-truth/claim-without-proof",
+        "expected_failure_reason": "no proof comment",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:entrypoint-reachability": {
+      "command": "bun run gate:entrypoint-reachability",
+      "prerequisites": [
+        "gate:vi-freshness"
+      ],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "entrypoint-reachability/ghost-reachable-edge",
+        "expected_failure_reason": "SELF-CHECK FAILED",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:eval-regression": {
+      "command": "bun run gate:eval-regression",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "eval-regression/beta-wins",
+        "expected_failure_reason": "advanced.best_configuration: actual=beta expected=alpha",
+        "args": [
+          "--fixture",
+          "{repo}/advanced-analytics.json"
+        ]
+      }
+    },
+    "gate:evidence-transaction-observability": {
+      "command": "bun run gate:evidence-transaction-observability",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "vitest",
+      "canary": {
+        "fixture": "evidence-transaction-observability/gate-not-enrolled",
+        "expected_failure_reason": "is missing a \"gate:evidence-transaction-observability\" entry",
+        "link_repo_paths": [
+          "scripts",
+          "node_modules",
+          "vitest.config.ts"
+        ],
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:execution-profile": {
+      "command": "bun run gate:execution-profile",
+      "inputs": [
+        "scripts/execution-profile.json",
+        "package.json",
+        "scripts/gate-all.mjs"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "execution-profile/gate-missing-from-profile",
+        "expected_failure_reason": "is declared in package.json but missing from execution-profile.json",
+        "link_repo_paths": [
+          "scripts"
+        ],
+        "args": [
+          "--repo",
+          "{repo}",
+          "--registry",
+          "{repo}/canary-profile.json"
+        ]
+      }
+    },
+    "gate:finalization-progress": {
+      "command": "bun run gate:finalization-progress",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 60000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light"
+    },
+    "gate:gap-status": {
+      "command": "bun run gate:gap-status",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "gap-status/register-contradiction",
+        "expected_failure_reason": "status contradiction(s) found",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:governance-counts": {
+      "command": "bun run gate:governance-counts",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": true,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "governance-counts/stale-adr-total",
+        "expected_failure_reason": "governance counts are stale in",
+        "args": [
+          "--check",
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:hollow-parity": {
+      "command": "bun run gate:hollow-parity",
+      "prerequisites": [
+        "gate:coverage"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "missing_authoritative_input",
+          "detail": "Branch evidence is produced by gate:coverage in CI; Stop cannot make this comparison and must not run a guaranteed-unavailable subprocess."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": false,
+      "advisory_reason": "This ranks reachable uncovered branches after the blocking coverage lane; absence is explicit, while the ranking itself is review evidence rather than a merge predicate.",
+      "scope": "self",
+      "effect": "advisory",
+      "resource_class": "vitest",
+      "canary": {
+        "fixture": "hollow-parity/undeclared-mcp-generic-only-kind",
+        "expected_failure_reason": "is MCP-generic-only and not declared in scripts/hollow-parity/api-only.json",
+        "link_repo_paths": [
+          "packages"
+        ],
+        "args": [
+          "--repo",
+          "{repo}",
+          "--skip-vitest"
+        ]
+      }
+    },
+    "gate:hook-devolution": {
+      "command": "bun run gate:hook-devolution",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": true,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Hook devolution is whole-tree consistency across the host registration surface, the ledger and packages/arbor-mcp/src/hooks; it does not answer a per-turn drift question, and the Stop budget is spent on gates that must."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "observes": {
+        "min": 1
+      },
+      "canary": {
+        "fixture": "hook-devolution/devolved-without-descriptor",
+        "expected_failure_reason": "is marked devolved but no descriptor activates it",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:hook-liveness": {
+      "command": "bun run gate:hook-liveness",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "local_history_only",
+          "detail": "CI never fires local coding-agent hooks and has no invocation history; a CI verdict would be vacuous."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "target",
+      "effect": "advisory",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "hook-liveness/no-manifest",
+        "expected_failure_reason": "no .hook-liveness/hook-manifest.json",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:interview-attestation": {
+      "command": "bun run gate:interview-attestation",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "local_history_only",
+          "detail": "The receipt store is per-clone runtime state; a staged diff says nothing about whether a record came through the recorder."
+        },
+        "prepush": {
+          "code": "local_history_only",
+          "detail": "The receipt store lives in the git common dir and is not part of the immutable candidate a push is verified against."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "local_history_only",
+          "detail": "CI checks out a fresh clone with no receipt store, so every post-baseline record would read as unattested and the gate would fail on a correct repository forever."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "interview-attestation/unattested-record",
+        "expected_failure_reason": "no receipt matches this record's content",
+        "git_repo": true
+      }
+    },
+    "gate:language-census": {
+      "command": "bun run gate:language-census",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "language-census/undeclared-rust",
+        "expected_failure_reason": "1 undeclared language(s)",
+        "env": {
+          "REPO_ROOT": "{repo}"
+        }
+      }
+    },
+    "gate:ledger-audit": {
+      "command": "bun run gate:ledger-audit",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "ledger-audit/scope-escalation-downgrade",
+        "expected_failure_reason": "scope_escalation_downgrade",
+        "args": [
+          "--all",
+          "--dir",
+          "{repo}/corpus"
+        ]
+      }
+    },
+    "gate:liveness": {
+      "command": "bun run gate:liveness",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light"
+    },
+    "gate:lockfile": {
+      "command": "bun run gate:lockfile",
+      "inputs": [
+        "package.json",
+        "bun.lock",
+        "packages/*/package.json"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "both",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "lockfile/workspace-missing-from-lock",
+        "expected_failure_reason": "bun.lock has no \"workspaces\"[\"packages/canary\"] entry at all",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:merge-critical-check": {
+      "command": "bun run gate:merge-critical-check",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "merge-critical-check/invalid-registry-schema",
+        "expected_failure_reason": "schema_version must equal 1",
+        "args": [
+          "--verify",
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:obligations": {
+      "command": "bun run gate:obligations",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "obligations/active-obligation-no-proof",
+        "expected_failure_reason": "active obligation has no resolving proof and no explicit unverifiable reason",
+        "git_repo": true
+      }
+    },
+    "gate:organization-enrollment": {
+      "command": "bun run gate:organization-enrollment",
+      "prerequisites": [
+        "gate:project-registry"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Organization inventory reconciliation is a stop and CI control-plane check; it is not repeated in the local prepush latency budget."
+        },
+        "stop": {
+          "code": "authenticated_ci_authority_required",
+          "detail": "Required enrollment reconciliation needs a CI-supplied GitHub API credential and cannot be green from an unauthenticated local stop profile."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "remote_receipt": {
+        "kind": "github_api",
+        "environment": "GH_TOKEN",
+        "argument": "--github-api",
+        "permissions": {
+          "contents": "read"
+        }
+      },
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "network",
+      "canary": {
+        "fixture": "organization-enrollment/missing-manifest",
+        "expected_failure_reason": "enrollment manifest failed missing_enrollment",
+        "git_repo": true,
+        "args": [
+          "--repo",
+          "{repo}",
+          "--registry",
+          "{repo}/canary-profile.json",
+          "--provider-receipt",
+          "{repo}/canary-receipt.json"
+        ]
+      }
+    },
+    "gate:opentui": {
+      "command": "bun run gate:opentui",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "The Bun-native OpenTUI proof belongs to immutable delivery verification, not the Stop battery."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "The Bun-native OpenTUI proof runs after a committed immutable source candidate exists."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates immutable delivery verification to the managed pre-push hook."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "effect": "blocking",
+      "resource_class": "vitest",
+      "required": true,
+      "scope": "self"
+    },
+    "gate:package-boundaries": {
+      "command": "bun run gate:package-boundaries",
+      "inputs": [
+        "packages/**",
+        "scripts/package-boundary-policy.json"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Whole-workspace import boundaries run against a committed candidate."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates immutable source admission to managed hooks."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "required": true,
+      "scope": "target",
+      "canary": {
+        "fixture": "package-boundaries/forbidden-import",
+        "expected_failure_reason": "is not permitted by @canary/leaf.source_imports",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:reuse-compliance": {
+      "command": "bun run gate:reuse-compliance",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Dependency and vendored-source compliance runs against a fully installed committed candidate."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates immutable source admission to managed hooks."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "effect": "blocking",
+      "resource_class": "light",
+      "required": true,
+      "scope": "target",
+      "canary": {
+        "fixture": "reuse-compliance/missing-vendored-file",
+        "expected_failure_reason": "vendor/canary: listed file missing: canary.ts",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:project-conform": {
+      "command": "bun run gate:project-conform",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "project-conform/invalid-profile",
+        "expected_failure_reason": "invalid JSONC",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:project-registry": {
+      "command": "bun run gate:project-registry",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "project-registry/unreachable-path",
+        "expected_failure_reason": "[path_unreachable]",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:projection-lifecycle": {
+      "command": "bun run gate:projection-lifecycle",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "vitest",
+      "canary": {
+        "fixture": "projection-lifecycle/missing-exports",
+        "expected_failure_reason": "missing export: initialProjectionLifecycle",
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:reachability": {
+      "command": "bun run gate:reachability",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "reachability/dead-export",
+        "expected_failure_reason": "unreachable exported symbol",
+        "args": [
+          "--repo",
+          "{repo}",
+          "--entry-points",
+          "{repo}/entry-points.json",
+          "--allowlist",
+          "{repo}/allowlist.json"
+        ]
+      }
+    },
+    "gate:registration-integrity": {
+      "command": "bun run gate:registration-integrity",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "registration-integrity/undocumented-dispatch",
+        "expected_failure_reason": "main() dispatches \"canary\" but no --help line or backtick mention documents it",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:repo-session-conformance": {
+      "command": "bun run gate:repo-session-conformance",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Repository-session adapter conformance belongs to the close-time full tier, not each turn's stop budget."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "Repository-session adapter conformance runs against a committed candidate at close or immutable delivery verification."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates immutable source conformance to the managed pre-push hook."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "repo-session-conformance/undocumented-repo-session-dispatch",
+        "expected_failure_reason": "native CLI does not dispatch the `arbor repo-session` lifecycle",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:remedy-coverage": {
+      "command": "bun run gate:remedy-coverage",
+      "inputs": [
+        "scripts/**",
+        "package.json"
+      ],
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "remedy-coverage/stale-exempt-roster",
+        "expected_failure_reason": "exempt entry(ies) name a gate no longer in package.json",
+        "link_repo_paths": [
+          "scripts"
+        ]
+      }
+    },
+    "gate:stop-budget": {
+      "command": "bun run gate:stop-budget",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "local_history_only",
+          "detail": "The measured-cost series is per-clone runtime state and says nothing about a staged change."
+        },
+        "prepush": {
+          "code": "local_history_only",
+          "detail": "The measured-cost series is per-clone runtime state and is not part of the immutable candidate a push is verified against."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "local_history_only",
+          "detail": "CI runs no stop battery and accumulates no series; a CI verdict here would judge an empty list forever."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "stop-budget/over-ceiling",
+        "expected_failure_reason": "the stop tier is over budget",
+        "args": [
+          "--costs",
+          "{repo}/measured-costs.json"
+        ]
+      }
+    },
+    "gate:stop-guard-releases": {
+      "command": "bun run gate:stop-guard-releases",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "local_history_only",
+          "detail": "The release journal is per-clone runtime state; a pre-commit verdict adds nothing the Stop battery has not already computed this session."
+        },
+        "prepush": {
+          "code": "local_history_only",
+          "detail": "The release journal is per-clone runtime state and is not part of the immutable candidate a push is verified against."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "local_history_only",
+          "detail": "CI never accumulates a stop-guard journal; this gate there would read an empty file and print a clean result forever -- a check that cannot fail, reported as a check that passed."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "git_admin",
+      "canary": {
+        "fixture": "stop-guard-releases/post-baseline-unnamed-release",
+        "expected_failure_reason": "named no red gate at all",
+        "args": [
+          "--root",
+          "{repo}",
+          "--journal",
+          "{repo}/state/releases.jsonl"
+        ]
+      }
+    },
+    "gate:store-freshness": {
+      "command": "bun run gate:store-freshness",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 600000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "store-freshness/store-without-manifest",
+        "expected_failure_reason": "store exists but has no manifest",
+        "git_repo": true
+      }
+    },
+    "gate:sur-05": {
+      "command": "bun run gate:sur-05",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "SUR-05 rescans 1,008 documents on every run; the Stop battery is budgeted, not a place to settle 16 open documentation findings."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "A whole-corpus document rescan on every commit is not proportional to a change that may touch no document at all."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "fast",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "sur-05/drifted-package-claim",
+        "expected_failure_reason": "claims \"9 packages\"",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:tui-catalog-parity": {
+      "command": "bun run gate:tui-catalog-parity",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "tui-catalog-parity/missing-catalog",
+        "expected_failure_reason": "has no TUI disposition",
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:typecheck-tests": {
+      "command": "bun run gate:typecheck-tests",
+      "prerequisites": [],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 1800000,
+      "cost_class": "full",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "both",
+      "effect": "blocking",
+      "resource_class": "typescript",
+      "canary": {
+        "fixture": "typecheck-tests/test-type-error",
+        "expected_failure_reason": "error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'",
+        "link_repo_paths": [
+          "node_modules"
+        ],
+        "args": [
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:vi-findings": {
+      "command": "bun run gate:vi-findings",
+      "prerequisites": [
+        "gate:vi-freshness"
+      ],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "scope": "self",
+      "effect": "advisory",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "vi-findings/untriaged-finding",
+        "expected_failure_reason": "untriaged \u2014 no disposition recorded"
+      }
+    },
+    "gate:vi-freshness": {
+      "command": "bun run gate:vi-freshness",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        }
+      },
+      "timeout_ms": 30000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": true,
+      "scope": "self",
+      "effect": "blocking",
+      "resource_class": "light",
+      "canary": {
+        "fixture": "vi-freshness/manifest-describes-unknown-revision",
+        "expected_failure_reason": "is not a commit in this repository",
+        "git_repo": true
+      }
+    },
+    "gate:vi-reproducible": {
+      "command": "bun run gate:vi-reproducible",
+      "prerequisites": [
+        "gate:vi-freshness"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": true
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the stop profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "prepush": {
+          "code": "replaced_by_conditional_reproduction",
+          "detail": "Local prepush uses exact input binding and runs full structural reproduction only when producer/tool inputs changed."
+        }
+      },
+      "timeout_ms": 1800000,
+      "cost_class": "full",
+      "mutability": "verification_sandbox",
+      "required": true,
+      "scope": "target",
+      "effect": "blocking",
+      "resource_class": "lsp",
+      "canary": {
+        "fixture": "vi-reproducible/no-canonical-root-set",
+        "expected_failure_reason": "The clean-worktree rule (CD-BR-05) cannot be evaluated",
+        "args": [
+          "--check",
+          "--root",
+          "{repo}"
+        ]
+      }
+    },
+    "gate:worktree-hygiene": {
+      "command": "bun run gate:worktree-hygiene",
+      "prerequisites": [],
+      "contexts": {
+        "stop": true,
+        "precommit": false,
+        "prepush": false,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "precommit": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the precommit profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "prepush": {
+          "code": "cost_or_authority_boundary",
+          "detail": "This gate is not selected by the prepush profile; its omission is explicit and reviewable in the execution profile."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates source admission to the managed pre-commit and pre-push hooks and validates that delegation against this registry."
+        },
+        "ci": {
+          "code": "local_git_admin_only",
+          "detail": "Shared-host worktree hygiene is a local advisory; immutable CI authority does not mutate or disposition host worktrees."
+        }
+      },
+      "timeout_ms": 120000,
+      "cost_class": "stop",
+      "mutability": "read_only",
+      "required": false,
+      "advisory_reason": "scripts/worktree-hygiene.mjs always exits 0 by design \u2014 it is a stranded-worktree hygiene report, not a correctness gate, so a stray worktree elsewhere must never block an unrelated contributor's push.",
+      "scope": "self",
+      "effect": "advisory",
+      "resource_class": "git_admin"
+    },
+    "gate:vi-prepush-policy": {
+      "command": "bun run gate:vi-prepush-policy",
+      "prerequisites": [
+        "gate:vi-freshness"
+      ],
+      "contexts": {
+        "stop": false,
+        "precommit": false,
+        "prepush": true,
+        "trunk_submit": false,
+        "ci": false
+      },
+      "excluded_contexts": {
+        "stop": {
+          "code": "prepush_policy_only",
+          "detail": "Conditional structural reproduction is a local prepush policy, not a Stop diagnostic."
+        },
+        "precommit": {
+          "code": "prepush_policy_only",
+          "detail": "Conditional structural reproduction runs after the immutable source candidate exists."
+        },
+        "trunk_submit": {
+          "code": "inherited_by_managed_hooks",
+          "detail": "trunk:submit delegates immutable source admission to the managed pre-push hook."
+        },
+        "ci": {
+          "code": "replaced_by_full_reproduction",
+          "detail": "Authoritative CI always runs gate:vi-reproducible and never substitutes the conditional local path."
+        }
+      },
+      "timeout_ms": 1800000,
+      "cost_class": "full",
+      "mutability": "verification_sandbox",
+      "effect": "blocking",
+      "resource_class": "lsp",
+      "required": false,
+      "scope": "self",
+      "canary": {
+        "fixture": "vi-prepush-policy/manifest-describes-unknown-revision",
+        "expected_failure_reason": "cannot inspect graph source revision",
+        "git_repo": true,
+        "args": [
+          "--repo",
+          "{repo}"
+        ]
+      }
+    }
+  }
+}

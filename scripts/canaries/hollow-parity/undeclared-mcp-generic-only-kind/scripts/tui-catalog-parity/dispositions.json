@@ -1,0 +1,1108 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "kind": "campaign.start",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Starting a campaign needs a plan reference and authority-bearing submission form."
+    },
+    {
+      "kind": "campaign.halt",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Halt Campaign form followed by destructive confirmation",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "requires a durable halt approval id and a destructive confirmation" }
+    },
+    {
+      "kind": "tree.branch",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Tree screen: b on the selected node",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'b' (branch_selected_node) dispatches a real tree.branch command that adds a genuine child node under the selected node"
+      }
+    },
+    {
+      "kind": "tree.prune",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Tree screen: x, then Enter confirmation on the selected node",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'x' then Enter (confirm_pending_action) dispatches the real tree.prune command that actually prunes the node"
+      }
+    },
+    {
+      "kind": "tree.interrupt",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Global: ! twice interrupts the active campaign node",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'!!' interrupts the campaign's genuinely expanding node end-to-end"
+      }
+    },
+    {
+      "kind": "operation.cancel",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Operations screen: c twice on the selected operation",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'c' twice dispatches the real operation.cancel command for the sticky-selected row"
+      }
+    },
+    {
+      "kind": "task.retry",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Tasks screen: r on a terminal task row",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "retry_selected_row on a terminal, cleanup-completed task dispatches the real task.retry command"
+      }
+    },
+    {
+      "kind": "recovery.retry",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Recovery screen: r on an interrupted durable target",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'r' retries an interrupted selected node through recovery.pending and the real RecoveryService"
+      }
+    },
+    {
+      "kind": "recovery.abandon",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Recovery screen: z, then Enter confirmation on the selected target",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'z' then Enter dispatches recovery.abandon with the selected durable target and operator authorization"
+      }
+    },
+    {
+      "kind": "campaign.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Campaigns screen: 1"
+    },
+    {
+      "kind": "campaign.snapshot",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The cockpit lists campaigns but has no selected-campaign snapshot detail pane yet."
+    },
+    {
+      "kind": "campaign.tree",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Tree screen: t"
+    },
+    {
+      "kind": "operation.get",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The Operations screen intentionally uses the enumerable operation.list projection; a detail inspector needs an operation id."
+    },
+    {
+      "kind": "operation.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Operations screen: 6"
+    },
+    {
+      "kind": "recovery.pending",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Recovery screen: focus from the recovery route"
+    },
+    {
+      "kind": "task.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Tasks screen: 5"
+    },
+    {
+      "kind": "taskcomposer.submit",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "The Task Composer pane accepts a free-form task or linked follow-up and derives the complete bounded submission envelope."
+    },
+    {
+      "kind": "taskcomposer.answer",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "An outstanding planner question requires an operator-authored bounded answer at the current draft revision."
+    },
+    {
+      "kind": "taskcomposer.cancel",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Cockpit: Esc while the selected task planner is running",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui.test.ts",
+        "title": "cancels an in-flight Cockpit planner through the canonical taskcomposer route without late-result resurrection"
+      }
+    },
+    {
+      "kind": "taskcomposer.confirm",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Confirmation is revision-bound and must follow an operator review of the plan, scope, and checks."
+    },
+    {
+      "kind": "taskcomposer.reject",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Rejection requires a durable operator reason, rather than an un-attributed dismiss gesture."
+    },
+    {
+      "kind": "taskcomposer.get",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The composer list exposes bounded draft metadata; selecting an individual draft is a detail projection."
+    },
+    {
+      "kind": "taskcomposer.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Task Composer screen: Ctrl+T"
+    },
+    {
+      "kind": "result.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Cockpit result review refresh for the active campaign"
+    },
+    {
+      "kind": "result.inspect",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Cockpit bounded result dossier for the highest-ranked capture"
+    },
+    {
+      "kind": "result.scope.authorize",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Scope expansion is a separate audited operator decision bound to an exact capture hash and path set; the CLI exposes the authorization step before adoption can consume it."
+    },
+    {
+      "kind": "result.adopt",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Adoption requires explicit file selection and confirmation of the inspected patch hash; the Web workspace provides that governed form while the TUI dossier remains read-only."
+    },
+    {
+      "kind": "result.revert",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Undo requires a live completed-adoption operation receipt, exact patch hash, and explicit confirmation; the Web workspace provides the immediate receipt-bound form."
+    },
+    {
+      "kind": "event.resume",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Diagnostics screen: 4"
+    },
+    {
+      "kind": "communication.record",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Record Communication form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "communication.selection",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Communications screen: 2 with a selected tree node"
+    },
+    {
+      "kind": "communication.history",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The cockpit presents selected-node communications; a campaign-wide history view is not yet a separate TUI panel."
+    },
+    {
+      "kind": "output.capture",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Capturing output requires payload, provenance, and sensitivity metadata that need a structured form."
+    },
+    {
+      "kind": "output.descriptor",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The Output screen enumerates descriptors; opening one descriptor requires its evidence identifier and authorization context."
+    },
+    {
+      "kind": "output.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Output screen: 3"
+    },
+    {
+      "kind": "output.raw",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Raw output requires an evidence id plus explicit raw-output authorization before it can be rendered."
+    },
+    {
+      "kind": "surveillance.scan",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Surveillance scans are lifecycle work performed after commands, not an operator cockpit control."
+    },
+    {
+      "kind": "surveillance.findings",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Surveillance screen: ;"
+    },
+    {
+      "kind": "capability.introspect",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Capabilities screen: ="
+    },
+    {
+      "kind": "governance.snapshot",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Governance screen: g"
+    },
+    {
+      "kind": "governance.backlog",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Backlog screen: l"
+    },
+    {
+      "kind": "kb.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Knowledge Base screen: m"
+    },
+    {
+      "kind": "audit.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Audit screen: v"
+    },
+    {
+      "kind": "config.get",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Config screen: 7"
+    },
+    {
+      "kind": "native.budget.get",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Native Budget screen: Ctrl+B with an active campaign"
+    },
+    {
+      "kind": "agent.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Agents screen: 8"
+    },
+    {
+      "kind": "job.submit",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Submitting a job requires its kind, payload, scheduling, and authority fields in a structured form."
+    },
+    {
+      "kind": "job.cancel",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Jobs screen: c twice on the selected job",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'c' twice dispatches the real job.cancel command for the sticky-selected row"
+      }
+    },
+    {
+      "kind": "job.retry",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Jobs screen: r on a terminal job row",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'9' focuses Jobs, 'r' retries the sticky-selected terminal job through the real job.retry command"
+      }
+    },
+    {
+      "kind": "job.pause",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Jobs screen: p while the queue is running",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'p' toggles the queue: pause then resume through the real job.pause/job.resume commands"
+      }
+    },
+    {
+      "kind": "job.resume",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Jobs screen: p while the queue is paused",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'p' toggles the queue: pause then resume through the real job.pause/job.resume commands"
+      }
+    },
+    {
+      "kind": "job.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Jobs screen: 9"
+    },
+    {
+      "kind": "approval.request",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Request Approval form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "approval.approve",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Approvals screen: y on the oldest pending request",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'y' resolves to APPROVE_ACTION_ID via the real catalog, and dispatching it approves the oldest pending request"
+      }
+    },
+    {
+      "kind": "approval.reject",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Approvals screen: n on the oldest pending request",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'n' resolves to a real reject through the same path"
+      }
+    },
+    {
+      "kind": "approval.expire",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Approvals screen: e on the oldest pending request",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-command-surface-expansion.test.ts",
+        "title": "'e' expires the oldest pending request through the real approval.expire command"
+      }
+    },
+    {
+      "kind": "approval.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Approvals screen: 0"
+    },
+    {
+      "kind": "trust.session.enroll",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Remote Trust: Enroll Remote Trust form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "trust.session.rotate",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Remote Trust: Rotate Remote Trust Key form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "trust.session.revoke",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Remote Trust: Revoke Remote Trust form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "trust.session.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Remote Trust screen: '"
+    },
+    {
+      "kind": "trust.session.status",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Remote Trust: Enter on selected session"
+    },
+    {
+      "kind": "compaction.record",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Compaction screen: / (Record Compaction Lifecycle form)",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "compaction.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Compaction screen: ["
+    },
+    {
+      "kind": "compaction.guard",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Compaction guard state is internal lifecycle policy rather than a direct interactive operator surface."
+    },
+    {
+      "kind": "phase_message.list",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Phase messages are per-node execution evidence \u2014 a specialist's final output recorded by the loop. The cockpit's tree screen selects a node but has no phase-message detail pane yet, so there is no operator trigger to name. Reachable today through the MCP query surface; recorded here rather than left silent, following campaign.snapshot's precedent."
+    },
+    {
+      "kind": "userinput.ask",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Asking an interview question requires question, options, blocking, and authority fields."
+    },
+    {
+      "kind": "userinput.answer",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Interviews screen: a, type an answer, then submit",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-controls.test.ts",
+        "title": "'a' resolves to ANSWER_ACTION_ID; arming, typing, and submitting answers through the real userinput.answer command and clears the blocking wait"
+      }
+    },
+    {
+      "kind": "userinput.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Interviews screen: i"
+    },
+    {
+      "kind": "userinput.awaiting",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The interviews list shows pending prompts; a separate boolean campaign-state indicator is not rendered yet."
+    },
+    {
+      "kind": "bus.record",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Record Bus Message form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "bus.history",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "The event bus is an internal transport seam; Diagnostics renders the supported event projection instead."
+    },
+    {
+      "kind": "bus.thread.send",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Parent/Child Threads screen: @ on a selected direct Tree relationship",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-operator-form-controls.test.ts",
+        "title": "sends a durable parent/child reply through the TUI form, catalog router, and restartable ledger"
+      }
+    },
+    {
+      "kind": "bus.thread.ack",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Acknowledgement is a recipient-agent transport transition; the operator can inspect its durable state but does not impersonate the recipient."
+    },
+    {
+      "kind": "bus.thread.history",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Parent/Child Threads screen: : with a selected non-root Tree node"
+    },
+    {
+      "kind": "sibling.status",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Siblings screen: ] with a selected Tree node"
+    },
+    {
+      "kind": "sibling.spawn",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Spawning requires an action description, delegate, estimates, and isolation authority; a structured form is required."
+    },
+    {
+      "kind": "a2a.send",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Send A2A Message form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "a2a.receive",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Receive A2A Message form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "foreground.derive",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Live dispatch foreground remains a selected-node detail surface, not a separate cockpit pane."
+    },
+    {
+      "kind": "nodecard.resolve",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The selected-node signed card projection remains detail work."
+    },
+    {
+      "kind": "a2a.cards",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Card publication requires a configured signed A2A bridge; no wire compatibility is claimed."
+    },
+    {
+      "kind": "context.artifact.capture",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Capture Governed Context form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "context.workspace",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "A bounded artifact reader needs an artifact selection and visibility context; the governed-context detail pane remains to be composed."
+    },
+    {
+      "kind": "context.overlays",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Governed Context screen: _"
+    },
+    {
+      "kind": "subagent.execute",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context screen: select an active declarative descriptor, then execute from its operator form",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-governed-context-controls.test.ts",
+        "title": "executes the selected active declarative descriptor through the TUI form and canonical catalog"
+      }
+    },
+    {
+      "kind": "subagent.executions",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Governed Context screen: _ shows durable declarative child execution status"
+    },
+    {
+      "kind": "context.governance",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Campaign-local fold/playbook/revision history is available through the canonical query pending its detail surface."
+    },
+    {
+      "kind": "fold.propose",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Propose Governed Fold form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "fold.approve",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Approve Governed Fold form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "fold.rollback",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context screen: } on a selected active fold",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-governed-context-controls.test.ts",
+        "title": "rolls back a selected active governed fold through the TUI form and canonical catalog"
+      }
+    },
+    {
+      "kind": "playbook.propose",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Propose Playbook Delta form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "playbook.approve",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Approve Playbook Delta form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "harness.propose",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Propose Harness Revision form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "harness.approve",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Approve Harness Revision form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "harness.rollback",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Rollback Harness Revision form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "harness.evaluate",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context: Record Harness Evaluation form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "harness.promote",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Harness Evaluations: Promote Harness Revision form",
+      "e2e": { "file": "packages/arbor-mcp/tests/tui-governed-context-controls.test.ts", "title": "runs the selected active revision hermetically, then exposes measured run detail and canonical promotion/quarantine forms" }
+    },
+    {
+      "kind": "harness.evaluation.start",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Governed Context screen: ctrl+v on a selected active, unevaluated harness revision",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-governed-context-controls.test.ts",
+        "title": "runs the selected active revision hermetically, then exposes measured run detail and canonical promotion/quarantine forms"
+      }
+    },
+    {
+      "kind": "harness.evaluation.candidates",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Governed Context screen: _ projects active, unevaluated revision eligibility"
+    },
+    {
+      "kind": "harness.evaluation.runs",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Evaluations screen: ctrl+shift+v"
+    },
+    {
+      "kind": "harness.evaluation.detail",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Evaluations screen: Enter on a selected durable run"
+    },
+    {
+      "kind": "harness.quarantine",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Harness Evaluations screen: ctrl+q on a selected measured run with evidence",
+      "e2e": {
+        "file": "packages/arbor-mcp/tests/tui-governed-context-controls.test.ts",
+        "title": "runs the selected active revision hermetically, then exposes measured run detail and canonical promotion/quarantine forms"
+      }
+    },
+    {
+      "kind": "harness.connector.inventory",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Connectors screen: Ctrl+K"
+    },
+    {
+      "kind": "harness.native.readiness",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Native Setup Doctor screen: Ctrl+R"
+    },
+    {
+      "kind": "harness.session.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Sessions screen: ."
+    },
+    {
+      "kind": "harness.session.inspect",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "The inventory is live; a selected-session detail pane is the next composed surface."
+    },
+    {
+      "kind": "harness.session.events",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Redacted events require a selected session detail pane and pagination controls."
+    },
+    {
+      "kind": "harness.session.interrupt",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "The canonical command exists, but true session-scoped cancellation needs a retained live abort handle before exposing a control."
+    },
+    {
+      "kind": "project.registry.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Project Registry screen: { (nav), Enter re-checks the selected entry"
+    },
+    {
+      "kind": "project.manage",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Project Registry screen: Ctrl+Shift+N runs the reconcile pass"
+    },
+    {
+      "kind": "doctor.get",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "migration.inspect",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "migration.preview",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "A migration preview is bounded but still needs an operator-selected remediation target."
+    },
+    {
+      "kind": "migration.apply",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Applying durable migration requires an explicit reviewed confirmation and migration input."
+    },
+    {
+      "kind": "migration.rollback",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Rollback requires an explicit reviewed confirmation and migration input."
+    },
+    {
+      "kind": "integration.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "integration.inspect",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Permission and dependency disclosure requires selecting one integration."
+    },
+    {
+      "kind": "integration.admit",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Admission must begin from a selected integration disclosure."
+    },
+    {
+      "kind": "remote.control",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Remote revocation requires explicit session selection and operator acknowledgement."
+    },
+    {
+      "kind": "scheduler.control",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Suspending or resuming a schedule requires explicit schedule selection and, for suspension, a reason."
+    },
+    {
+      "kind": "remote.inspect",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "scheduler.inspect",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "integration.install",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Installation must follow an integration disclosure and explicit approval."
+    },
+    {
+      "kind": "integration.enable",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Enabling authority must follow an integration disclosure and explicit approval."
+    },
+    {
+      "kind": "integration.disable",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Disabling an integration requires an explicit operator decision."
+    },
+    {
+      "kind": "integration.update",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Updating an integration requires review of changed dependencies and permissions."
+    },
+    {
+      "kind": "integration.rollback",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Rollback requires explicit operator selection of a prior durable integration version."
+    },
+    {
+      "kind": "harness.session.steer",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Steering requires an attached live non-terminal session and bounded operator message."
+    },
+    {
+      "kind": "harness.session.resume",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Harness Sessions: Ctrl+Shift+G after an advertised resume capability and typed RESUME confirmation",
+      "e2e": {
+        "file": "packages/arbor-tui/tests/session-continuation.test.ts",
+        "title": "dispatches only an explicitly advertised resume after disposition and typed confirmation"
+      }
+    },
+    {
+      "kind": "harness.session.fork",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Fork requires an advertised capability, a disposition, and typed confirmation."
+    },
+    {
+      "kind": "harness.session.respawn",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Respawn requires an advertised capability, a disposition, and typed confirmation."
+    },
+    {
+      "kind": "harness.session.attach",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Sessions: Ctrl+Shift+H on a selected session"
+    },
+    {
+      "kind": "session.identity.get",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "A named-session detail requires selecting a session identity."
+    },
+    {
+      "kind": "session.identity.search",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh uses the bounded session-name projection"
+    },
+    {
+      "kind": "session.identity.mutate",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Session names and tags require bounded operator-authored values."
+    },
+    {
+      "kind": "result.verification.get",
+      "operator_visible": true,
+      "disposition": "detail_required",
+      "reason": "Verification evidence needs a selected result identity."
+    },
+    {
+      "kind": "result.verification.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "notification.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "notification.read",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Marking a durable notification read requires an explicit selected inbox record."
+    },
+    {
+      "kind": "followup.list",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Dashboard/Cockpit product refresh"
+    },
+    {
+      "kind": "followup.create",
+      "operator_visible": true,
+      "disposition": "authoring_required",
+      "reason": "Follow-up lineage requires explicit typed source result/node and parent campaign references."
+    },
+    {
+      "kind": "harness.session.availability",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Harness Sessions selected-session capability inspection"
+    },
+    {
+      "kind": "control.status",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Flight Control screen: status palette action"
+    },
+    {
+      "kind": "control.discover",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Flight Control screen: discover-hosts palette action"
+    },
+    {
+      "kind": "control.inbox",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Flight Control screen: redacted-inbox palette action"
+    },
+    {
+      "kind": "taskcomposer.retry",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Task Composer: Ctrl+Shift+Y on a failed or cancelled draft",
+      "e2e": {
+        "file": "packages/arbor-tui/tests/task-composer-screen.test.ts",
+        "title": "retries the selected failed draft in place with revision CAS"
+      }
+    },
+    {
+      "kind": "result.review.workspace",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Result Review screen: selected captured result workspace"
+    },
+    {
+      "kind": "result.review.comment",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Result Review selected file: inline-comment operator form",
+      "e2e": {
+        "file": "packages/arbor-tui/tests/result-review-screen.test.ts",
+        "title": "opens CAS-bound comment, revision, and editor forms from the selected manifest row"
+      }
+    },
+    {
+      "kind": "result.review.request_revision",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Result Review selected file: request-revision operator form",
+      "e2e": {
+        "file": "packages/arbor-tui/tests/result-review-screen.test.ts",
+        "title": "opens CAS-bound comment, revision, and editor forms from the selected manifest row"
+      }
+    },
+    {
+      "kind": "result.review.editor_handoff",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Result Review selected file: editor-handoff operator form",
+      "e2e": {
+        "file": "packages/arbor-tui/tests/result-review-screen.test.ts",
+        "title": "opens CAS-bound comment, revision, and editor forms from the selected manifest row"
+      }
+    },
+    {
+      "kind": "peer.grant",
+      "operator_visible": true,
+      "disposition": "live_control",
+      "trigger": "Grant Native Peer Relationship form",
+      "e2e": { "file": "packages/arbor-tui/tests/operator-forms.test.ts", "title": "projects each supported command from entered fields through dispatch_command" }
+    },
+    {
+      "kind": "peer.query",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Peer queries are capability-scoped native model tools rather than operator-authored cockpit commands."
+    },
+    {
+      "kind": "peer.reply",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Peer replies are capability-scoped native model tools rather than operator-authored cockpit commands."
+    },
+    {
+      "kind": "peer.history",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Peer history is projected only inside the authenticated model relationship; operators use the existing communications and bus views."
+    },
+    {
+      "kind": "peer.grants",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Grant enumeration is an internal scoped model projection; parent authority is visible through communications evidence rather than a grant-minting UI."
+    },
+    {
+      "kind": "git.workspace",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "The TUI has no Git workspace screen; operators can use the dedicated CLI and MCP workspace query surfaces."
+    },
+    {
+      "kind": "git.worktree.create",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Worktree creation is currently exposed through the dedicated CLI and MCP workspace surfaces, not an operator-authored TUI flow."
+    },
+    {
+      "kind": "git.worktree.switch",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Worktree switching is currently exposed through the dedicated CLI and MCP workspace surfaces, not an operator-authored TUI flow."
+    },
+    {
+      "kind": "git.worktree.cleanup",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "Worktree cleanup is currently exposed through the dedicated CLI and MCP workspace surfaces, not an operator-authored TUI flow."
+    },
+    {
+      "kind": "inspect.action",
+      "operator_visible": true,
+      "disposition": "live_query",
+      "trigger": "Console inspect pane: load the selected action detail projection"
+    },
+    {
+      "kind": "governance.record.search",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "The TUI exposes the governance snapshot and backlog, while record search is available through the dedicated CLI and MCP query surface."
+    },
+    {
+      "kind": "governance.record.read",
+      "operator_visible": false,
+      "disposition": "excluded",
+      "reason": "The TUI exposes the governance snapshot and backlog, while direct record reads are available through the dedicated CLI and MCP query surface."
+    }
+  ]
+}

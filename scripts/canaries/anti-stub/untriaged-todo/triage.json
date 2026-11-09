@@ -1,0 +1,4 @@
+{
+  "_comment": "Canary fixture: an empty anti-stub triage store, so the finding below is untriaged by construction.",
+  "entries": []
+}

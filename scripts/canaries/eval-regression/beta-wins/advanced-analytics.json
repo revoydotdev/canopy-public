@@ -1,0 +1,31 @@
+{
+  "schema": "arbor.eval-analytics-fixture/v1",
+  "agent_uct": {
+    "fixture": {
+      "fixture_id": "report-cost-aware-choice",
+      "dimensions": [{ "dimension_id": "provider", "options": ["alpha", "beta"] }],
+      "clusters": [{ "cluster_id": "core", "weight": 1, "item_ids": ["q1"] }],
+      "prefix_cost_units": { "alpha": 9, "beta": 2 },
+      "rewards": { "alpha": { "core": { "q1": 0.85 } }, "beta": { "core": { "q1": 0.95 } } }
+    },
+    "policy": { "mode": "agent_uct", "exploration_constant": 1.4142135623730951, "lambda_0": 1, "cost_scale": 1 },
+    "iteration_budget": 4
+  },
+  "run_manifest": {
+    "schema": "arbor.eval-run-manifest/v3",
+    "campaign_id": "advanced-analytics-fixture",
+    "environment_digest": "sha256:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "run_date": "2026-08-10T00:00:00.000Z",
+    "models": [], "sampling_rule": "fixed fixture", "aggregation_rule": "deterministic fixture",
+    "cost": { "input_tokens": 0, "output_tokens": 0, "cache_read_tokens": 0, "cache_write_tokens": 0, "tool_calls": 0, "wall_clock_ms": 0, "priced": [], "unpriced_calls": 0, "by_phase": [], "by_role": [], "by_agent": [] },
+    "context_economy": { "observations": 0, "offered_tokens": 0, "retained_tokens": 0, "pruned_tokens": 0, "indexed_reference_tokens": 0, "stable_prefix_tokens": 0, "dynamic_tokens": 0, "retention_ratio": null, "by_source": [] },
+    "tool_economy": { "observations": 0, "offered_calls": 0, "host_executions": 0, "reused_reads": 0, "avoided_output_bytes": 0, "reuse_ratio": null },
+    "cache_economy": { "eligible_input_tokens": 0, "cache_read_tokens": 0, "cache_write_tokens": 0, "cache_read_ratio": null, "cache_write_ratio": null },
+    "efficiency": { "effective_token_policy": { "input": 1, "cache_read": 0.1, "cache_write": 1.25, "output": 4, "unit": "weighted_token" }, "effective_tokens": 0, "verified_progress_units": 0, "verified_progress_per_effective_token": null },
+    "failures": []
+  },
+  "critic_reliability_samples": [
+    { "node_id": "defect-caught", "observed_at": "2026-08-10T00:00:00.000Z", "artifact_correct_before": false, "critic_flagged": true, "correction_attempted": true, "artifact_correct_after": true, "later_defect_found": true },
+    { "node_id": "correct-pass", "observed_at": "2026-08-10T00:01:00.000Z", "artifact_correct_before": true, "critic_flagged": false, "correction_attempted": false, "artifact_correct_after": true, "later_defect_found": false }
+  ]
+}

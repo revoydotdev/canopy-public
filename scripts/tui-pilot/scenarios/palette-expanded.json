@@ -1,0 +1,83 @@
+{
+  "id": "palette-expanded",
+  "title": "X01–X03 palette: contextual, filtered, expanded, paged",
+  "covers": [
+    "X01",
+    "X02",
+    "X03"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "C-p",
+      "label": "open palette",
+      "hold_s": 1.0
+    },
+    {
+      "type": "gov",
+      "label": "filter: gov",
+      "hold_s": 1
+    },
+    {
+      "key": "BSpace",
+      "label": "erase",
+      "hold_s": 0.5
+    },
+    {
+      "key": "BSpace",
+      "label": "erase",
+      "hold_s": 0.5
+    },
+    {
+      "key": "BSpace",
+      "label": "erase",
+      "hold_s": 0.5
+    },
+    {
+      "key": "Tab",
+      "label": "expand to all commands",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "PageDown",
+      "label": "page down",
+      "hold_s": 1.0
+    },
+    {
+      "key": "End",
+      "label": "jump to end",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Home",
+      "label": "jump to start",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Down",
+      "label": "select next",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Escape",
+      "label": "close palette",
+      "hold_s": 1.0
+    }
+  ]
+}

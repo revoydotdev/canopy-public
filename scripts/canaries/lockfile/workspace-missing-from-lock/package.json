@@ -1,0 +1,5 @@
+{
+  "name": "canary-lockfile",
+  "private": true,
+  "workspaces": ["packages/canary"]
+}

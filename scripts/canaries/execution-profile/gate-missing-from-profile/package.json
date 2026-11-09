@@ -1,0 +1,7 @@
+{
+  "name": "canary-execution-profile",
+  "private": true,
+  "scripts": {
+    "gate:canary-only": "bun scripts/canary-gate.mjs"
+  }
+}

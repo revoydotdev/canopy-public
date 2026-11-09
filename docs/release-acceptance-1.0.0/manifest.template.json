@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "release": "1.0.0",
+  "candidate_commit": null,
+  "domains": {
+    "native_campaign": { "status": "unavailable", "reason": "No candidate-bound native campaign evidence recorded." },
+    "mcp": { "status": "unavailable", "reason": "No candidate-bound MCP evidence recorded." },
+    "cli": { "status": "unavailable", "reason": "No candidate-bound CLI evidence recorded." },
+    "webui": { "status": "unavailable", "reason": "No candidate-bound WebUI evidence recorded." },
+    "tui": { "status": "unavailable", "reason": "No candidate-bound TUI evidence recorded." },
+    "recovery": { "status": "unavailable", "reason": "No candidate-bound recovery evidence recorded." },
+    "adoption": { "status": "unavailable", "reason": "No candidate-bound adoption evidence recorded." },
+    "evidence": { "status": "unavailable", "reason": "No candidate-bound evidence integrity proof recorded." },
+    "selfhost": { "status": "unavailable", "reason": "No candidate-bound selfhost evidence recorded." },
+    "external_cohort": { "status": "unavailable", "reason": "No candidate-bound external cohort evidence recorded." }
+  }
+}

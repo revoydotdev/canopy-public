@@ -1,0 +1,4 @@
+{"id":"sym:canary.main","kind":"symbol","attributes":{}}
+{"id":"sym:canary.helper","kind":"symbol","attributes":{}}
+{"id":"sym:canary.ghost","kind":"symbol","attributes":{}}
+{"id":"entrypoint:set","kind":"entrypoint","attributes":{"roots":["sym:canary.main"]}}

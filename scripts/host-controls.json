@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "adapters": [
+    {
+      "host": "claude-code",
+      "configPath": ".claude/settings.json",
+      "events": []
+    },
+    {
+      "host": "codex",
+      "configPath": ".codex/hooks.json",
+      "events": []
+    }
+  ]
+}

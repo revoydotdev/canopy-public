@@ -1,0 +1,17 @@
+{
+  "id": "narrow-approval-refusal",
+  "title": "P4-6: approval prompt and refusal remedy at narrow geometries, and focus after the decision",
+  "covers": ["X16", "S21"],
+  "seed": "populated",
+  "steps": [
+    { "wait_for": "approval pending", "timeout_s": 60, "label": "launch: Console shows the pending approval", "hold_s": 1.5 },
+    { "key": "Escape", "label": "blur composer", "hold_s": 0.5 },
+    { "key": "0", "label": "Approvals", "hold_s": 1.5 },
+    { "key": "y", "label": "approve once (self-approval or missing-capability refusal expected)", "hold_s": 1.5 },
+    { "key": "Down", "label": "focus still on the list after the refusal", "hold_s": 0.8 },
+    { "key": "n", "label": "reject request", "hold_s": 1.5 },
+    { "key": "i", "label": "Interviews", "hold_s": 1.5 },
+    { "key": "a", "label": "Answer interview", "hold_s": 1.5 },
+    { "key": "Escape", "label": "cancel answer", "hold_s": 0.8 }
+  ]
+}

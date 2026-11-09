@@ -1,0 +1,16 @@
+{
+  "_comment": "Canary fixture: a vendored source whose inventory lists a file that is not on disk.",
+  "schema_version": 1,
+  "ceiling": "no unclassified third-party material",
+  "repository_license": { "path": "LICENSE", "required_text": "MIT" },
+  "allowed_direct_dependency_licenses": [],
+  "direct_dependencies": {},
+  "vendored_sources": [
+    {
+      "path": "vendor/canary",
+      "inventory": "inventory.json",
+      "attribution": "ATTRIBUTION.md",
+      "license": "MIT"
+    }
+  ]
+}

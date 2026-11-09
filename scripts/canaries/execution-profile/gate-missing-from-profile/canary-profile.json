@@ -1,0 +1,11 @@
+{
+  "_comment": [
+    "Canary fixture for `gate:execution-profile`.",
+    "The sibling package.json declares gate:canary-only; this registry does not.",
+    "That omission is exactly the drift the gate exists to catch, and it is the",
+    "one problem this fixture is built to produce."
+  ],
+  "schema_version": 1,
+  "profile_version": "canary",
+  "gates": {}
+}

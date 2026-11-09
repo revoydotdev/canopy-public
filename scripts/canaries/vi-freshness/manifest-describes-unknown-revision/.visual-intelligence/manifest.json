@@ -1,0 +1,7 @@
+{
+  "repo_revision": "0000000000000000000000000000000000000000",
+  "tree_state": "clean",
+  "entrypoints": { "source": "declared", "roots": ["src/index.ts"] },
+  "extraction_gaps": [],
+  "counts": { "nodes": 1, "edges": 1, "evidence": 1 }
+}

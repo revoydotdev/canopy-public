@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "noEmit": true,
+    "rootDir": ".",
+    /* Tests only — src still targets root tsconfig's lib: ["ES2022"]. Node 22
+       (this repo's runtime, per CI) supports Set.prototype.difference/etc.
+       natively; only the TS lib declarations lag, and only test fixtures use
+       it (screens-install.test.ts). Scoped here so it never affects the src
+       build's target semantics. */
+    "lib": ["ES2022", "ESNext.Collection"]
+  },
+  "include": ["src/**/*.ts", "tests/**/*.ts"]
+}

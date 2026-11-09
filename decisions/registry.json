@@ -1,0 +1,950 @@
+{
+  "schema_version": 1,
+  "next_available": 196,
+  "reserved": [
+    2,
+    4,
+    10,
+    45,
+    86
+  ],
+  "reserved_reason": {
+    "2": "ADR-005 cites revoy-spec's ADR-002; this number is a disclosed legacy local overlap",
+    "4": "ADR-004 cites revoy-spec's ADR-004; this number is a disclosed legacy local overlap",
+    "10": "ADR-003 cites revoy-spec's ADR-010; this number is a disclosed legacy local overlap",
+    "45": "ADR-027 cites the cross-namespace ADR-045 tier convention",
+    "86": "ADR-006 cites revoy-spec's process_gate.v1 ADR-086"
+  },
+  "allocations": [
+    {
+      "number": 1,
+      "slug": "botanical-taxonomy-agent-naming",
+      "placeholder_id": "legacy:ADR-001"
+    },
+    {
+      "number": 2,
+      "slug": "uct-scoring-with-regression-priorsors",
+      "placeholder_id": "legacy:ADR-002"
+    },
+    {
+      "number": 3,
+      "slug": "provenance-typed-kb-entries",
+      "placeholder_id": "legacy:ADR-003"
+    },
+    {
+      "number": 4,
+      "slug": "envelope-pattern-for-kb-reads",
+      "placeholder_id": "legacy:ADR-004"
+    },
+    {
+      "number": 5,
+      "slug": "capability-tiered-kb-access",
+      "placeholder_id": "legacy:ADR-005"
+    },
+    {
+      "number": 6,
+      "slug": "process-gates-wrapping-tree-search",
+      "placeholder_id": "legacy:ADR-006"
+    },
+    {
+      "number": 7,
+      "slug": "jsonl-backed-kb-and-audit",
+      "placeholder_id": "legacy:ADR-007"
+    },
+    {
+      "number": 8,
+      "slug": "typescript-monorepo",
+      "placeholder_id": "legacy:ADR-008"
+    },
+    {
+      "number": 9,
+      "slug": "tree-search-as-core-execution-model",
+      "placeholder_id": "legacy:ADR-009"
+    },
+    {
+      "number": 10,
+      "slug": "dual-level-memory",
+      "placeholder_id": "legacy:ADR-010"
+    },
+    {
+      "number": 11,
+      "slug": "tui-cockpit-architecture",
+      "placeholder_id": "legacy:ADR-011"
+    },
+    {
+      "number": 12,
+      "slug": "interrupted-expansion-recovery-authority",
+      "placeholder_id": "legacy:ADR-012"
+    },
+    {
+      "number": 13,
+      "slug": "surveillance-is-an-audited-monitor",
+      "placeholder_id": "legacy:ADR-013"
+    },
+    {
+      "number": 14,
+      "slug": "ledger-witnessed-memory-projections",
+      "placeholder_id": "legacy:ADR-014"
+    },
+    {
+      "number": 15,
+      "slug": "model-aware-token-epochs",
+      "placeholder_id": "legacy:ADR-015"
+    },
+    {
+      "number": 16,
+      "slug": "interruption-is-a-recoverable-ledger-outcome",
+      "placeholder_id": "legacy:ADR-016"
+    },
+    {
+      "number": 17,
+      "slug": "telemetry-is-a-ledger-derived-projection",
+      "placeholder_id": "legacy:ADR-017"
+    },
+    {
+      "number": 18,
+      "slug": "compaction-is-a-ledger-witnessed-lifecycle",
+      "placeholder_id": "legacy:ADR-018"
+    },
+    {
+      "number": 19,
+      "slug": "user-interview-is-a-governed-ledger-transition",
+      "placeholder_id": "legacy:ADR-019"
+    },
+    {
+      "number": 20,
+      "slug": "palette-keymap-and-config-are-projections",
+      "placeholder_id": "legacy:ADR-020"
+    },
+    {
+      "number": 21,
+      "slug": "devtools-is-a-derived-inspector-projection",
+      "placeholder_id": "legacy:ADR-021"
+    },
+    {
+      "number": 22,
+      "slug": "repo-instructions-are-a-filesystem-scope-not-a-ledger-fact",
+      "placeholder_id": "legacy:ADR-022"
+    },
+    {
+      "number": 23,
+      "slug": "no-rollback-target-worktree-isolation-plus-ledger-suffice",
+      "placeholder_id": "legacy:ADR-023"
+    },
+    {
+      "number": 24,
+      "slug": "tool-execution-enforcement-is-a-host-trust-boundary",
+      "placeholder_id": "legacy:ADR-024"
+    },
+    {
+      "number": 25,
+      "slug": "blocked-tier-requires-platform-branch-protection",
+      "placeholder_id": "legacy:ADR-025"
+    },
+    {
+      "number": 26,
+      "slug": "campaign-loop-is-a-supervised-job",
+      "placeholder_id": "legacy:ADR-026"
+    },
+    {
+      "number": 27,
+      "slug": "governance-control-plane-placement",
+      "placeholder_id": "legacy:ADR-027"
+    },
+    {
+      "number": 28,
+      "slug": "capability-enforcement-at-revoy2-owned-mutating-surfaces",
+      "placeholder_id": "legacy:ADR-028"
+    },
+    {
+      "number": 29,
+      "slug": "one-writer-process-per-persistence-directory",
+      "placeholder_id": "legacy:ADR-029"
+    },
+    {
+      "number": 30,
+      "slug": "liveness-attestation-over-the-seam-catalog",
+      "placeholder_id": "legacy:ADR-030"
+    },
+    {
+      "number": 31,
+      "slug": "the-visual-intelligence-skill-is-vendored-into-the-repository",
+      "placeholder_id": "legacy:ADR-031"
+    },
+    {
+      "number": 32,
+      "slug": "hook-liveness-is-attested-by-persisted-invocation-history",
+      "placeholder_id": "legacy:ADR-032"
+    },
+    {
+      "number": 33,
+      "slug": "completeness-claims-carry-a-durable-record-and-a-required-discharge",
+      "placeholder_id": "legacy:ADR-033"
+    },
+    {
+      "number": 34,
+      "slug": "determinism-is-measured-off-the-critical-path",
+      "placeholder_id": "legacy:ADR-034"
+    },
+    {
+      "number": 35,
+      "slug": "reachable-is-not-exercised-completion-depth-over-one-decidable-subset",
+      "placeholder_id": "legacy:ADR-035"
+    },
+    {
+      "number": 36,
+      "slug": "opentui-supersedes-adr-011s-provisional-ink-renderer-decision",
+      "placeholder_id": "legacy:ADR-036"
+    },
+    {
+      "number": 37,
+      "slug": "a-structured-scene-supersedes-adr-011s-o4-port-existence-obligation",
+      "placeholder_id": "legacy:ADR-037"
+    },
+    {
+      "number": 38,
+      "slug": "governed-context-folding-and-campaign-local-harness-overlays",
+      "placeholder_id": "legacy:ADR-038"
+    },
+    {
+      "number": 39,
+      "slug": "durable-direct-thread-transport-semantics",
+      "placeholder_id": "legacy:ADR-039"
+    },
+    {
+      "number": 40,
+      "slug": "opt-in-remote-session-ingress",
+      "placeholder_id": "legacy:ADR-040"
+    },
+    {
+      "number": 41,
+      "slug": "authenticated-remote-transport-contract",
+      "placeholder_id": "legacy:ADR-041"
+    },
+    {
+      "number": 42,
+      "slug": "runtime-observation-and-finding-triage-close-the-visual-intelligence-loops",
+      "placeholder_id": "legacy:ADR-042"
+    },
+    {
+      "number": 43,
+      "slug": "governed-crash-continuation-requires-effect-reconciliation",
+      "placeholder_id": "legacy:ADR-043"
+    },
+    {
+      "number": 44,
+      "slug": "graded-brokered-os-confinement",
+      "placeholder_id": "legacy:ADR-044"
+    },
+    {
+      "number": 46,
+      "slug": "task-campaigns-stop-on-a-verified-adoptable-result",
+      "placeholder_id": "legacy:ADR-046"
+    },
+    {
+      "number": 47,
+      "slug": "long-horizon-scheduling-is-a-durable-trigger-over-supervised-campaigns",
+      "placeholder_id": "legacy:ADR-047"
+    },
+    {
+      "number": 48,
+      "slug": "opt-in-ephemeral-grant-remote-worker-host",
+      "placeholder_id": "legacy:ADR-048"
+    },
+    {
+      "number": 49,
+      "slug": "governed-hook-and-lifecycle-bus-is-a-reduction-only-overlay",
+      "placeholder_id": "legacy:ADR-049"
+    },
+    {
+      "number": 50,
+      "slug": "difficulty-routing-refines-how-uct-selected-nodes-execute",
+      "placeholder_id": "legacy:ADR-050"
+    },
+    {
+      "number": 51,
+      "slug": "cost-attribution-is-evidence-before-pruning",
+      "placeholder_id": "legacy:ADR-051"
+    },
+    {
+      "number": 52,
+      "slug": "user-commands-and-plugins-are-trust-tiered-reduction-only-authorities",
+      "placeholder_id": "legacy:ADR-052"
+    },
+    {
+      "number": 53,
+      "slug": "integration-conductor-is-a-supervised-verified-landing-process",
+      "placeholder_id": "legacy:ADR-053"
+    },
+    {
+      "number": 54,
+      "slug": "decision-identity-precedes-landing-time-number-allocation",
+      "placeholder_id": "legacy:ADR-054"
+    },
+    {
+      "number": 55,
+      "slug": "evidence-store-freshness-is-content-hash-provenanced",
+      "placeholder_id": "sha256:9bb9eef84f277e3f69439622b4e81bea01b4bea6a2bb0bab88e8e400d43d2385"
+    },
+    {
+      "number": 56,
+      "slug": "governance-counts-are-rendered-from-a-single-derivation",
+      "placeholder_id": "sha256:be2f76a563013c84cdfe6c7039ec1cd2a805c1fd4e8213fc8c6c8be89aeeee8b"
+    },
+    {
+      "number": 57,
+      "slug": "the-integration-base-and-branch-dependencies-are-checked-declarations",
+      "placeholder_id": "sha256:4c4383ecdc47d0b3756ebee193186ccef1fcea9dcc8e281a2d40b9ba82be8381"
+    },
+    {
+      "number": 58,
+      "slug": "merge-critical-safety-properties",
+      "placeholder_id": "sha256:6ea434d82e90a19767d1a1aaf83649ea8357cf3e75e26d5c91491147f180c1e6"
+    },
+    {
+      "number": 59,
+      "slug": "acceptance-is-separate-authority",
+      "placeholder_id": "sha256:b5e61cb426f4480042467e79ce8a34d65e81d5ac84bcae5285653ef48a9ca446"
+    },
+    {
+      "number": 60,
+      "slug": "mcp-version-negotiation",
+      "placeholder_id": "sha256:40dd92f66ed5a545c2ed652e6dd3fd5fe0bb3c7eaa974ba68441dd29623bf0c3"
+    },
+    {
+      "number": 61,
+      "slug": "harness-integrations-are-capability-bound-plugins",
+      "placeholder_id": "sha256:805f21a81406e57dae2c9de110746d9f2c2f8b41a2f2df7b9ad42c10a7eb5e81"
+    },
+    {
+      "number": 62,
+      "slug": "arbiter-intake-governance-tiers",
+      "placeholder_id": "sha256:1400bee1099577ffc7aad2d1b2e0f0a0383cb18a0b9746e3ab255b4803834e01"
+    },
+    {
+      "number": 63,
+      "slug": "external-ledger-attestation-and-waiver-outcome-ledger",
+      "placeholder_id": "sha256:9f229aaf03adf5e6b4fa00bef06cf031d1a3625df2ad04f4a293e0d2baafaaaf"
+    },
+    {
+      "number": 64,
+      "slug": "adaptive-turn-budgets-confidence-and-verification-strength",
+      "placeholder_id": "sha256:32ce6a29b72abc5924c5272f2cc63b7dd00c1db03185f4a1d5e893d17297248e"
+    },
+    {
+      "number": 65,
+      "slug": "graduated-scope-enforcement-and-structural-authority-provenance",
+      "placeholder_id": "sha256:ef9415295fd7173d5370bad13e0722f64d5b1aa34c47301bf653c32a3b8c16e1"
+    },
+    {
+      "number": 66,
+      "slug": "lineage-aware-scope-and-generated-oracle-evidence",
+      "placeholder_id": "sha256:9b8aadce01eac9b22c73366b76a35f12789111d310e99969394cbb7ef8036e38"
+    },
+    {
+      "number": 67,
+      "slug": "staggered-verifier-gated-specialist-racing",
+      "placeholder_id": "sha256:92388a19f045a366b7c7783d0c24d0a91f94746b915f6e467af0687f68638b59"
+    },
+    {
+      "number": 68,
+      "slug": "durable-advisory-evidence-and-offline-ledger-audit",
+      "placeholder_id": "sha256:95337cdbe77753b76d32ce263c7f624e9816508aec713a0088043f5a382d8c92"
+    },
+    {
+      "number": 69,
+      "slug": "adaptive-fork-thresholds-and-mutation-probe-evidence-class",
+      "placeholder_id": "sha256:c8cd42d0a60460d386ae2c18f86206415d22287a65582938e05263803ba20369"
+    },
+    {
+      "number": 70,
+      "slug": "signed-scope-decision-inheritance",
+      "placeholder_id": "sha256:cf6cbb528bd3693fcefd7ed9b32967abde49e992a9b95c9908bfac64d9db0b34"
+    },
+    {
+      "number": 71,
+      "slug": "race-none-tie-arbitration-and-mutation-probe-hardening",
+      "placeholder_id": "sha256:949f4cb90a15367ccc86e87714d3fa50ed8271a30dadece5a55e4690a65374f5"
+    },
+    {
+      "number": 72,
+      "slug": "authoring-allocation-separation-and-the-decisions-interlock",
+      "placeholder_id": "sha256:726db9407de1e2095a03ddaf5e42209a79c5850bead2dcf47099eb1782b6bd45"
+    },
+    {
+      "number": 73,
+      "slug": "project-profile-and-conformance-spec",
+      "placeholder_id": "sha256:2e36a9ca389f94c7359475342b34897d0558447ed9f65da5f80b626664f7a666"
+    },
+    {
+      "number": 74,
+      "slug": "enumerating-gate-battery",
+      "placeholder_id": "sha256:bb8af3d7dde985db6aee72e2f3fe8ce23c4db701e816f1ddbef850a914a8c819"
+    },
+    {
+      "number": 75,
+      "slug": "decision-traceable-work",
+      "placeholder_id": "sha256:5ef5c74c0afe615ce6f6c23ef22752070c955084d3f705a70dc16a6f4bfe1ed1"
+    },
+    {
+      "number": 76,
+      "slug": "project-registry-entries-are-claims-with-required-discharge",
+      "placeholder_id": "sha256:558674488b7d3c6daa6f57667c7f38fa5b94374cbee9a60719fd65a5c4d0a923"
+    },
+    {
+      "number": 77,
+      "slug": "opt-in-renderer-reachability-supersedes-adr-036-o3",
+      "placeholder_id": "sha256:d687fdc6995dee5922d886ffb3f325c1fb1100b46e1a98b66fd24faf7d43e6f2"
+    },
+    {
+      "number": 78,
+      "slug": "tests-over-repository-state-run-against-a-frozen-snapshot",
+      "placeholder_id": "sha256:b5425e4e1dc546ca4f7939c05a2fce5fc8bd1ebfd4d90bd97445f12f3cf72b99"
+    },
+    {
+      "number": 79,
+      "slug": "a-precondition-must-be-satisfiable-by-the-action-it-gates",
+      "placeholder_id": "sha256:1d5c8f81a77cfaac18ae63cf8641d0f6684c231fa8be90bc079d5cfa628608fe"
+    },
+    {
+      "number": 80,
+      "slug": "citation-roots-are-declared-separately-from-source-roots",
+      "placeholder_id": "sha256:98684dd648a61d20b2c72588f116a30319e9574a839e4a4d96453614aefd837e"
+    },
+    {
+      "number": 81,
+      "slug": "a-decision-that-is-owed-is-asked-on-a-schedule",
+      "placeholder_id": "sha256:7eacab12b578cec9f8e3fbf0db88725cdff1c86c2522d25551d04d95e5c7778a"
+    },
+    {
+      "number": 82,
+      "slug": "an-operator-call-blocks-the-stop-it-accrued-behind",
+      "placeholder_id": "sha256:2b3becf3260fc2d5504157c54a4930600d5d099124e4cd0d1dfaa4939bd290b3"
+    },
+    {
+      "number": 83,
+      "slug": "bidirectional-agent-communication-is-one-mechanism-scoped-per-edge",
+      "placeholder_id": "sha256:e8057eed4f98b1064ca7b9bf9b8dfe3bbe9529acabce42402d092b62d95debbe"
+    },
+    {
+      "number": 84,
+      "slug": "a-junior-tier-transport-needs-a-surface-it-can-reach",
+      "placeholder_id": "sha256:027e85fd6270942435c6a6db1395013636a57b4c76c712ee77b70d9fe6fb5330"
+    },
+    {
+      "number": 85,
+      "slug": "proposed-adrs-flagged-and-decisions-must-follow-through",
+      "placeholder_id": "sha256:9c7009a42163e9e0884a121ed4d9d70976ec78de293828d3484dbacc801da0ff"
+    },
+    {
+      "number": 87,
+      "slug": "ecosystem-parity-one-native-mechanism-per-connector-feature",
+      "placeholder_id": "sha256:c5e9594b882e34272136236c3cc3b3b52a4bbf069777104c58d4a7d4875fa00b"
+    },
+    {
+      "number": 88,
+      "slug": "native-structured-scope-pre-authorization-and-auto-approve",
+      "placeholder_id": "sha256:36bb930895c6ca0d4714a0d1cf759806eb03b1d2fdc1927592605fe5f2d8c824"
+    },
+    {
+      "number": 89,
+      "slug": "adr-authoring-is-scaffolded-structure-and-resolved-proof",
+      "placeholder_id": "sha256:2e795aa375671d1cf1d2648bf05a4d9daa2cb02fcecc1b63880c6b59c6cf65e4"
+    },
+    {
+      "number": 90,
+      "slug": "vi-static-facts-lsp-sourced",
+      "placeholder_id": "sha256:5929df0c8ac257fa148618de9d2c5d99999f0bb5cb93a7e405e24bfe7065aa73"
+    },
+    {
+      "number": 91,
+      "slug": "streaming-progress-for-finalization-gates",
+      "placeholder_id": "sha256:317e77ef4a944251f193de12169e6a09fe96a16dd12f7e0cf893c8a7c8b3ae67"
+    },
+    {
+      "number": 92,
+      "slug": "durable-evidence-transaction-lifecycle-observability",
+      "placeholder_id": "sha256:2f61699f081923a9a26598c78b7db9c86a8883da5f44cc826d77c63b4e7f6ef6"
+    },
+    {
+      "number": 93,
+      "slug": "canonical-durable-campaign-run-execution-status",
+      "placeholder_id": "sha256:d749edca374524f8e57cf780ff9bad1ca3ea04ddcb6ac5b5b5766a1d6247f969"
+    },
+    {
+      "number": 94,
+      "slug": "projection-lifecycle-freshness-and-temporal-parity",
+      "placeholder_id": "sha256:cb5417a0854e557a364af53e164dbcf9dfc2e6a695dd1e73909f54560527e2ca"
+    },
+    {
+      "number": 95,
+      "slug": "live-model-evaluation-evidences-the-search-claim",
+      "placeholder_id": "sha256:c186489fe462701a94b860dbb70f80209365443cc38920ad698cae7c5f2f6584"
+    },
+    {
+      "number": 96,
+      "slug": "campaign-semantic-identity",
+      "placeholder_id": "sha256:d28f173b90ffaa0ede0a554625ced12a1e947f893bf402d0ee3efc39d54bf663"
+    },
+    {
+      "number": 97,
+      "slug": "durable-authority-transitions",
+      "placeholder_id": "sha256:9b8b5de1930ab9eecb19afa1932a1a5c990530a2b51e75c6e0fd1bbd63d7358f"
+    },
+    {
+      "number": 98,
+      "slug": "mcp-client-implements-the-whole-protocol",
+      "placeholder_id": "sha256:d57c5c453fcfc009b0a1c096e3a7317297c9afa7077deee28ce493b5ed28e409"
+    },
+    {
+      "number": 99,
+      "slug": "native-first-execution-default",
+      "placeholder_id": "sha256:1887a621d473d8f62a333e369a401f2c7362b2401a27f03a3f289e449afa1dff"
+    },
+    {
+      "number": 100,
+      "slug": "provider-breadth-covers-managed-endpoints",
+      "placeholder_id": "sha256:e319c3d60fda10aed94e4f96a5de967f3e51caa36ee83f3c02416d3c7464e9cf"
+    },
+    {
+      "number": 101,
+      "slug": "recovery-is-proven-against-real-process-death",
+      "placeholder_id": "sha256:f9a2f38ddf95515bdcfb5a4509e5e1ed58cdf12328ad4046618701bc5dadf434"
+    },
+    {
+      "number": 102,
+      "slug": "sandbox-confinement-is-cross-platform",
+      "placeholder_id": "sha256:7b6b190f58704cd7627d7c0f691a18b06d9f342cb8212da246f533ef2118b099"
+    },
+    {
+      "number": 103,
+      "slug": "session-environment-is-injected-not-inferred",
+      "placeholder_id": "sha256:71c73d0b714e95e06d46915e105a9138291e36b55874bfd09fd68c7cd087f690"
+    },
+    {
+      "number": 104,
+      "slug": "terminal-render-is-incremental",
+      "placeholder_id": "sha256:fd026b4d3391f2fcef54fd7c64b420e3bfc43c2620b0a631bee75e88077a7a7e"
+    },
+    {
+      "number": 105,
+      "slug": "tool-surface-meets-caller-expectation",
+      "placeholder_id": "sha256:c22106a215540bd230f6a34a987d6d64378f247177ee75b3fd284a9c6ebc40da"
+    },
+    {
+      "number": 106,
+      "slug": "tree-search-backpropagates-value",
+      "placeholder_id": "sha256:e564a13dce685f796453ccb28dcd34c9a32cdbbfcecd41a451c4688ce3274513"
+    },
+    {
+      "number": 107,
+      "slug": "interactive-coding-session-is-first-class",
+      "placeholder_id": "sha256:08d0b4c8f77c774b58ed8c4d542187df8be7ac4ac861413844f0134827367338"
+    },
+    {
+      "number": 108,
+      "slug": "governance-declares-self-or-user-scope",
+      "placeholder_id": "sha256:1d90976df5803dd1c61fb32ce110f7cd6f9f12199d255e51ca7467412e8726f5"
+    },
+    {
+      "number": 109,
+      "slug": "agent-loop-parallel-dispatch-and-preserved-reasoning",
+      "placeholder_id": "sha256:34adc65f533474a3fac2678dc6cf160cf84e67853290fe89afdc444417df98a2"
+    },
+    {
+      "number": 110,
+      "slug": "configuration-precedence-is-multi-scope",
+      "placeholder_id": "sha256:1b06a0736a910213e559194f7438732e83ef64597aeb7307f85e8fc5d9707c35"
+    },
+    {
+      "number": 111,
+      "slug": "extensibility-surfaces-are-operator-authored",
+      "placeholder_id": "sha256:f1caff337e3f3c90f0e315bdddf65c41a3720c12325b2b74319755ba6a789bd6"
+    },
+    {
+      "number": 112,
+      "slug": "knowledge-retrieval-is-semantic",
+      "placeholder_id": "sha256:7890ae8cbee7fafc3c37f6e3bbfa1c0b4ff8ab43b0a115fd53cd7e3a0217d5f5"
+    },
+    {
+      "number": 113,
+      "slug": "gate-failures-carry-a-remedy",
+      "placeholder_id": "sha256:7c7b7e1832594bb9d70616e4fbec13be9f41b5e831e3d8869c28ccbdf41d6dd8"
+    },
+    {
+      "number": 114,
+      "slug": "greenfield-onboarding-is-one-guided-flow",
+      "placeholder_id": "sha256:9450eb61aade9a2df7c9ad9007636c01ac5e4fdebed98d3b3c83631ff52fbfb2"
+    },
+    {
+      "number": 115,
+      "slug": "one-recovery-lane-for-scope-violations",
+      "placeholder_id": "sha256:d8f459d3cd975765a57c907159b787f9b9cc436f708a384d546924e443b89024"
+    },
+    {
+      "number": 116,
+      "slug": "operator-flags-are-position-independent",
+      "placeholder_id": "sha256:8b0a766ea1a883c21bec4446a4c9a73961588d29a32196dcfec545cb6fc221e0"
+    },
+    {
+      "number": 117,
+      "slug": "refusals-reach-the-corrigible-actor",
+      "placeholder_id": "sha256:0c1646fb201a2508425780a685e86057b2e53b789b87f611aa1b56d0e9bde455"
+    },
+    {
+      "number": 118,
+      "slug": "refusal-states-authority-held",
+      "placeholder_id": "sha256:b2b1a1fcdc3a45ac7d4524c18408751bf2deb3ce55b93f7634f0fa99c5d79f6d"
+    },
+    {
+      "number": 119,
+      "slug": "scope-binds-at-first-use",
+      "placeholder_id": "sha256:afa7ad5379145e6222f9dadf3f73f1cd6fb12724f78bf0d3c771b4a6afa9bd12"
+    },
+    {
+      "number": 120,
+      "slug": "typed-failure-codes-survive-routing",
+      "placeholder_id": "sha256:22e706ef3ab4699fa6431eeb193ac9bd836cb2c271a536c00818039962010188"
+    },
+    {
+      "number": 121,
+      "slug": "console-transcript-narrates-not-echoes",
+      "placeholder_id": "sha256:fa1af6d96ed1281ee7bb51f08eda7632948bd54f4f8d5f33a850b96f7c906e77"
+    },
+    {
+      "number": 122,
+      "slug": "console-layout-fills-available-space",
+      "placeholder_id": "sha256:5f4b242deb4e86d57a83d89e02bc6edc046f62dc021e0d244e030084b5bd757a"
+    },
+    {
+      "number": 123,
+      "slug": "status-bar-sources-the-active-screen",
+      "placeholder_id": "sha256:dc28b18aea36585bc424bee1549329779540669b511be69ef68622f0ca570811"
+    },
+    {
+      "number": 124,
+      "slug": "console-input-strip-is-not-a-command-line",
+      "placeholder_id": "sha256:8fb2dcf9167715321181c8bbfd565b32af7972e9e89953c0b8cb97b701905618"
+    },
+    {
+      "number": 125,
+      "slug": "tui-multi-region-composition-not-pane-expansion",
+      "placeholder_id": "sha256:6537dd6b04e2d76f88f5ac8886a16f48b73cda351980a159e7df4d5d620865ad"
+    },
+    {
+      "number": 126,
+      "slug": "console-tree-shows-a-search-not-a-dump",
+      "placeholder_id": "sha256:6865d96f932a474139e36a6e0eea583fafaac3141db3e3657865e2cdb30d3a6e"
+    },
+    {
+      "number": 127,
+      "slug": "governance-side-effects-are-system-enforced",
+      "placeholder_id": "sha256:40468437e32a1445a3f84387db5cfca6b58a7e9ed5f5005187600bb5545d1aff"
+    },
+    {
+      "number": 128,
+      "slug": "attestation-is-enforced-at-push",
+      "placeholder_id": "sha256:23434c4924dee701a976b29be30e3bbbb45ea7d05590cf22fda14503caf1e0ca"
+    },
+    {
+      "number": 129,
+      "slug": "age-based-blocking-is-superseded-by-decision-followthrough",
+      "placeholder_id": "sha256:6622c6db53a7f5124721da4e389549b43639faa4ebf293ee010634f44c4763c1"
+    },
+    {
+      "number": 130,
+      "slug": "adr-prose-citations-are-machine-checkable",
+      "placeholder_id": "sha256:dc2f8ce4df0208c24689ed82f1462d6fcae4c8aff78e8f2b6578ab66f63e51a3"
+    },
+    {
+      "number": 131,
+      "slug": "search-efficacy-is-unmeasured-measure-before-tuning",
+      "placeholder_id": "sha256:37b960e3bcf2f71a12d1476328c2acf5890bd302168bb913d4002f24073333e2"
+    },
+    {
+      "number": 132,
+      "slug": "exploration-axis-is-the-wrong-question",
+      "placeholder_id": "sha256:167ee2997555adf1a97832e2711fb4ce93019617e53f87264de62475c17dc1ac"
+    },
+    {
+      "number": 133,
+      "slug": "oracle-richness-is-the-tunable-knob",
+      "placeholder_id": "sha256:88586ae509c3b48452ef1ea94d9522f60f2ef440b2f51623f04d6f6268e4dc50"
+    },
+    {
+      "number": 134,
+      "slug": "verification-carries-its-scope",
+      "placeholder_id": "sha256:d1282eecd13d46f83d0a68be76e3445a727a7306a8395c84597e8ec07ba6e14e"
+    },
+    {
+      "number": 135,
+      "slug": "claimed-nodes-do-not-steer-selection",
+      "placeholder_id": "sha256:72046c5dd43fbc823da8f81b39d033147120bb67c46cc8c1a6f9351620a3c4bc"
+    },
+    {
+      "number": 136,
+      "slug": "persona-authority-mapping-fails-closed",
+      "placeholder_id": "sha256:455036491792ac671fd45f26d81ccb3961b34b9828da0c2667318f794d5f5efa"
+    },
+    {
+      "number": 137,
+      "slug": "an-answer-queues-its-own-discharge",
+      "placeholder_id": "sha256:38b29f834682663c7aaa4f2f7f7962fa0384a3fc6d78f1e958b068a38251ef1a"
+    },
+    {
+      "number": 138,
+      "slug": "kb-retrieval-is-lexical-not-semantic",
+      "placeholder_id": "sha256:62803215ac5c6ccc338ded2c88dd98da47305ff5dc568f5ce3689a57de7348b6"
+    },
+    {
+      "number": 140,
+      "slug": "proposed-records-without-a-number-are-invisible-to-the-queue",
+      "placeholder_id": "sha256:7df523c9fbe42bf28ad0d59c3112bb41b3b6b38040943e6af2e6ed3d24452d40"
+    },
+    {
+      "number": 141,
+      "slug": "orchestration-belongs-to-the-harness-not-a-connector",
+      "placeholder_id": "sha256:8e08255c7a219649f76ee025f55978c23ffd64048521f37767b2b4e50a0d1ba6"
+    },
+    {
+      "number": 142,
+      "slug": "native-harness-executes-campaigns-connectors-are-switchable",
+      "placeholder_id": "sha256:88e9f40722fdd9ef99867e5c83f6bde98ceb32df69e74ccbd716539ce336e88a"
+    },
+    {
+      "number": 143,
+      "slug": "language-agnostic-gating-with-detected-language-packs",
+      "placeholder_id": "sha256:20bb43d916e16c912a296e3cef74dd93a1cc28ebb7ae85aea1d5b908b60af880"
+    },
+    {
+      "number": 145,
+      "slug": "semantic-authority-applicability-and-retained-history",
+      "placeholder_id": "sha256:7a1c5d90c283564306f993d8ce529cb33eb5fd3945c6a31754dfa9e85d64d06b"
+    },
+    {
+      "number": 146,
+      "slug": "unlanded-governance-is-a-push-blocker",
+      "placeholder_id": "sha256:f9adfb1e12454ad8353373a266622129cc03dfa3af855559e757212395ecb803"
+    },
+    {
+      "number": 147,
+      "slug": "gate-enforcement-is-truthful-costed-and-resource-scheduled",
+      "placeholder_id": "sha256:44d6ff052f62970df239e36997fb2d6ae9e172575ef650e20541c82709d4d826"
+    },
+    {
+      "number": 149,
+      "slug": "frontier-conversation-shell",
+      "placeholder_id": "sha256:394a237ba37ba78fca79a0b8a5ae49ce6a489b05c1fb0e1bef080db12a65a851"
+    },
+    {
+      "number": 150,
+      "slug": "skill-descriptors-admit-multi-file-bundles",
+      "placeholder_id": "sha256:5125e6609ef962571ead2e889344112ef80feb77c2b1987336585b281b5c0d13"
+    },
+    {
+      "number": 151,
+      "slug": "repo-flight-control-is-one-fenced-authority",
+      "placeholder_id": "sha256:079c78134a3b3ebd8a7948302a3cd8984d6ed05156a092c45af7cb039283b014"
+    },
+    {
+      "number": 152,
+      "slug": "flight-admission-and-validation-are-attested-and-revision-bound",
+      "placeholder_id": "sha256:e7d7df468d5d91c784a45368d490648abc2c98b1dd652c371730018ffe0b39c3"
+    },
+    {
+      "number": 153,
+      "slug": "branch-accounting-and-shared-reservations-are-the-built-unlanded-governance-controls",
+      "placeholder_id": "sha256:441cfd2dff8ff2a7a4590ee2debff35e31401fb6a35594fbb130fcb35319a4de"
+    },
+    {
+      "number": 154,
+      "slug": "stop-guard-unnameable-failure",
+      "placeholder_id": "sha256:12aa42e5be21f76f67f19e097bd0d62dfecefbcb121adf52b24892359d51ebb0"
+    },
+    {
+      "number": 155,
+      "slug": "adr-citation-must-resolve",
+      "placeholder_id": "sha256:3a51c3159ada9c2281c1d6bffab8437062b346846c5a65e52e79817aedcd620b"
+    },
+    {
+      "number": 156,
+      "slug": "stop-tier-budget-is-measured",
+      "placeholder_id": "sha256:773e2fd1dbd6a13c950962d0a4a11056ca413cfb31b203ff23eec54de4b4e29c"
+    },
+    {
+      "number": 157,
+      "slug": "eval-instrument-measures-governance",
+      "placeholder_id": "sha256:a5ae28872b0f06d993e94064b7befbff46ec755946279f3c484d083744213bd4"
+    },
+    {
+      "number": 158,
+      "slug": "interview-records-are-attested",
+      "placeholder_id": "sha256:5b665a2eda136209542e02b5c9aa8efc2341200551ea8d22e4152f021a2db90b"
+    },
+    {
+      "number": 159,
+      "slug": "native-multichoice-interview",
+      "placeholder_id": "sha256:93160cb71cf72558b92083a03382e9805c0fb05d3664fa7abb9c25f5c3e9fb40"
+    },
+    {
+      "number": 160,
+      "slug": "session-close",
+      "placeholder_id": "sha256:fb7040e4e9b3833323e3e722fc6e9b7f11337d682eabc887db7556cd7344f630"
+    },
+    {
+      "number": 161,
+      "slug": "tui-read-model-folds-runtime-event-stream",
+      "placeholder_id": "sha256:beff266f802a9b394cf85114b93d420f6ff1f6fc1e42f8c21595fec18e0008a7"
+    },
+    {
+      "number": 162,
+      "slug": "tui-shell-layout-and-focus-contract",
+      "placeholder_id": "sha256:91484a60bdfdecb818db796b945f58c12986e1f959aabe4c1a324893c6104701"
+    },
+    {
+      "number": 164,
+      "slug": "canopy-debug-capture-is-an-opt-in-redacted-local-sink",
+      "placeholder_id": "sha256:cf3eb3ca4179f436b88c18b1cb1b5db5809eb51df9acbeb9c09fdf54be01ac24"
+    },
+    {
+      "number": 165,
+      "slug": "controlled-recovery-experiment-preserves-fresh-authority",
+      "placeholder_id": "sha256:3eac8621ed045562acf5bf2487e66892ca94b96ace6321f66f446ad2408a304e"
+    },
+    {
+      "number": 166,
+      "slug": "target-bound-reuse-notes-remain-nonauthoritative",
+      "placeholder_id": "sha256:107fb39e8a4d362c5c88a3cfca033de8209dee7f44ca13de11a37c01611d1bc4"
+    },
+    {
+      "number": 167,
+      "slug": "verifier-drift-uses-versioned-adversarial-holdouts",
+      "placeholder_id": "sha256:283630066a61935786a227b09dfc8fdbafcd4373e37781f5862d50c9322190e2"
+    },
+    {
+      "number": 169,
+      "slug": "visual-intelligence-graph-is-not-committed",
+      "placeholder_id": "sha256:c41e2c51cf05544596fe70f4b144ddb08187e9581f1d03ebb03a6c7be60414ea"
+    },
+    {
+      "number": 170,
+      "slug": "native-gate-migration-plan",
+      "placeholder_id": "sha256:a02a2fad653927e2be63ad38551d2c0f78fbd6537302a817626e068a248e3f1f"
+    },
+    {
+      "number": 173,
+      "slug": "undeclared-third-party-egress-requires-named-operator-consent",
+      "placeholder_id": "sha256:b7fc510bf1459883fee79fd3c8619492148afd6265924de851c192c1d3903a40"
+    },
+    {
+      "number": 174,
+      "slug": "repo-instructions-reach-the-native-agent-path",
+      "placeholder_id": "sha256:4e95236fcae9eaa3d5d2a2927b59280ccf8c774cc8b39678998ed1f94769fec6"
+    },
+    {
+      "number": 175,
+      "slug": "critic-approved-requires-an-actual-critic",
+      "placeholder_id": "sha256:1daa501b5893df90ab3311def2cf0d577ff09d155efacb6495208d8d797c5ca9"
+    },
+    {
+      "number": 176,
+      "slug": "visual-intelligence-skill-is-first-party-source",
+      "placeholder_id": "sha256:cd4cfb62588e75af44780a8d48778dc0c3c6305f23b72aed71aa778ba46f492e"
+    },
+    {
+      "number": 177,
+      "slug": "governance-acts-only-inside-canopy-runs",
+      "placeholder_id": "sha256:089d7ed454a7bc2af36c9bf6aa3f52ba6d62584f068f833423402ca47f0a1892"
+    },
+    {
+      "number": 178,
+      "slug": "native-interview-egress",
+      "placeholder_id": "sha256:69f2d85d595848563472b3e64d993b15dcda9fbd2a081aa963ad4a6e3ba952bb"
+    },
+    {
+      "number": 179,
+      "slug": "non-gate-refusals-project-the-typed-remedy",
+      "placeholder_id": "sha256:fb05b353d3a2d2855d7a14c1c64f1aed8b57a7cdcab3fc896dfcb12b9f123002"
+    },
+    {
+      "number": 180,
+      "slug": "gate-canaries-and-tri-state-results",
+      "placeholder_id": "sha256:5f2dd3046bdcb5c5feb94008e4950224122c81f9b522e58a6568aa6826d16527"
+    },
+    {
+      "number": 181,
+      "slug": "native-inject-lane-and-devolved-host-hooks",
+      "placeholder_id": "sha256:4953c366c79b2b506082df600ac7dda5b26a53e002547ce3953665880a35ee51"
+    },
+    {
+      "number": 182,
+      "slug": "stop-battery-scheduled-by-declared-inputs",
+      "placeholder_id": "sha256:0f105adb848fe774b71794ceb1812e52ad605f49aa3ba4e3b24c55e088c74c74"
+    },
+    {
+      "number": 183,
+      "slug": "store-freshness-hashes-graph-inputs",
+      "placeholder_id": "sha256:57e527249f8a4db9d4d402c3247617a595c221b7ab288e1bb544ed0b681e1d99"
+    },
+    {
+      "number": 184,
+      "slug": "native-critic-reviews-the-work",
+      "placeholder_id": "sha256:357c9783aa15eaa6ed5a1addba8cdc55bd965553d379326f8c63e7c7aa329124"
+    },
+    {
+      "number": 185,
+      "slug": "provenance-typed-reward-contract",
+      "placeholder_id": "sha256:675a31a6c12c408d1f98fc456cbb8a32cce4e8a5e5ef5093a568fa1ce80d7653"
+    },
+    {
+      "number": 186,
+      "slug": "search-policy-core-and-search-runtime",
+      "placeholder_id": "sha256:0972f10897e3b40f2c0cc5ecd2d326d990a4a14991f36c3ad7b9c0f6186252dd"
+    },
+    {
+      "number": 187,
+      "slug": "interview-witness-and-cross-clone-attestation",
+      "placeholder_id": "sha256:5869355394d02a39380120deb1f6713f8666bacf4a9858d7aab0b837fd9b7b94"
+    },
+    {
+      "number": 188,
+      "slug": "vi-plane-transaction-and-store-graph-binding",
+      "placeholder_id": "sha256:e72293b23cb2d371cf38e4e88cbdba9098afd7c7eff839cb88de1666ad006ab0"
+    },
+    {
+      "number": 189,
+      "slug": "fork-reopens-exhausted-halt",
+      "placeholder_id": "sha256:b5893e326d1d8e0ee907b7aa91a144b198fdb1956fae828050bb4daf9667745d"
+    },
+    {
+      "number": 190,
+      "slug": "session-journal-persists-a-typed-redacted-provider-failure-reason",
+      "placeholder_id": "sha256:444760cd391264b8eddca2a66fa4668684ac7988c4f658de3e0ebcad4166a083"
+    },
+    {
+      "number": 191,
+      "slug": "verifier-network-default-deny",
+      "placeholder_id": "sha256:da2d432e8c938d8f9b1a24c2f4f8c5802c5622cad4a13d329c6acc9ab7f68d48"
+    },
+    {
+      "number": 192,
+      "slug": "canopy-is-the-only-harness-before-1-0",
+      "placeholder_id": "sha256:26f618d2ebc4938af08d01d07765fad8449c8e9f205b448eb7e79fd110f03675"
+    },
+    {
+      "number": 193,
+      "slug": "communication-channels-and-ledger-backed-inbox",
+      "placeholder_id": "sha256:72e3ad8052d0656415a2f28c5c74a52f2c834cdc2febe9a5db12e8f7e534c23a"
+    },
+    {
+      "number": 194,
+      "slug": "governed-command-and-control",
+      "placeholder_id": "sha256:1007cbc9b84a590b13ecb6154916ba9e7a035f92ca6c9c95a462f2ede01fbe89"
+    },
+    {
+      "number": 195,
+      "slug": "ratify-the-sibling-peer-channel",
+      "placeholder_id": "sha256:4cb0234da1e8f2ccfce94f8269abf997d81bef7a0ead192f03d727b5aed48a67"
+    }
+  ]
+}

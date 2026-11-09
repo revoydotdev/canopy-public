@@ -1,0 +1,52 @@
+{
+  "id": "mouse",
+  "title": "X13 mouse: click a row, wheel scroll (SGR mouse reports)",
+  "covers": [
+    "X13",
+    "S26"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "=",
+      "label": "Capabilities",
+      "hold_s": 1.0
+    },
+    {
+      "raw": "\\u001b[<0;10;6M\\u001b[<0;10;6m",
+      "label": "click row at 10,6",
+      "hold_s": 1
+    },
+    {
+      "raw": "\\u001b[<65;10;6M",
+      "label": "wheel down",
+      "hold_s": 0.6
+    },
+    {
+      "raw": "\\u001b[<65;10;6M",
+      "label": "wheel down",
+      "hold_s": 0.6
+    },
+    {
+      "raw": "\\u001b[<64;10;6M",
+      "label": "wheel up",
+      "hold_s": 0.8
+    },
+    {
+      "raw": "\\u001b[<0;70;2M\\u001b[<0;70;2m",
+      "label": "click rail",
+      "hold_s": 1
+    }
+  ]
+}

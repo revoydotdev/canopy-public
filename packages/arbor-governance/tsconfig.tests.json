@@ -1,0 +1,15 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": false,
+    "noEmit": true
+  },
+  "include": [
+    "src/**/*.ts",
+    "tests/**/*.ts"
+  ],
+  "$comment": "rootDir is intentionally omitted here (every sibling package sets it). This is the only package whose TESTS import another workspace package resolved to source \u2014 @arbor/kb, used by the chain-comparison probes per ADR-027 amendment \u2014 which trips TS6059 under a package-scoped rootDir. Omitting it, together with the project references added to this package tsconfig.json, makes gate:typecheck-tests pass across all 11 packages (verified empirically; the two changes landed together and their contributions were not isolated). Revisit if a future TS version reintroduces the error."
+}

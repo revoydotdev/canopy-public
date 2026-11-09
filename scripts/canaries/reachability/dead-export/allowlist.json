@@ -1,0 +1,4 @@
+{
+  "_comment": "Canary fixture: an empty reachability allowlist, so the only finding is the gate's own.",
+  "entries": []
+}

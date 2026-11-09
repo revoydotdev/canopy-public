@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "references": [
+    { "path": "../arbor-core" },
+    { "path": "../arbor-campaign-support" },
+    { "path": "../arbor-config" },
+    { "path": "../arbor-audit" },
+    { "path": "../arbor-prompts" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["tests/**", "dist/**"]
+}

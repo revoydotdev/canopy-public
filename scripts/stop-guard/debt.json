@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "kind": "revoy2.stop_baseline_debt",
+  "_doc": "Arboretum M2. A blocking stop-tier gate listed here was observed red at opened_at_revision on a clean tree and is owned by the named decision record; the native stop battery attributes its red to the baseline and does not refuse a turn on it. Written only by `bun scripts/stop-guard-debt.mjs open|close`. The battery never writes this file.",
+  "entries": []
+}

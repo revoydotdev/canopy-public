@@ -1,0 +1,2 @@
+.claim-ledger/*.jsonl merge=union-sorted-jsonl
+.visual-intelligence/observed/*.jsonl merge=union-sorted-jsonl

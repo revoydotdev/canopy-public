@@ -1,0 +1,4 @@
+{
+  "_purpose": "Canary fixture: no catalog kind is dispositioned as deliberately API-only, so every MCP-generic-only kind item 3 finds is an undeclared finding.",
+  "entries": []
+}

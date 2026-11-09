@@ -1,0 +1,31 @@
+{
+  // Long-lived behavior belongs here. Secrets belong in the ignored `.env`.
+  //
+  // "native" is deliberately NOT set by default. The machine's native lane --
+  // provider, auth route, model, budget -- lives in the user scope
+  // (`~/.arbor/arbor.jsonc`, ADR-110) and is inherited by every clone and
+  // worktree. A project only declares "native" when it deliberately pins a
+  // DIFFERENT provider than the machine uses; declaring it here shadows the
+  // user scope for this project.
+  //
+  // The previous default pinned openrouter + a specific model id, which meant
+  // `arbor project enroll` overwrote a working machine lane with one that has
+  // no credential on most machines -- and the resulting config hard-fails with
+  // provider_native_route_required rather than falling back. Uncomment and edit
+  // only if this project really must pin a provider:
+  //
+  // "native": {
+  //   // "native" fails closed; "auto" permits the selected harness integration.
+  //   "mode": "auto",
+  //   "adapter_id": "openai-compatible",
+  //   "provider_id": "openrouter",
+  //   "base_url": "https://openrouter.ai/api/v1",
+  //   // OpenRouter is an ordinary provider. The closed frontier route (tool model here +
+  //   // a Claude-bridge no-tool child, connector fallback forbidden) is an explicit opt-in:
+  //   // "closed_route": true,
+  //   "model": "deepseek/deepseek-v4-pro"
+  // },
+  "kb": {
+    "backend": "jsonl"
+  }
+}

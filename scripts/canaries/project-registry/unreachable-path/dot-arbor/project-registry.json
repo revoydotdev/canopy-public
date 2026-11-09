@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "project_id": "canary-unreachable",
+      "path": "/nonexistent/revoy2-canary/unreachable-project",
+      "profile_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "verified_at_revision": "0000000000000000000000000000000000000000",
+      "verified_at": "2026-01-01T00:00:00.000Z",
+      "expires": "2999-12-31"
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "id": "narrow-populated",
+  "title": "P4-6: populated campaign (plan, verified, critic-approved and failed nodes, approval, ask) at narrow geometries",
+  "covers": ["X16", "S21"],
+  "seed": "populated",
+  "steps": [
+    { "wait_for": "❯", "timeout_s": 60, "label": "launch: Console ready", "hold_s": 1.5 },
+    { "key": "Escape", "label": "blur composer", "hold_s": 0.5 },
+    { "key": "t", "label": "Tree", "hold_s": 1.5 },
+    { "key": "Down", "label": "select node 2", "hold_s": 0.6 },
+    { "key": "Down", "label": "select node 3", "hold_s": 0.6 },
+    { "key": "Down", "label": "select node 4", "hold_s": 0.6 },
+    { "key": "Down", "label": "select node 5", "hold_s": 0.6 },
+    { "key": "C-p", "label": "command palette", "hold_s": 1.0 },
+    { "key": "Escape", "label": "close palette (focus returns?)", "hold_s": 0.8 },
+    { "key": "Down", "label": "selection still moves after palette", "hold_s": 0.6 },
+    { "key": "?", "label": "help overlay", "hold_s": 1.0 },
+    { "key": "Escape", "label": "close help", "hold_s": 0.6 },
+    { "key": "`", "label": "back to Console", "hold_s": 1.0 }
+  ]
+}

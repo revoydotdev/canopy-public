@@ -1,0 +1,4 @@
+{
+  "records_historical_through": "2000-01-01",
+  "note": "Canary fixture baseline. Set to the epoch so that EVERY ledger record in this fixture is post-baseline and therefore required to carry a receipt. The real store at scripts/interview/baseline.json is not read by this canary and is not modified by it."
+}

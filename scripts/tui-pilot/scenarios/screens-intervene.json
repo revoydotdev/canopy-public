@@ -1,0 +1,76 @@
+{
+  "id": "screens-intervene",
+  "title": "L4 intervene: approvals, interviews, threads, communications, bus, agents",
+  "covers": [
+    "M01",
+    "M02",
+    "M04",
+    "M05",
+    "M06",
+    "S03",
+    "S05",
+    "S14",
+    "S18",
+    "S27",
+    "S28"
+  ],
+  "seed": "populated",
+  "steps": [
+    {
+      "wait_for": "❯",
+      "timeout_s": 60,
+      "label": "launch: Console ready",
+      "hold_s": 1
+    },
+    {
+      "key": "Escape",
+      "label": "blur composer",
+      "hold_s": 0.5
+    },
+    {
+      "key": "0",
+      "label": "Approvals",
+      "hold_s": 1.0
+    },
+    {
+      "key": "i",
+      "label": "Interviews",
+      "hold_s": 1.0
+    },
+    {
+      "key": "t",
+      "label": "Tree",
+      "hold_s": 1.0
+    },
+    {
+      "key": "Down",
+      "label": "Tree: select child",
+      "hold_s": 1.0
+    },
+    {
+      "key": ":",
+      "label": "Threads for selected child",
+      "hold_s": 1.0
+    },
+    {
+      "key": "5",
+      "label": "Communications",
+      "hold_s": 1.0
+    },
+    {
+      "key": "C-d",
+      "label": "Bus",
+      "hold_s": 1.0
+    },
+    {
+      "key": "8",
+      "label": "Agents",
+      "hold_s": 1.0
+    },
+    {
+      "key": "`",
+      "label": "back to Console",
+      "hold_s": 1.0
+    }
+  ]
+}

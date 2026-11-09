@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "references": [
+    { "path": "../arbor-core" },
+    { "path": "../arbor-audit" },
+    { "path": "../arbor-config" },
+    { "path": "../arbor-harness" },
+    { "path": "../arbor-mcp" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["tests/**", "dist/**"]
+}

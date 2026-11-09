@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:revoy:artifact-metadata:v1",
+  "title": "Revoy durable Markdown artifact metadata",
+  "description": "The ordered metadata block immediately following a Markdown document title. This is a line-oriented header, not YAML front matter.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "Artifact kind",
+    "Status",
+    "Revision",
+    "As-of commit",
+    "Authority",
+    "Evidence scope",
+    "Supersedes",
+    "Superseded by",
+    "Owner",
+    "Review trigger"
+  ],
+  "properties": {
+    "Artifact kind": {
+      "type": "string",
+      "enum": ["decision", "roadmap", "architecture", "policy", "runbook", "audit", "research", "evidence", "reference", "generated-index"]
+    },
+    "Status": {
+      "type": "string",
+      "enum": ["draft", "proposed", "accepted", "active", "verified", "historical", "superseded", "rejected"]
+    },
+    "Revision": { "type": "integer", "minimum": 1 },
+    "As-of commit": { "type": "string", "pattern": "^[0-9a-fA-F]{7,40}( \\(\\d{4}-\\d{2}-\\d{2}\\))?$" },
+    "Authority": { "type": "string", "minLength": 1 },
+    "Evidence scope": {
+      "type": "string",
+      "pattern": "^(observed|inferred|target|mixed)(\\s+[—:-]\\s+.+)$"
+    },
+    "Supersedes": { "type": "string", "minLength": 1 },
+    "Superseded by": { "type": "string", "minLength": 1 },
+    "Owner": { "type": "string", "minLength": 1 },
+    "Review trigger": { "type": "string", "minLength": 1 }
+  },
+  "x-header-format": {
+    "title-line": "# <title>",
+    "field-order": [
+      "Artifact kind", "Status", "Revision", "As-of commit", "Authority",
+      "Evidence scope", "Supersedes", "Superseded by", "Owner", "Review trigger"
+    ],
+    "none-token": "none",
+    "local-links": "Markdown link destinations and paths named in successor fields resolve from the document or repository root as appropriate."
+  }
+}

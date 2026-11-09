@@ -1,0 +1,5 @@
+{
+  "entryPoints": [
+    { "id": "demo-cli", "kind": "process-entry", "file": "packages/demo/src/index.ts" }
+  ]
+}

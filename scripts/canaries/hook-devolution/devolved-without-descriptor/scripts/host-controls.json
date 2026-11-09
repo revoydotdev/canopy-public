@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "adapters": [
+    {
+      "host": "claude-code",
+      "configPath": ".claude/settings.json",
+      "events": [
+        {
+          "event": "PreToolUse",
+          "groups": [
+            {
+              "hooks": [
+                {
+                  "id": "claude-code.pretooluse.git-write-guard",
+                  "command": "$CLAUDE_PROJECT_DIR/.hook-liveness/wrap.sh --mode conditional --log $CLAUDE_PROJECT_DIR/.hook-liveness/invocations.jsonl $CLAUDE_PROJECT_DIR/scripts/hooks/git-write-guard.sh"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

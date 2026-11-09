@@ -1,0 +1,11 @@
+{
+  "_comment": "Canary fixture: one leaf package permitted to import no sibling workspace package at all.",
+  "schema_version": 1,
+  "packages": {
+    "@canary/leaf": {
+      "path": "packages/leaf",
+      "source_imports": [],
+      "test_imports": []
+    }
+  }
+}

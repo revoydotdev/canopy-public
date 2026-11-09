@@ -1,0 +1,15 @@
+{
+  "_comment": [
+    "Canary fixture for `gate:organization-enrollment`.",
+    "A `required` inventory naming one governed repository. Its sibling manifests.json",
+    "declares no enrollment for it, which is the drift the gate must catch."
+  ],
+  "schema_version": 1,
+  "mode": "required",
+  "organization": "canary-org",
+  "canonical_repository": "canary-org/canary-repo",
+  "scope": { "kind": "allowlist" },
+  "repositories": [
+    { "repository": "canary-org/canary-repo" }
+  ]
+}

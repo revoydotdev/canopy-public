@@ -1,0 +1,1 @@
+{"id":"seam:canary00000001","roundtrip_path":"packages/arbor-mcp/tests/ledger-command-audit.test.ts","measured_at":"2026-08-29T05:24:28.807Z","git_revision":"canary","node_version":"v26.3.0","repeat_count":3,"pass_count":1,"fail_count":2,"flake_rate":0.67,"wall_clock_ms_median":36,"wall_clock_ms_spread_pct":11,"nondeterministic":true}

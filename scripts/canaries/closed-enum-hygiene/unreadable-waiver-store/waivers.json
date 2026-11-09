@@ -1,0 +1,10 @@
+{
+  "_comment": [
+    "Canary fixture for `gate:closed-enum-hygiene`.",
+    "This gate has no root override: it reads contracts.ts, decisions/, ROADMAP.md and",
+    "two audit docs from its own checkout, so a fixture can only substitute the WAIVER",
+    "STORE. A store whose `entries` is not an array is the fail-closed case the gate",
+    "documents: an unreadable waiver store must not silently read as 'nothing is waived'."
+  ],
+  "entries": {}
+}

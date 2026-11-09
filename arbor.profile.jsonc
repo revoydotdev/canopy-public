@@ -1,0 +1,97 @@
+{
+  // arbor.profile.jsonc — declares this repo's shape to the project
+  // conformance gate (`bun run gate:project-conform`, ADR-073). This file
+  // describes revoy2 AS IT IS; it does not restructure the repo to fit an
+  // idealized profile. A sibling project in another language authors its own
+  // arbor.profile.jsonc with the same schema and different values — the
+  // profile is the seam that lets "a revoy2-family project" mean something
+  // checkable without every repo being TypeScript/npm-shaped.
+  "schema_version": 1,
+  "project_id": "revoy2",
+  "language": "typescript",
+  // ADR-143: polyglot is the normal case, so the plural form is authoritative
+  // and the singular above is retained for backward compatibility. Each entry
+  // names the LSP server ADR-090's client drives for it, the globs that
+  // identify its files, and the commands the battery runs on its behalf.
+  "languages": [
+    {
+      "id": "typescript",
+      "globs": ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+      "lsp_server": "typescript-language-server --stdio",
+      "commands": { "typecheck": "typecheck", "test": "test", "coverage": "gate:coverage" }
+    },
+    {
+      // Found by gate:language-census on its first run: packages/arbor-mcp/bin/
+      // arbor-mcp.mjs is the CLI's production entry point and was never
+      // declared, so no gate parsed it. Declared here rather than excluded.
+      "id": "javascript",
+      "globs": ["**/*.js", "**/*.mjs", "**/*.cjs", "**/*.jsx"],
+      "lsp_server": "typescript-language-server --stdio",
+      "commands": { "typecheck": "typecheck", "test": "test", "coverage": "gate:coverage" }
+    },
+    {
+      "id": "shell",
+      "globs": ["**/*.sh", "**/*.bash"],
+      "lsp_server": "bash-language-server start",
+      // No pack answers stub heuristics for shell; gates needing that
+      // capability report `unsupported` for these files rather than approximate.
+      "commands": { "typecheck": null, "test": null, "coverage": null }
+    }
+  ],
+
+  // Directories the migrated gates (scripts/docs-truth.mjs,
+  // scripts/registration-integrity.mjs) treat as source roots when
+  // resolving a cited path or a well-known source file. This repo has one:
+  // every workspace package lives under packages/*.
+  "source_roots": ["packages"],
+
+  // Roots the ADR-citation scan walks. SEPARATE from source_roots on
+  // purpose, because the two lists answer different questions.
+  //
+  // source_roots means "this is a package tree": typecheck-tests.mjs
+  // demands a tsconfig.tests.json in every immediate subdirectory of every
+  // root and FAILS CLOSED without one, and anti-stub, the artifact scan and
+  // the derived counts all assume a <root>/<pkg>/src shape. None of the
+  // eight subdirectories of scripts/ is a TypeScript package, so adding
+  // scripts/ here would break a green blocking gate eight times over.
+  //
+  // citation_roots means "governed code that cites decisions lives here",
+  // which is a weaker and different claim. This repo's own governance
+  // machinery is under scripts/ (adr-registry.mjs, adr-trace.mjs,
+  // merge-critical.mjs, store-freshness-gate.mjs and others), so six
+  // accepted records were counted as orphans purely because nothing looked
+  // there. Measured effect of declaring it: orphan records 21 -> 15,
+  // exactly ADR-033, 034, 048, 059, 072 and 075 leaving the set, with none
+  // newly orphaned.
+  //
+  // Unset means "same as source_roots", so this key is a no-op for any
+  // project that does not need the distinction.
+  "citation_roots": ["packages", "scripts"],
+
+  "governance": {
+    "decisions_dir": "decisions",
+    "evidence_stores": [
+      ".claim-ledger",
+      ".completion-depth",
+      ".determinism-baseline",
+      ".visual-intelligence"
+    ],
+    "arbor_dir": ".arbor",
+
+    // Repo-relative path to this project's dated, expiring waiver store —
+    // the file `scripts/reachability.mjs` enforces and `@arbor/governance`'s
+    // vi/exceptions.ts, vi/baseline.ts, and counts/derive.ts mirror. A
+    // sibling project names its own waiver mechanism's path here; the
+    // default below is revoy2's own convention.
+    "allowlist_path": "scripts/reachability/allowlist.json"
+  },
+
+  // Bare package.json script names (not full shell invocations) — this repo
+  // is npm/bun-scripted, so "the typecheck command" is just the script key
+  // to run via `bun run <name>`.
+  "commands": {
+    "typecheck": "typecheck",
+    "test": "test",
+    "reachability": "gate:reachability"
+  }
+}

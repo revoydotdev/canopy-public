@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "ceiling": "This mechanical inventory validates declared files, hashes, notices, attributions, and direct dependency license metadata. It cannot prove clean-room authorship, independent expression, ownership, legal compatibility, or transitive dependency compliance.",
+  "repository_license": {
+    "path": "LICENSE",
+    "spdx": "MIT",
+    "required_text": "Copyright (c) 2026 revelri"
+  },
+  "allowed_direct_dependency_licenses": [
+    "Apache-2.0",
+    "MIT"
+  ],
+  "direct_dependencies": {
+    "@opencode-ai/plugin": {
+      "status": "excluded_optional_peer",
+      "reason": "Optional peer supplied by an OpenCode host; it is not installed, bundled, or redistributed by this repository and must be separately reviewed if that boundary changes."
+    },
+    "@opentui/core": {
+      "license": "MIT"
+    },
+    "@types/node": {
+      "license": "MIT"
+    },
+    "@vitest/coverage-v8": {
+      "license": "MIT"
+    },
+    "bun-types": {
+      "license": "MIT"
+    },
+    "typescript": {
+      "license": "Apache-2.0"
+    },
+    "vitest": {
+      "license": "MIT"
+    },
+    "@xterm/headless": {
+      "license": "MIT"
+    }
+  },
+  "vendored_sources": []
+}

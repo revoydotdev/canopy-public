@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "purpose": "ADR-147's machine-readable workspace import policy. It checks literal @arbor/* imports, and relative specifiers that resolve into forbidden_source_roots; it is not a substitute for runtime reachability or API compatibility checks.",
+  "forbidden_source_roots": ["scripts/"],
+  "packages": {
+    "@arbor/core": { "path": "packages/arbor-core", "source_imports": [], "test_imports": [] },
+    "@arbor/audit": { "path": "packages/arbor-audit", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/core"] },
+    "@arbor/campaign-support": { "path": "packages/arbor-campaign-support", "source_imports": ["@arbor/audit", "@arbor/core"], "test_imports": ["@arbor/audit", "@arbor/core"] },
+    "@arbor/claude-bridge": { "path": "packages/arbor-claude-bridge", "source_imports": [], "test_imports": [] },
+    "@arbor/config": { "path": "packages/arbor-config", "source_imports": [], "test_imports": [] },
+    "@arbor/eval": { "path": "packages/arbor-eval", "source_imports": ["@arbor/audit", "@arbor/config", "@arbor/core", "@arbor/harness", "@arbor/mcp"], "test_imports": ["@arbor/audit", "@arbor/core", "@arbor/harness", "@arbor/mcp", "@arbor/tui"] },
+    "@arbor/gate": { "path": "packages/arbor-gate", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/core"] },
+    "@arbor/governance": { "path": "packages/arbor-governance", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/audit", "@arbor/core", "@arbor/kb"] },
+    "@arbor/harness": { "path": "packages/arbor-harness", "source_imports": ["@arbor/core"], "test_imports": [] },
+    "@arbor/kb": { "path": "packages/arbor-kb", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/core"] },
+    "@arbor/mcp": { "path": "packages/arbor-mcp", "source_imports": ["@arbor/audit", "@arbor/claude-bridge", "@arbor/config", "@arbor/core", "@arbor/gate", "@arbor/governance", "@arbor/harness", "@arbor/kb", "@arbor/opencode", "@arbor/prompts", "@arbor/tui"], "test_imports": ["@arbor/audit", "@arbor/campaign-support", "@arbor/config", "@arbor/core", "@arbor/governance", "@arbor/harness", "@arbor/kb", "@arbor/opencode", "@arbor/prompts", "@arbor/tui"] },
+    "@arbor/opencode": { "path": "packages/arbor-opencode", "source_imports": ["@arbor/audit", "@arbor/campaign-support", "@arbor/config", "@arbor/core", "@arbor/prompts"], "test_imports": ["@arbor/audit", "@arbor/campaign-support", "@arbor/core", "@arbor/mcp", "@arbor/prompts"] },
+    "@arbor/prompts": { "path": "packages/arbor-prompts", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/audit"] },
+    "@arbor/search-runtime": { "path": "packages/arbor-search-runtime", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/core"] },
+    "@arbor/tui": { "path": "packages/arbor-tui", "source_imports": ["@arbor/core"], "test_imports": ["@arbor/core"] }
+  }
+}

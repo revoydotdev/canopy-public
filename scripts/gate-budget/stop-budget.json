@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "_doc": "ADR-156. The stop tier's boundary is defined as an empirical wall-clock budget, and nothing measured or bounded it. It drifted from a documented 17 gates at ~3.7s to 37 gates at ~14s while ADR-074 and gate-stop.sh still stated the original figure. This ceiling is a ratchet in the shape of scripts/remedy-coverage-gate.mjs's FLOOR: it may be LOWERED freely as the tier gets cheaper, and raising it is a deliberate, reviewable edit that should carry its reason here.",
+  "ceiling_ms": 25000,
+  "adopted": {
+    "date": "2026-09-02",
+    "gate_count": 37,
+    "median_measured_ms": 16410,
+    "why_this_ceiling": "Roughly 1.5x the measured median on a loaded workstation (readings ranged 11.8s to 16.4s across runs). Tight enough that a structural regression -- a new expensive gate, or an existing one slowing by an order of magnitude -- breaches it; loose enough that ordinary load does not. The gate judges a median over the last runs rather than a single reading, so the headroom absorbs variance rather than hiding growth."
+  },
+  "min_samples": 3
+}

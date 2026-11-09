@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "rootDir": "./src"
+  },
+  "references": [
+    { "path": "../arbor-core" },
+    { "path": "../arbor-claude-bridge" },
+    { "path": "../arbor-config" },
+    { "path": "../arbor-kb" },
+    { "path": "../arbor-gate" },
+    { "path": "../arbor-audit" },
+    { "path": "../arbor-tui" },
+    { "path": "../arbor-governance" },
+    { "path": "../arbor-prompts" },
+    { "path": "../arbor-harness" },
+    { "path": "../arbor-opencode" }
+  ],
+  "include": ["src/**/*.ts"],
+  "exclude": ["dist/**"]
+}

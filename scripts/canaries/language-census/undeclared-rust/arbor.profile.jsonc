@@ -1,0 +1,18 @@
+{
+  // Canary fixture for `gate:language-census`.
+  // Declares TypeScript and nothing else. The sibling `packages/canary/src`
+  // carries four Rust files, which is above the gate's default materiality
+  // floor of 3, so Rust is an UNDECLARED language the battery does not govern.
+  "schema_version": 1,
+  "project_id": "canary-language-census",
+  "language": "typescript",
+  "languages": [
+    {
+      "id": "typescript",
+      "globs": ["**/*.ts"],
+      "lsp_server": "typescript-language-server --stdio",
+      "commands": { "typecheck": "typecheck", "test": "test", "coverage": "gate:coverage" }
+    }
+  ],
+  "source_roots": ["packages"]
+}

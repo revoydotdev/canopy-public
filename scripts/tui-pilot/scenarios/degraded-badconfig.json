@@ -1,0 +1,22 @@
+{
+  "id": "degraded-badconfig",
+  "title": "degraded: mis-edited arbor.jsonc",
+  "covers": [
+    "S01"
+  ],
+  "seed": "bad-config",
+  "early_exit_expected": true,
+  "steps": [
+    {
+      "wait_for": "crashed|❯",
+      "timeout_s": 60,
+      "label": "launch outcome",
+      "hold_s": 2
+    },
+    {
+      "key": "q",
+      "label": "quit if crash screen",
+      "hold_s": 1
+    }
+  ]
+}

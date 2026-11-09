@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "hooks": [
+    {
+      "id": "claude-code.pretooluse.git-write-guard",
+      "event": "PreToolUse",
+      "source": "scripts/hooks/git-write-guard.sh",
+      "status": "devolved",
+      "handler_ref": "veto.git-write-guard",
+      "descriptor": "git-write-guard-inert",
+      "seam": "wrapToolPort",
+      "reason": ""
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "_comment": [
+    "Dated exemptions for a closed-enum-hygiene finding this repository has deliberately",
+    "chosen not to fix immediately. Same discipline as scripts/reachability/allowlist.json:",
+    "every entry states a REASON and an EXPIRES date; an expired entry blocks the gate again.",
+    "Managed through `bun run waiver <verb> closed-enum-hygiene ...` (scripts/lib/waiver-store.mjs)",
+    "rather than hand-edited — see scripts/closed-enum-hygiene.mjs's module header."
+  ],
+  "entries": []
+}
