@@ -1,6 +1,6 @@
 # ADR-047: Long-Horizon Scheduling Is a Durable Trigger Over Supervised Campaigns
 
-**Status:** Accepted<br>
+**Status:** Accepted
 **Date:** 2026-08-12
 
 ## Context

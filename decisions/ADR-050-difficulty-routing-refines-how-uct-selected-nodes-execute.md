@@ -1,6 +1,6 @@
 # ADR-050: Difficulty Routing Refines How UCT-Selected Nodes Execute
 
-**Status:** Accepted<br>
+**Status:** Accepted
 **Date:** 2026-08-12
 
 ## Context

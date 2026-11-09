@@ -1,6 +1,6 @@
 # ADR-049: Governed Hook and Lifecycle Bus Is a Reduction-Only Overlay
 
-**Status:** Accepted<br>
+**Status:** Accepted
 **Date:** 2026-08-12
 
 ## Context

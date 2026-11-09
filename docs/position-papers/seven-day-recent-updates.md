@@ -1,6 +1,6 @@
 # Recent updates digest (past 7 days)
 
-**Window:** 2026-08-09 to 2026-08-16 (inclusive of 560 commits, HEAD `466a2fe` on 2026-08-15)<br>
+**Window:** 2026-08-09 to 2026-08-16 (inclusive of 560 commits, HEAD `466a2fe` on 2026-08-15)
 **Primary evidence source:** `git log --since='7 days ago'` and changed-file analysis in repo.
 
 ## 1) Big-picture activity pattern

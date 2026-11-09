@@ -10,6 +10,12 @@
 > for this initial publication. See [public readiness](docs/public-readiness.md)
 > for the exact validation scope and remaining portability work.
 
+> **Dependency audit gate:** the locked test/development toolchain still has
+> upstream advisories. These currently affect verification dependencies rather
+> than declared application runtime packages; see [public readiness](docs/public-readiness.md)
+> for the audit result and required upgrade gate. Do not treat this preview as a
+> release or enable CI until that gate is closed.
+
 **Explore alternatives. Coordinate specialists. Review evidence. Adopt deliberately.**
 
 [![CI](https://github.com/revoydotdev/canopy-public/actions/workflows/ci.yml/badge.svg)](https://github.com/revoydotdev/canopy-public/actions/workflows/ci.yml)

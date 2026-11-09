@@ -1,6 +1,6 @@
 # ADR-052: User Commands and Plugins Are Trust-Tiered Reduction-Only Authorities
 
-**Status:** Accepted<br>
+**Status:** Accepted
 **Date:** 2026-08-12
 
 ## Context

@@ -1,9 +1,9 @@
 # Revoy2 orchestration refactor and re-tooling plan
 
-**Status:** Proposed implementation program<br>
-**Date:** 2026-08-14<br>
+**Status:** Proposed implementation program
+**Date:** 2026-08-14
 **Scope:** Native Revoy2 orchestration, model/session management, tool authority,
-review, recovery, context, worktrees, and the operator contract<br>
+review, recovery, context, worktrees, and the operator contract
 **Primary objective:** Increase task accuracy, completion rate, recovery quality,
 latency, and token efficiency by moving hard controls to real effect boundaries and
 removing restrictions that govern model cognition without preventing a concrete risk.

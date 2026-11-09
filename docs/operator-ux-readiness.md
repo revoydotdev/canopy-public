@@ -1,6 +1,6 @@
 # Operator UX and self-build readiness
 
-**Audit date:** 2026-08-13<br>
+**Audit date:** 2026-08-13
 **Target:** launch `arbor` from `PATH`, drive the native cockpit, submit a real
 repository task, supervise it, inspect the result, and adopt verified changes.
 
